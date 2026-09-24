@@ -1,0 +1,9 @@
+{
+  "functions": {"api/*.js": {"maxDuration": 30}},
+  "rewrites": [
+    {"source":"/criar-pix","destination":"/api/criar-pix"},
+    {"source":"/criar-cartao","destination":"/api/criar-cartao"},
+    {"source":"/config","destination":"/api/config"}
+  ],
+  "headers":[{"source":"/api/(.*)","headers":[{"key":"Cache-Control","value":"no-store"}]}]
+}

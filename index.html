@@ -17,19 +17,9 @@
   <link rel="dns-prefetch" href="https://images.converteai.net">
   <link rel="dns-prefetch" href="https://license.vturb.com">
 
-  <!-- PostHog -->
-  <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p||((p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r));var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId setPersonProperties".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    posthog.init('phc_pAtdQQK5FH6ZFtgc8vFVqHkdbbQxFdSbB3JoEsqAAERN', {
-      api_host: 'https://us.i.posthog.com',
-      person_profiles: 'identified_only',
-      capture_pageview: false,   // controlamos manualmente via goTo()
-      capture_pageleave: false,
-      autocapture: false         // zero eventos automáticos — só os Historinha_*
-    });
-  </script>
 
   <style>
+    .amplo-card-grid{display:grid;gap:12px;margin-bottom:16px}.amplo-card-grid .kiwi-input-field{border:1px solid #d1d5db;border-radius:6px;padding:12px;width:100%}
     :root {
       --bg:        #FFFFFF;
       --bg-soft:   #FAFAFC;
@@ -1321,7 +1311,7 @@
                   <input class="kiwi-input-field" id="cardNeighborhood" autocomplete="address-line2" placeholder="Bairro">
                   <input class="kiwi-input-field" id="cardStreet" autocomplete="address-line1" placeholder="Rua">
                   <input class="kiwi-input-field" id="cardNumberAddress" inputmode="numeric" autocomplete="address-line3" placeholder="Número">
-                  <select class="kiwi-input-field" id="cardInstallments"><option value="1">1x sem juros</option><option value="2">2x</option><option value="3">3x</option><option value="4">4x</option><option value="5">5x</option><option value="6">6x</option></select>
+                  <select class="kiwi-input-field" id="cardInstallments"><option value="1">1x</option></select>
                 </div>
                 <button class="kw-pay-btn" id="btnCard" type="button" onclick="pagarCartaoAmplo()">Pagar com cartão</button>
                 <div class="kw-erro" id="erroCartaoBrick"></div>
@@ -1336,6 +1326,7 @@
                 <div class="kw-sec-text">Protegemos seus dados de pagamento com criptografia para garantir segurança bancária.</div>
               </div>
               </div><!-- /paymentMethodCard -->
+              <div id="paymentCheck" style="display:none;margin:18px 0"><button class="kw-pay-btn" id="checkPayment" onclick="verificarPagamento()">Já paguei — verificar confirmação</button><p id="paymentStatusMessage" role="status" style="margin-top:12px"></p></div>
 
               <!-- Resultado PIX gerado -->
               <div class="kw-pix-result" id="pixDisplay" style="display:none;margin-top:20px">
@@ -1668,7 +1659,6 @@ function closeCustomScenario(){
 }
 document.addEventListener('DOMContentLoaded',()=>{
   // Captura manual da tela intro — não passa por goTo()
-  window.posthog&&posthog.capture('Historinha_Intro',{step_raw:'intro',session_id:SESSION_EID});
 
   const customInput=document.getElementById('q-setting-custom');
   if(customInput){
@@ -1719,7 +1709,6 @@ function goTo(s){
     'result':      'Historinha_Resultado',
   };
   const eventName = STEP_EVENTS[s] || ('Historinha_Step_' + String(s));
-  window.posthog&&posthog.capture(eventName,{step_raw:String(s),session_id:SESSION_EID});
 
   if(s===11&&!hasDiscount&&!window._popupShown){
     window._popupShown=true;
@@ -1730,9 +1719,6 @@ function goTo(s){
   if(s==='fb-final'){ runFbLoader('fbFinalLoader','fbFinalFill','fbFinalCheck','fbFinalBtn',2300) }
 
   if(s==='loading'){
-    fetch('/track-ic',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-        valor:calcTotal().tot,utms:getUTMsFresh(),eventId:SESSION_EID,fbp:getFbp(),fbc:getFbc()
-      })}).catch(()=>{});
     startLoading();
   }
   if(s==='result'){
@@ -1841,7 +1827,6 @@ function togAddon(a){
   addons[a]=!addons[a];
   document.getElementById('addon-'+a).classList.toggle('sel',addons[a]);
   updateReceipts();
-  window.posthog&&posthog.capture('addon_toggled',{addon:a,active:addons[a]});
 }
 function calcTotal(){
   let tot=PRICES.base-(hasDiscount?PRICES.discount:0);
@@ -1877,7 +1862,6 @@ function updateReceipts(){
 function applyDiscount(){
   hasDiscount=true;updateReceipts();
   const p=document.getElementById('couponPopup');p.classList.remove('active');setTimeout(()=>{p.style.display='none'},300);
-  window.posthog&&posthog.capture('discount_applied');
 }
 
 // ════════════════════════════════════════════
@@ -2046,16 +2030,17 @@ async function pagarPix(){
   quizData.addon_colorir  = addons.colorir  ? 'Sim' : 'Não';
   quizData.addon_expressa = addons.expressa ? 'Sim' : 'Não';
 
+  let retryAllowed = true;
   try{
-    const r = await fetch('/criar-pix',{
+    const r = await fetch('/api/criar-pix',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        email, telefone: tel, total, quizData,
+        email, telefone: tel, total, quizData, identifier: SESSION_EID, hasDiscount,
         utms: getUTMsFresh(), eventId: SESSION_EID, fbp: getFbp(), fbc: getFbc(),
         obExtras, addon_colorir: addons.colorir, addon_expressa: addons.expressa,
       }),
     });
-    const data = await r.json();
+    const data = await paymentResponse(r);
     if(!r.ok || data.erro) throw new Error(data.erro || 'Erro ao gerar PIX');
 
     pixId = data.id || data.transactionId;
@@ -2070,13 +2055,16 @@ async function pagarPix(){
     document.getElementById('pixDisplay').style.display = 'block';
     document.getElementById('pixDisplay').scrollIntoView({behavior:'smooth',block:'start'});
 
-    startPolling(pixId, email);
-    startExpTimer();
+    pendingPayment = {statusToken:data.statusToken,email};
+    document.getElementById('paymentCheck').style.display='block';
+    retryAllowed = false;
+    startExpTimer(data.pix?.expiresAt);
 
   }catch(err){
+    if(err.uncertain || err instanceof TypeError) retryAllowed=false;
     showErroCheckout(err.message || 'Erro ao gerar PIX. Tente novamente.');
   }finally{
-    btn.disabled = false;
+    btn.disabled = !retryAllowed;
     btn.innerHTML = `<img src="images/pix.svg" alt="" width="20" height="20" style="filter:brightness(0) invert(1)"> Pagar agora <span id="ctaPricePix" style="display:none">${fmtBRL(calcTotalCheckout())}</span>`;
   }
 }
@@ -2093,24 +2081,38 @@ function copiarPix(){
 }
 
 // ── POLLING PIX ───────────────────────────────────────────────────────────────
-function startPolling(id, email){
-  if(pollingInt) clearInterval(pollingInt);
-  pollingInt = setInterval(async()=>{
-    try{
-      const r = await fetch('/status/'+id);
-      const d = await r.json();
-      if(['approved','COMPLETED'].includes(d.status) || d.transactionStatus === 'COMPLETED'){
-        clearInterval(pollingInt); clearInterval(expInterval);
-        // Purchase é enviado apenas via CAPI (server-side) — evita duplicidade e funciona mesmo com bloqueadores de anúncio
-        document.getElementById('okEmail').textContent = email;
-        goTo('aprovado');
-      }
-    }catch(_){}
-  },4000);
+let pendingPayment=null;
+let nextStatusCheck=0;
+async function paymentResponse(response){
+  const raw=await response.text();let data;
+  try{data=JSON.parse(raw)}catch{const e=new Error('O serviço de pagamento não respondeu corretamente (HTTP '+response.status+'). Confira o deploy da Vercel antes de tentar novamente.');e.uncertain=true;throw e}
+  if(!response.ok||data.erro){const e=new Error(data.erro||'Não foi possível processar o pagamento.');e.uncertain=data.uncertain===true;throw e}
+  return data;
+}
+async function verificarPagamento(){
+  if(!pendingPayment)return;
+  const output=document.getElementById('paymentStatusMessage');
+  const wait=Math.ceil((nextStatusCheck-Date.now())/1000);
+  if(wait>0){output.textContent='Aguarde '+wait+' segundos para consultar novamente.';return}
+  const button=document.getElementById('checkPayment');button.disabled=true;
+  nextStatusCheck=Date.now()+60000;
+  try{
+    const response=await fetch('/api/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({statusToken:pendingPayment.statusToken})});
+    const data=await paymentResponse(response);
+    if(data.status==='approved'){
+      clearInterval(expInterval);document.getElementById('okEmail').textContent=pendingPayment.email;goTo('aprovado');
+    }else if(['failed','refunded','charged_back','expired','canceled','rejected'].includes(data.status)){
+      output.textContent='Pagamento não concluído ou encerrado. Confira o aplicativo do banco antes de fazer um novo pedido.';
+    }else{output.textContent='O pagamento ainda aguarda confirmação. Após pagar, aguarde um minuto e consulte novamente.'}
+  }catch(e){output.textContent=e.message}
+  finally{button.disabled=false}
 }
 
-function startExpTimer(){
-  let s = 30*60;
+function startExpTimer(expiresAt){
+  let s = Math.max(0,Math.floor((Date.parse(expiresAt)-Date.now())/1000));
+  const timer=document.querySelector('.kw-pix-timer');
+  if(!Number.isFinite(s)){if(timer)timer.style.display='none';return}
+  if(timer)timer.style.display='';
   const el = document.getElementById('expTimer');
   if(expInterval) clearInterval(expInterval);
   expInterval = setInterval(()=>{
@@ -2121,92 +2123,7 @@ function startExpTimer(){
   },1000);
 }
 
-// ── BLOCO LEGADO DE CARTÃO (NÃO UTILIZADO) ───────────────────────────────────
-async function initCardBrick(){
-  if(!srvCfg.publicKey){
-    document.getElementById('erroCartaoBrick').textContent = 'Pagamento por cartão indisponível no momento. Use o Pix.';
-    return;
-  }
-  if(typeof LegacyCardProvider === 'undefined'){ setTimeout(initCardBrick,400); return; }
-  if(cardBrickController) return; // já montado — refreshCardBrickIfNeeded() cuida de atualizar o valor
-
-  if(!mpClientObj) mpClientObj = new LegacyCardProvider(srvCfg.publicKey,{locale:'pt-BR'});
-  const total = calcTotalCheckout();
-
-  try{
-    const builder = mpClientObj.bricks();
-    cardBrickController = await builder.create('legacy-card','legacy-card-container',{
-      initialization: { amount: total },
-      customization: {
-        paymentMethods: { maxInstallments: srvCfg.maxParcelas || 3 },
-        fields: {
-          cardholderIdentification: { mode: 'required' },
-        },
-      },
-      callbacks: {
-        onReady: ()=>{},
-        onSubmit: async (data)=>{
-          document.getElementById('erroCartaoBrick').textContent = '';
-          const email = getCheckoutEmail() || data.payer?.email || '';
-          if(!email || !isValidEmail(email)){
-            document.getElementById('erroCartaoBrick').textContent = 'Preencha seu e-mail no topo do checkout antes de pagar.';
-            throw new Error('email ausente');
-          }
-          const quizData = getQuizData();
-          quizData.addon_colorir  = addons.colorir  ? 'Sim' : 'Não';
-          quizData.addon_expressa = addons.expressa ? 'Sim' : 'Não';
-
-          try{
-            const r = await fetch('/criar-cartao',{
-              method:'POST', headers:{'Content-Type':'application/json'},
-              body: JSON.stringify({
-                token:           data.token,
-                installments:    data.installments,
-                paymentMethodId: data.payment_method_id,
-                issuerId:        data.issuer_id,
-                email,
-                telefone: getCheckoutTel(),
-                identification: data.payer?.identification || null,
-                total: calcTotalCheckout(),
-                quizData,
-                utms:    getUTMsFresh(),
-                eventId: SESSION_EID,
-                fbc:     getFbc(),
-                obExtras, addon_colorir: addons.colorir, addon_expressa: addons.expressa,
-              }),
-            });
-            const d = await r.json();
-            if(d.status === 'rejected' || d.erro){
-              document.getElementById('erroCartaoBrick').textContent = (d.erro || 'Cartão recusado.') + ' Tente outro cartão ou use o Pix.';
-              return;
-            }
-            if(d.status === 'approved'){
-              // Purchase é enviado apenas via CAPI (server-side)
-              document.getElementById('okEmail').textContent = email;
-              goTo('aprovado');
-            } else {
-              document.getElementById('erroCartaoBrick').textContent = 'Pagamento não aprovado. Tente outro cartão ou use o Pix.';
-            }
-          }catch(e){
-            document.getElementById('erroCartaoBrick').textContent = e.message || 'Erro ao processar cartão.';
-          }
-        },
-        onError: (e)=>{ console.error('Brick error:', e); },
-      },
-    });
-  }catch(e){
-    console.error('Erro ao montar Brick:', e);
-    document.getElementById('erroCartaoBrick').textContent = 'Erro ao carregar o formulário de cartão. Recarregue a página.';
-  }
-}
-
-// Reconstrói o Brick quando o valor total muda (order bump, addons) enquanto cartão está aberto
-async function refreshCardBrickIfNeeded(){
-  if(metodoPag !== 'card' || !cardBrickController) return;
-  try{ await cardBrickController.unmount(); }catch(_){}
-  cardBrickController = null;
-  initCardBrick();
-}
+function refreshCardBrickIfNeeded(){}
 
 // ── CHECKOUT CARTÃO AMPLO PAY ───────────────────────────────────────────────
 // As chaves da Amplo Pay ficam no backend que atende /criar-cartao.
@@ -2227,15 +2144,16 @@ async function pagarCartaoAmplo(){
   btn.disabled = true;
   btn.textContent = 'Processando…';
   erro.textContent = '';
+  let allowCardRetry=true;
   const quizData = getQuizData();
   quizData.addon_colorir = addons.colorir ? 'Sim' : 'Não';
   quizData.addon_expressa = addons.expressa ? 'Sim' : 'Não';
 
   try{
-    const r = await fetch('/criar-cartao',{
+    const r = await fetch('/api/criar-cartao',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        identifier: 'HIST-' + SESSION_EID,
+        identifier: 'HIST-' + SESSION_EID, hasDiscount,
         amount: calcTotalCheckout(),
         email, telefone: tel, total: calcTotalCheckout(), quizData,
         client: {
@@ -2257,16 +2175,23 @@ async function pagarCartaoAmplo(){
         utms:getUTMsFresh()
       })
     });
-    const d = await r.json();
+    const d = await paymentResponse(r);
     if(!r.ok || d.erro || ['FAILED','REJECTED','CANCELED'].includes(d.status)) throw new Error(d.erro || d.errorDescription || 'Pagamento recusado.');
     if(d.status === 'approved' || d.transactionStatus === 'COMPLETED'){
       document.getElementById('okEmail').textContent = email;
       goTo('aprovado');
     }else{
-      erro.textContent = 'Pagamento em análise. Aguarde a confirmação.';
+      pendingPayment={statusToken:d.statusToken,email};
+      document.getElementById('paymentCheck').style.display='block';
+      erro.textContent = 'Pagamento em análise. Use o botão para verificar a confirmação.';
     }
-  }catch(e){ erro.textContent = e.message || 'Erro ao processar cartão.'; }
-  finally{ btn.disabled=false; btn.textContent='Pagar com cartão'; }
+    allowCardRetry=false;
+  }catch(e){ if(e.uncertain || e instanceof TypeError)allowCardRetry=false;erro.textContent = e instanceof TypeError ? 'Falha de conexão. Confira o painel de pagamentos antes de repetir a cobrança.' : (e.message || 'Erro ao processar cartão.'); }
+  finally{
+    document.getElementById('cardNumber').value='';
+    document.getElementById('cardCvv').value='';
+    btn.disabled=!allowCardRetry; btn.textContent='Pagar com cartão';
+  }
 }
 
 // ── GOTO — adicionar sc-checkout e sc-aprovado ────────────────────────────────
@@ -2322,8 +2247,8 @@ window.goTo = function(s){
 // ── INIT SERVIDOR ─────────────────────────────────────────────────────────────
 (async function initSrv(){
   try{
-    const r = await fetch('/config');
-    srvCfg = await r.json();
+    const r = await fetch('/api/config');
+    srvCfg = await paymentResponse(r);
     if(srvCfg.orderBump?.preco) OB_PRECO = srvCfg.orderBump.preco;
     const obPrecoEl = document.getElementById('obPreco');
     if(obPrecoEl && srvCfg.orderBump) obPrecoEl.textContent = fmtBRL(srvCfg.orderBump.preco||9.90);
