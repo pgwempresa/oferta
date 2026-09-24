@@ -2,6 +2,16 @@
   // The standard base code is inline in index.html so Meta Pixel Helper detects it.
   // This file only contains the checkout event logic.
   const sent = new Set();
+  window.trackInitiateCheckout = function (total, eventId) {
+    try {
+      const id = eventId || ('checkout_' + Date.now());
+      if (sent.has(id)) return;
+      window.fbq('track', 'InitiateCheckout', {
+        value: Number(total) || 0, currency: 'BRL'
+      }, {eventID: id});
+      sent.add(id);
+    } catch (_) { /* Pixel must not interrupt checkout. */ }
+  };
   window.trackPixPurchase = function (data) {
     try {
       const id = data.metaEventId;

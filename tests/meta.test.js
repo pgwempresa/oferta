@@ -49,3 +49,10 @@ test('HTML inclui o código base inline detectável pela Meta',()=>{
  assert.match(html,/fbq\('init','2175744060029065'\)/);
  assert.match(html,/fbq\('track','PageView'\)/);
 });
+test('checkout dispara InitiateCheckout com valor em BRL e event ID',()=>{
+ const calls=[];const context={window:{fbq:(...args)=>calls.push(args)}};
+ vm.runInNewContext(fs.readFileSync('js/meta-pixel.js','utf8'),context);
+ context.window.trackInitiateCheckout(36.6,'checkout_ev_1');
+ const event=calls.find(c=>c[1]==='InitiateCheckout');
+ assert.equal(event[2].value,36.6);assert.equal(event[2].currency,'BRL');assert.equal(event[3].eventID,'checkout_ev_1');
+});

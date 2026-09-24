@@ -2251,6 +2251,9 @@ window.goTo = function(s){
 
     syncCheckoutReceipt();
     selMethod('pix');
+    if(typeof window.trackInitiateCheckout === 'function') {
+      window.trackInitiateCheckout(calcTotalCheckout(), 'checkout_' + SESSION_EID);
+    }
 
     return;
   }
