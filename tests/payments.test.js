@@ -37,3 +37,12 @@ test('cartão usa IP do servidor e OK sem COMPLETED permanece pendente',async()=
  global.fetch=async(url,opts)=>{assert.equal(JSON.parse(opts.body).clientIp,'127.0.0.1');return new Response(JSON.stringify({transactionId:'tx-card',status:'OK'}))};const r=await call(card,b);assert.equal(r.code,200);assert.equal(r.data.status,'pending');assert.ok(!JSON.stringify(r.data).includes('4111111111111111'));
 });
 test('método incorreto rejeitado como JSON',async()=>{assert.equal((await call(pix,{},'GET')).code,405)});
+test('telefone nacional é enviado com DDD sem prefixo 55 duplicado',()=>{setup();assert.equal(p.buildOrder(body(),'pix',{}).client.phone,'11999999999')});
+test('mostra código e campo recusado sem expor dados do comprador ou credenciais',async()=>{
+ setup();global.fetch=async()=>new Response(JSON.stringify({errorCode:'GATEWAY_INVALID_DATA',message:'Dados inválidos',details:[{path:'client.phone',error:{message:'Invalid phone 5511999999999 for teste@example.com test-secret test-public'}}]}),{status:400});
+ const r=await call(pix,body());assert.equal(r.code,422);assert.match(r.data.erro,/GATEWAY_INVALID_DATA/);assert.match(r.data.erro,/client.phone/);for(const value of ['5511999999999','teste@example.com','test-secret','test-public'])assert.ok(!r.data.erro.includes(value));
+});
+test('recusa HTTP 200 preserva motivo e falha 500 bloqueia repetição ambígua',async()=>{
+ setup();global.fetch=async()=>new Response(JSON.stringify({status:'REJECTED',errorDescription:'ACQUIRER_REJECTED'}));assert.match((await call(pix,body())).data.erro,/ACQUIRER_REJECTED/);
+ global.fetch=async()=>new Response(JSON.stringify({message:'Unavailable'}),{status:500});assert.equal((await call(pix,body())).data.uncertain,true);
+});
