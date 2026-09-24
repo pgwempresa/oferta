@@ -1,0 +1,2334 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sua Historinha — Livro Personalizado para Crianças</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link rel="preload" as="image" href="images/ChatGPT%20Image%2017%20de%20jun.%20de%202026%2C%2014_54_47.png" fetchpriority="high">
+  <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:wght@400;500;600&amp;family=Open+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+
+  <!-- VTurb player preloads -->
+  <script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
+  <link rel="preload" href="js/player.js" as="script">
+  <link rel="preload" href="js/smartplayer.js" as="script">
+  <link rel="preload" href="https://cdn.converteai.net/5a997ec4-709f-4ac4-8078-16082f6a9347/6aa857911793a964188aa777/main.m3u8" as="fetch">
+  <link rel="dns-prefetch" href="https://cdn.converteai.net">
+  <link rel="dns-prefetch" href="https://scripts.converteai.net">
+  <link rel="dns-prefetch" href="https://images.converteai.net">
+  <link rel="dns-prefetch" href="https://license.vturb.com">
+
+  <!-- PostHog -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p||((p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r));var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId setPersonProperties".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_pAtdQQK5FH6ZFtgc8vFVqHkdbbQxFdSbB3JoEsqAAERN', {
+      api_host: 'https://us.i.posthog.com',
+      person_profiles: 'identified_only',
+      capture_pageview: false,   // controlamos manualmente via goTo()
+      capture_pageleave: false,
+      autocapture: false         // zero eventos automáticos — só os Historinha_*
+    });
+  </script>
+
+  <style>
+    :root {
+      --bg:        #FFFFFF;
+      --bg-soft:   #FAFAFC;
+      --bg-card:   #F6F5FB;
+      --ink:       #20203D;
+      --ink-soft:  #5C5C7A;
+      --muted:     #8C8CA8;
+      --border:    #ECECF3;
+
+      --navy:      #1C1E52;
+      --gold:      #FFC845;
+      --gold-d:    #E6B030;
+      --coral:     #FF6F91;
+      --coral-d:   #E85878;
+      --green:     #009F33;
+      --green-bg:  #E4F7EA;
+      --blue:      #4A90E2;
+
+      --display: 'Reddit Sans', sans-serif;
+      --body:    'Reddit Sans', sans-serif;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+
+      --shadow-sm: 0 2px 8px rgba(32,32,61,.06);
+      --shadow-md: 0 6px 18px rgba(32,32,61,.09);
+      --shadow-lg: 0 16px 40px rgba(32,32,61,.14);
+    }
+
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0 }
+    html { scroll-behavior: smooth }
+    body { font-family: var(--body); background: var(--bg); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-x: hidden }
+    img { max-width: 100%; display: block }
+    button { font-weight: 600; font-family: var(--body) }
+
+    /* ── LAYOUT ── */
+    .overlay { position: fixed; inset: 0; z-index: 9999; background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch }
+    .inner { display: flex; flex-direction: column; align-items: center; padding: 16px 16px 40px }
+    .card-wrap { width: 100%; max-width: 480px }
+
+    /* ── HEADER (logo fixo em toda tela) ── */
+    .site-header { display: flex; justify-content: center; padding: 2px 0 16px }
+    .brand-logo { height: 66px; width: auto; display: block }
+
+    /* ── PROGRESS ── */
+    .prog-wrap { margin-bottom: 18px }
+    .prog-track { width: 100%; height: 6px; background: var(--bg-card); border-radius: var(--radius-sm); overflow: hidden }
+    .prog-fill { height: 100%; background: var(--coral); border-radius: var(--radius-sm); transition: width .5s cubic-bezier(.4,0,.2,1) }
+    .step-count { font-size: 11px; font-weight: 600; color: var(--muted); text-align: center; margin-top: 8px; letter-spacing: 1.2px; text-transform: uppercase }
+
+    /* ── SCREENS ── */
+    .screen { display: none; animation: riseIn .3s cubic-bezier(.22,1,.36,1) both }
+    .screen.active { display: block }
+    @keyframes riseIn { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: translateY(0) } }
+
+    .quiz-card { background: var(--bg); padding: 4px 2px 0 }
+
+    /* ── TYPOGRAPHY ── */
+    .step-title { font-family: var(--display); font-weight: 600; font-size: 24px; color: var(--ink); text-align: center; margin-bottom: 8px; line-height: 1.1; letter-spacing: -.2px }
+    .step-title em { font-style: normal; color: var(--coral); font-weight: 600 }
+    .step-sub { font-size: 15px; font-weight: 400; color: var(--ink-soft); text-align: center; margin-bottom: 20px; line-height: 1.1 }
+
+    .mini-back { font-size: 13px; font-weight: 600; color: var(--ink-soft); cursor: pointer; margin-top: 18px; display: inline-flex; align-items: center; gap: 4px; user-select: none }
+    .mini-back:active { opacity: .6 }
+
+    /* ── INPUTS ── */
+    .fld { margin-bottom: 14px }
+    .fld:last-child { margin-bottom: 0 }
+    .lbl { display: block; font-size: 12.8px; font-weight: 600; color: var(--coral-d); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 7px }
+    .inp {
+      width: 100%; padding: 15px 16px;
+      background: var(--bg-card); border: 1.5px solid transparent;
+      border-radius: var(--radius-md); color: var(--ink);
+      font-family: var(--body); font-weight: 500; font-size: 16px;
+      transition: border-color .2s, background .2s; outline: none;
+    }
+    .inp:focus { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 3px rgba(255,200,69,.15) }
+    .inp::placeholder { color: var(--muted); font-weight: 400 }
+    textarea.inp { resize: none; min-height: 120px }
+    .hint { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.1 }
+
+    /* ── IMAGE CHIPS (grid — cor do cabelo, tipo de cabelo, olhos) ── */
+    .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
+    .img-grid.cols3 { grid-template-columns: 1fr 1fr 1fr }
+    .img-grid.col1 { grid-template-columns: 1fr; gap: 10px; max-width: 86%; margin: 0 auto }
+
+    .img-chip {
+      background: var(--bg-card); border: 2px solid transparent; border-radius: var(--radius-md);
+      cursor: pointer; transition: border-color .18s, transform .12s, box-shadow .18s;
+      overflow: hidden; display: flex; flex-direction: column; user-select: none;
+    }
+    .img-chip:active { transform: scale(.98) }
+    .img-chip.sel { border-color: var(--gold); box-shadow: var(--shadow-md) }
+
+    .img-chip-pic { width: 100%; aspect-ratio: 1/1; background: var(--border); overflow: hidden; position: relative }
+    .img-chip-pic.wide { aspect-ratio: 4/3 }
+    .img-grid.col1 .img-chip-pic { aspect-ratio: 2.8/1 }
+    .img-grid.col1 .img-chip-pic img { object-position: top }
+    .img-chip-pic img { width: 100%; height: 100%; object-fit: cover; display: block; position: relative; z-index: 1 }
+    .img-chip-pic .ph-skeleton { position: absolute; inset: 0; background: linear-gradient(90deg, #ECECF3 25%, #F6F5FB 37%, #ECECF3 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite }
+    @keyframes shimmer { 0% { background-position: 100% 0 } 100% { background-position: 0 0 } }
+
+    .img-chip-label { padding: 6px 8px 7px; text-align: center }
+    .img-chip-label .chip-label { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.1; display: block }
+    .img-chip.sel .chip-label { color: var(--coral-d) }
+
+    .img-chip.sel .img-chip-pic::after {
+      content: ''; position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--gold);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpolyline points='2,6 5,9 10,3' fill='none' stroke='%2320203D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: center; box-shadow: var(--shadow-sm);
+    }
+
+    /* ── TILE CARDS (coluna, imagens grandes — pele, ensinamento, cenário) ── */
+    .tile-list { display: flex; flex-direction: column; gap: 12px }
+    .tile-card { position: relative; border-radius: var(--radius-md); overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border-color .18s, box-shadow .18s; background: var(--bg-card) }
+    .tile-card:active { transform: scale(.99) }
+    .tile-card.sel { border-color: var(--gold); box-shadow: var(--shadow-md) }
+    .tile-card-pic { width: 100%; aspect-ratio: 2.2/1; position: relative; background: var(--border) }
+    .tile-card-pic img { width: 100%; height: 100%; object-fit: cover }
+    .tile-card-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 65%, rgba(28,30,82,.68) 60%) }
+    .tile-card-label { position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 16px; color: #fff; font-weight: 600; font-size: 16.5px; line-height: 1.1 }
+    .tile-card-sub { font-size: 11.5px; font-weight: 400; opacity: .85; margin-top: 2px; line-height: 1.1 }
+
+    /* ── BULLET (etiqueta sobreposta na imagem — sexo e pele) ── */
+    .tile-bullet { position: absolute; background: rgba(28,30,82,.82); color: #fff; font-weight: 600; font-size: 14.5px; padding: 7px 15px; border-radius: 20px; line-height: 1.1 }
+    .tile-bullet-left { left: 10px; bottom: 10px; font-size: 16px; text-transform: uppercase; letter-spacing: .4px; padding: 8px 16px }
+    .tile-bullet-center { left: 50%; bottom: 10px; transform: translateX(-50%) }
+
+    /* ── GENDER CARDS (empilhados) ── */
+    .gender-grid { display: flex; flex-direction: column; gap: 10px }
+    .gender-card {
+      background: var(--bg-card); border: 2px solid transparent; border-radius: var(--radius-md);
+      cursor: pointer; transition: border-color .18s, box-shadow .18s; overflow: hidden;
+    }
+    .gender-card.sel { border-color: var(--gold); box-shadow: var(--shadow-md) }
+    .gender-card-pic { width: 100%; aspect-ratio: 1.7/1; background: var(--border); overflow: hidden; position: relative }
+    .gender-card-pic img { width: 100%; height: 100%; object-fit: cover; object-position: top }
+    .gender-card-pic .tile-card-scrim { background: linear-gradient(180deg, transparent 80%, rgba(28,30,82,.68) 77%) }
+    .gender-card-pic .tile-card-label { padding: 7px 16px; font-size: 15.5px }
+
+    /* ── CUSTOM SCENARIO ── */
+    .custom-toggle { text-align: center; margin-top: 14px; font-size: 13.5px; font-weight: 600; color: var(--coral-d); cursor: pointer; text-decoration: underline; text-decoration-style: dotted }
+    .custom-scenario-fld { display: none; margin-top: 14px }
+
+    /* ── ADDON SECTION ── */
+    .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
+    .opt-chip { padding: 22px 14px; background: var(--bg-card); border: 2px solid transparent; border-radius: var(--radius-md); cursor: pointer; transition: border-color .18s, transform .12s, box-shadow .18s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; text-align: center; user-select: none }
+    .opt-chip:active { transform: scale(.98) }
+    .opt-chip.sel { border-color: var(--gold); box-shadow: var(--shadow-md) }
+    .opt-chip-label { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.1 }
+    .opt-chip-sub { font-size: 11.5px; color: var(--muted); line-height: 1.1; font-weight: 400 }
+    .opt-chip.sel .opt-chip-label { color: var(--coral-d) }
+
+    .addon-section-tag { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: var(--green); letter-spacing: .3px; margin-bottom: 10px; margin-top: 18px }
+    .addon-section-tag svg { width: 14px; height: 14px; stroke: var(--green); fill: none; stroke-width: 2; flex-shrink: 0 }
+    .addon-section-tag:first-of-type { margin-top: 6px }
+
+    .addon-card { background: var(--bg-card); border: 2px solid transparent; border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden; cursor: pointer; transition: border-color .18s, box-shadow .18s }
+    .addon-card:active { transform: scale(.99) }
+    .addon-card.sel { border-color: var(--green); box-shadow: var(--shadow-md) }
+    .addon-body { display: flex; align-items: flex-start; gap: 14px; padding: 16px }
+    .addon-thumb { width: 64px; height: 64px; border-radius: var(--radius-sm); background: var(--border); flex-shrink: 0; overflow: visible; position: relative; display: flex; align-items: center; justify-content: center }
+    .addon-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm) }
+    .addon-thumb svg { width: 28px; height: 28px; stroke: var(--coral-d); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+    .addon-ribbon { position: absolute; top: -6px; right: -8px; background: var(--green); color: #fff; font-size: 8px; font-weight: 600; padding: 3px 6px; border-radius: 4px; letter-spacing: .2px; text-transform: uppercase; white-space: nowrap; box-shadow: var(--shadow-sm) }
+    .addon-info { flex: 1; padding-top: 1px }
+    .addon-name { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px; line-height: 1.1 }
+    .addon-desc { font-size: 12.5px; color: var(--ink-soft); line-height: 1.1; font-weight: 400 }
+    .addon-price-row { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; flex-wrap: wrap }
+    .addon-price-old { font-size: 12.5px; color: var(--muted); text-decoration: line-through; text-decoration-color: var(--coral-d); text-decoration-thickness: 2px; font-weight: 500 }
+    .addon-price { font-size: 16px; font-weight: 600; color: var(--green) }
+    .addon-action { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: rgba(0,159,51,.05); border-top: 1px solid var(--border) }
+    .addon-card.sel .addon-action { background: rgba(0,159,51,.1) }
+    .addon-check { width: 20px; height: 20px; border-radius: 5px; border: 2px solid #D9D9E6; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .18s }
+    .addon-card.sel .addon-check { background: var(--green); border-color: var(--green) }
+    .addon-check svg { width: 12px; height: 12px; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0 }
+    .addon-card.sel .addon-check svg { opacity: 1 }
+    .addon-action-txt { font-size: 13px; font-weight: 500; color: var(--ink-soft) }
+    .addon-card.sel .addon-action-txt { color: var(--ink) }
+
+    /* ── INCLUDED TAG ── */
+    .included-tag { background: #FFF8E8; border: 1.5px solid #FFE7B0; border-radius: var(--radius-sm); padding: 11px 14px; font-size: 12.5px; font-weight: 600; color: var(--ink); text-align: center; line-height: 1.1; margin-bottom: 16px }
+
+    /* ── BÔNUS (paywall) ── */
+    .bonus-stack { margin: 18px 0 6px }
+    .bonus-stack-title { font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 10px; text-align: center }
+    .bonus-list { display: flex; flex-direction: column; gap: 10px }
+    .bonus-card { display: flex; align-items: center; gap: 14px; background: var(--bg-card); border-radius: var(--radius-md); padding: 12px 14px }
+    .bonus-thumb { width: 56px; height: 56px; border-radius: var(--radius-sm); background: #FFF3D6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative }
+    .bonus-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm) }
+    .bonus-thumb svg { width: 25px; height: 25px; stroke: var(--gold-d); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+    .bonus-ribbon { position: absolute; top: -6px; right: -8px; background: var(--gold); color: var(--navy); font-size: 8.5px; font-weight: 600; padding: 3px 6px; border-radius: 4px; letter-spacing: .3px; text-transform: uppercase; white-space: nowrap }
+    .bonus-info { flex: 1 }
+    .bonus-name { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.1 }
+    .bonus-desc { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; line-height: 1.1 }
+
+    /* ── RECEIPT ── */
+    .receipt { background: var(--bg-card); border-radius: var(--radius-md); padding: 16px 18px; margin-top: 16px }
+    .rr { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 13px; gap: 8px }
+    .rr.sub .rv { text-decoration: line-through; color: var(--muted) }
+    .rr.disc .rl { color: var(--coral-d) }
+    .rr.disc .rv { color: var(--coral-d); font-weight: 600 }
+    .rr.add .rl { color: var(--ink-soft) }
+    .rr.add .rv { color: var(--ink-soft) }
+    .rr.tot { border-top: 1.5px solid var(--border); margin-top: 8px; padding-top: 10px }
+    .rr.tot .rv { font-weight: 600; font-size: 23px; color: var(--green) }
+    .rl { font-weight: 500; flex: 1; color: var(--ink-soft) }
+    .rv { font-weight: 600; flex-shrink: 0; text-align: right; color: var(--ink) }
+
+    /* ── NAVIGATION ── */
+    .nav { display: flex; gap: 10px; margin-top: 18px }
+    .btn-back { flex: 1; padding: 14px; background: var(--bg-card); border: none; border-radius: var(--radius-md); color: var(--ink-soft); font-weight: 600; font-size: 14px; cursor: pointer; transition: background .18s }
+    .btn-back:hover { background: var(--border) }
+    .btn-next { flex: 2; padding: 15px; background: var(--green); border: none; border-radius: var(--radius-md); color: #fff; font-weight: 600; font-size: 15px; letter-spacing: .1px; cursor: pointer; transition: filter .15s, transform .1s; box-shadow: none }
+    .btn-next:hover { filter: brightness(.92) }
+    .btn-next:active { transform: scale(.98) }
+    .btn-next:disabled { background: #E4E4EC; color: #B5B5C7; cursor: not-allowed; filter: none }
+    .btn-cta { width: 100%; padding: 17px; background: var(--green); border: none; border-radius: var(--radius-md); color: #fff; font-weight: 600; font-size: 15.5px; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; transition: filter .15s, transform .1s; box-shadow: none; display: flex; align-items: center; justify-content: center; gap: 9px; text-align: center }
+    .btn-cta:hover { filter: brightness(.92) }
+    .btn-cta:active { transform: scale(.98) }
+    .btn-cta:disabled { background: #E4E4EC; color: #B5B5C7; cursor: not-allowed; filter: none }
+
+    .nav-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 18px }
+    .btn-mini-back { background: none; border: none; color: var(--ink-soft); font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 6px }
+    .btn-mini-back:hover { color: var(--ink) }
+
+    @keyframes pulseZoom { 0%,100% { transform: scale(1) } 50% { transform: scale(1.035) } }
+    .btn-pulse { animation: pulseZoom 2.1s ease-in-out infinite }
+    .btn-pulse:hover, .btn-pulse:active { animation-play-state: paused }
+
+    /* ── PROMO BAR ── */
+    .promo-bar { background: var(--coral); color: #fff; text-align: center; font-size: 12px; font-weight: 600; padding: 9px 14px; letter-spacing: .8px; text-transform: uppercase; border-radius: var(--radius-sm); margin-bottom: 18px }
+
+    /* ── INTRO ── */
+    .intro-hero-banner { width: 80%; margin: 0 auto 22px }
+    .intro-hero-banner img { width: 100%; height: auto; display: block; object-fit: contain }
+
+    .intro-headline { font-family: var(--display); font-size: 27px; font-weight: 600; color: var(--ink); text-align: center; line-height: 1.1; margin-bottom: 12px; letter-spacing: -.3px }
+    .intro-headline em { font-style: normal; color: var(--coral) }
+    .intro-sub { font-size: 15.5px; font-weight: 400; color: var(--ink-soft); text-align: center; line-height: 1.1; margin-bottom: 22px }
+    .intro-sub strong { color: var(--ink); font-weight: 600 }
+
+    .minute-badge { display: flex; align-items: center; gap: 6px; background: var(--bg-card); color: var(--ink-soft); font-size: 12px; font-weight: 600; padding: 8px 16px; border-radius: var(--radius-sm); margin: 14px auto 0; width: fit-content }
+    .minute-badge svg { width: 14px; height: 14px; stroke: var(--coral-d); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+
+    .guarantee-row { display: flex; align-items: center; gap: 12px; background: #FFF8E8; border-radius: var(--radius-md); padding: 14px 16px; margin-top: 14px }
+    .guarantee-row .g-icon { flex-shrink: 0 }
+    .guarantee-row .g-icon svg { width: 20px; height: 20px; stroke: var(--gold-d); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+    .guarantee-row p { font-size: 13px; font-weight: 400; color: var(--ink-soft); line-height: 1.1 }
+    .guarantee-row p strong { color: var(--ink); font-weight: 600 }
+
+    /* ── PROVA SOCIAL ── */
+    .social-headline { font-family: var(--display); font-size: 24px; font-weight: 600; color: var(--ink); text-align: center; line-height: 1.1; margin-bottom: 18px; letter-spacing: -.2px }
+    .social-headline strong { color: var(--coral-d) }
+
+    .carousel-wrap { overflow: hidden; width: 100%; margin-bottom: 20px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent) }
+    .carousel-track { display: flex; gap: 10px; width: max-content; animation: carouselScroll 34s linear infinite }
+    .carousel-track img { width: 138px; height: 138px; border-radius: var(--radius-md); object-fit: cover; flex-shrink: 0; box-shadow: var(--shadow-sm) }
+    @keyframes carouselScroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 18px }
+    .mini-badge { display: flex; align-items: center; gap: 5px; background: var(--bg-card); padding: 6px 10px; border-radius: var(--radius-sm); font-size: 10.5px; font-weight: 600; color: var(--ink-soft) }
+    .mini-badge svg { width: 13px; height: 13px; stroke: var(--green); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0 }
+
+    /* ── FEEDBACK SCREENS ── */
+    .fb-wrap { text-align: center; padding: 20px 0 6px }
+    .fb-icon { width: 128px; height: 128px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; position: relative }
+    .fb-icon img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 12px 20px rgba(32,32,61,.18)); animation: floatIcon 3s ease-in-out infinite }
+    @keyframes floatIcon { 0%,100% { transform: translateY(0) rotate(-2deg) } 50% { transform: translateY(-10px) rotate(2deg) } }
+    .fb-text { font-family: var(--display); font-size: 23px; font-weight: 600; color: var(--ink); line-height: 1.1; margin-bottom: 10px; padding: 0 4px }
+    .fb-text .child-name-dyn, .fb-text .child-name-solo { color: var(--coral) }
+    .fb-sub { font-size: 15.5px; color: var(--ink-soft); font-weight: 400; margin-bottom: 26px; line-height: 1.1 }
+
+    .fb-loader { max-width: 220px; margin: 0 auto 8px }
+    .fb-loader-track { width: 100%; height: 6px; background: var(--bg-card); border-radius: var(--radius-sm); overflow: hidden }
+    .fb-loader-fill { height: 100%; width: 0%; background: var(--coral); border-radius: var(--radius-sm) }
+
+    .fb-check { width: 54px; height: 54px; border-radius: 50%; background: var(--green-bg); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; animation: checkPop .4s ease }
+    .fb-check svg { width: 24px; height: 24px; stroke: var(--green); fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round }
+    @keyframes checkPop { 0% { transform: scale(0); opacity: 0 } 70% { transform: scale(1.15) } 100% { transform: scale(1); opacity: 1 } }
+
+    /* ── LOADING ── */
+    .loading-wrap { text-align: center; padding: 14px 0 8px }
+    .ld-icon-wrap { width: 130px; height: 130px; margin: 0 auto 18px; position: relative }
+    .ld-icon-wrap img { width: 100%; height: 100%; object-fit: contain; animation: floatBook 3s ease-in-out infinite }
+    @keyframes floatBook { 0%,100% { transform: translateY(0) rotate(-1deg) } 50% { transform: translateY(-8px) rotate(1deg) } }
+
+    .ld-msg { font-family: var(--display); font-size: 17px; font-weight: 600; color: var(--ink); text-align: center; margin-bottom: 26px; line-height: 1.1 }
+    .ld-msg .child-name-dyn { color: var(--coral) }
+
+    .ld-bars { display: flex; flex-direction: column; gap: 18px; max-width: 320px; margin: 0 auto }
+    .ld-bar-line { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 7px }
+    .ld-bar-track { width: 100%; height: 8px; background: var(--bg-card); border-radius: var(--radius-sm); overflow: hidden }
+    .ld-bar-fill { height: 100%; width: 0%; background: var(--coral); border-radius: var(--radius-sm) }
+
+    .ld-reveal { text-align: center; margin-top: 30px; animation: riseIn .4s ease both }
+    .ld-reveal-icon { width: 52px; height: 52px; border-radius: 50%; background: var(--green-bg); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px }
+    .ld-reveal-icon svg { width: 23px; height: 23px; stroke: var(--green); fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round }
+    .ld-reveal-txt { font-family: var(--display); font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 20px; line-height: 1.1 }
+    .ld-reveal-txt .child-name-dyn { color: var(--coral) }
+
+    /* ── MICRO PERGUNTA (popup durante loading) ── */
+    .micro-note { font-size: 12.5px; font-weight: 600; color: var(--coral-d); margin: -10px 0 16px; text-align: center }
+    .micro-opts { display: flex; flex-direction: column; gap: 10px; margin-top: 4px }
+    .micro-opt-btn { padding: 14px; background: var(--bg-card); border: 1.5px solid transparent; border-radius: var(--radius-md); font-weight: 600; font-size: 14.5px; color: var(--ink); cursor: pointer; transition: all .15s }
+    .micro-opt-btn:hover { border-color: var(--gold) }
+    .micro-opt-btn:active { transform: scale(.98) }
+    .micro-opt-btn.primary { background: var(--green); color: #fff; font-size: 15.5px; padding: 16px }
+    .micro-opt-btn.secondary { background: var(--bg-card); color: var(--muted); font-size: 12.5px; font-weight: 500; padding: 9px }
+
+    /* ── RESULT / PAYWALL ── */
+    .result-headline { font-family: var(--display); font-size: 26px; font-weight: 600; color: var(--ink); line-height: 1.1; margin-bottom: 9px; letter-spacing: -.3px; text-align: center }
+    .result-headline .child-name-dyn { color: var(--coral) }
+    .result-sub { font-size: 14.5px; color: var(--ink-soft); font-weight: 400; line-height: 1.1; margin-bottom: 8px; text-align: center }
+
+    .social-proof-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 22px }
+    .social-proof-avatars { display: flex }
+    .social-proof-avatars img { width: 28px; height: 28px; border-radius: 50%; border: 2.5px solid #fff; object-fit: cover; margin-left: -9px; box-shadow: var(--shadow-sm) }
+    .social-proof-avatars img:first-child { margin-left: 0 }
+    .social-proof-text { font-size: 13px; font-weight: 500; color: var(--ink-soft) }
+    .social-proof-text strong { color: var(--ink); font-weight: 600 }
+
+    .book-result-wrap { position: relative; width: 200px; height: 260px; margin: 0 auto 24px }
+    .book-result { width: 200px; height: 260px; background: linear-gradient(155deg, #FFFFFF 0%, #FAFAFA 55%, #F6F5FB 100%); border-radius: 4px var(--radius-md) var(--radius-md) 4px; box-shadow: 0 20px 32px rgba(32,32,61,.16), inset -5px 0 0 rgba(0,0,0,.04); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 18px; position: relative }
+    .book-result::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background: var(--gold); border-radius: 4px 0 0 4px }
+    .book-result::after { content: ''; position: absolute; inset: 11px; border: 1.5px solid rgba(255,200,69,.25); pointer-events: none }
+    .book-result.menino::before { background: var(--blue) }
+    .book-result.menino::after { border-color: rgba(74,144,226,.28) }
+    .book-result.menina::before { background: var(--coral) }
+    .book-result.menina::after { border-color: rgba(255,111,145,.28) }
+    .br-star-icon { position: relative; margin-bottom: 10px }
+    .br-star-icon svg { width: 28px; height: 28px; fill: var(--gold) }
+    .br-name { font-family: var(--display); font-weight: 600; font-size: 23px; color: var(--ink); text-align: center; line-height: 1.1; margin-bottom: 5px; position: relative }
+    .br-sub { font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--coral-d); text-align: center; position: relative; font-weight: 600 }
+    .book-result-sparkle { position: absolute; top: 50%; left: 50%; width: 16px; height: 16px; margin: -8px; color: var(--gold) }
+    .book-result-sparkle svg { width: 16px; height: 16px; fill: currentColor }
+    @keyframes orbitSparkle {
+      0%   { transform: rotate(0deg) translateX(122px) rotate(0deg); opacity: .5 }
+      50%  { transform: rotate(180deg) translateX(122px) rotate(-180deg); opacity: 1 }
+      100% { transform: rotate(360deg) translateX(122px) rotate(-360deg); opacity: .5 }
+    }
+    .book-result-sparkle.s1 { animation: orbitSparkle 7s linear infinite }
+    .book-result-sparkle.s2 { animation: orbitSparkle 7s linear infinite reverse; animation-delay: -3.5s }
+
+    .urgency-timer { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--coral-d); color: #fff; font-size: 12.5px; font-weight: 600; padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 14px }
+    .urgency-timer svg { width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0 }
+    .urgency-timer strong { color: #fff; font-weight: 600 }
+
+    .price-anchor-card { background: #FFF8E8; border-radius: var(--radius-lg); padding: 20px 18px; margin-bottom: 18px; text-align: center }
+    .price-anchor-old { font-size: 14.5px; color: var(--muted); text-decoration: line-through; text-decoration-color: var(--coral-d); font-weight: 500 }
+    .price-anchor-new { font-family: var(--display); font-size: 36px; font-weight: 600; color: var(--green); margin: 4px 0 6px; line-height: 1.1 }
+    .price-anchor-tag { font-size: 12px; color: var(--coral-d); font-weight: 600; letter-spacing: .2px }
+
+    .security-badges { width: 100%; margin-top: 14px; border-radius: var(--radius-md); overflow: hidden }
+    .security-badges img { width: 100%; height: auto; display: block }
+
+    /* ── REVIEWS ── */
+    .section-heading { font-family: var(--display); font-size: 21px; font-weight: 600; color: var(--ink); text-align: center; margin: 32px 0 5px; letter-spacing: -.2px; line-height: 1.1 }
+    .section-sub { font-size: 13px; color: var(--ink-soft); text-align: center; margin-bottom: 18px; font-weight: 400; line-height: 1.1 }
+
+    .video-review-stack { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px }
+    .video-review-card { border-radius: var(--radius-md); overflow: hidden; background: var(--bg-card); position: relative }
+    .video-review-card video { width: 100%; height: 220px; object-fit: cover; display: block; background: #1C1E52 }
+    .video-review-label { position: absolute; left: 10px; bottom: 10px; background: rgba(28,30,82,.72); color: #fff; font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: var(--radius-sm) }
+
+    .review-card { background: var(--bg-card); border-radius: var(--radius-md); padding: 18px; margin-bottom: 10px }
+    .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px }
+    .review-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0; box-shadow: var(--shadow-sm) }
+    .review-info h4 { font-size: 13.5px; font-weight: 600; color: var(--ink) }
+    .review-stars { color: var(--gold-d); font-size: 12px; margin-top: 2px; letter-spacing: 1px }
+    .review-text { font-size: 14px; color: var(--ink-soft); line-height: 1.1; font-weight: 400 }
+    .review-text strong { color: var(--ink); font-weight: 600 }
+    .review-date { font-size: 11px; color: var(--muted); margin-top: 8px; display: block; font-weight: 500 }
+
+    /* ── FAQ ── */
+    .faq-item { border-bottom: 1.5px solid var(--border) }
+    .faq-q { padding: 16px 0; font-size: 14.5px; font-weight: 600; color: var(--ink); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: color .2s }
+    .faq-q::after { content: '+'; font-size: 20px; color: var(--coral); transition: transform .3s; font-weight: 300; flex-shrink: 0 }
+    .faq-item.open .faq-q::after { transform: rotate(45deg) }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; font-size: 13px; color: var(--ink-soft); line-height: 1.1; font-weight: 400 }
+    .faq-item.open .faq-a { max-height: 260px; padding-bottom: 16px }
+
+    .price-pick-wrap { margin-top: 8px }
+    .price-pick-info { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 12px; font-weight: 500 }
+
+    /* ── POPUPS ── */
+    .popup-overlay { position: fixed; inset: 0; background: rgba(32,32,61,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); z-index: 100000; display: none; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity .3s }
+    .popup-overlay.active { opacity: 1 }
+    .popup-card { background: #fff; border-radius: var(--radius-lg); padding: 30px 26px; text-align: center; max-width: 340px; width: 100%; transform: translateY(20px) scale(.95); transition: transform .35s cubic-bezier(.175,.885,.32,1.275); box-shadow: var(--shadow-lg) }
+    .popup-overlay.active .popup-card { transform: translateY(0) scale(1) }
+    .popup-icon { display: flex; justify-content: center }
+    .popup-icon img { margin-bottom: 14px }
+    .popup-icon svg { width: 40px; height: 40px; stroke: var(--gold-d); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 14px }
+    .popup-title { font-family: var(--display); font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 9px; line-height: 1.1 }
+    .popup-title em { color: var(--coral); font-style: normal }
+    .popup-sub { font-size: 14px; color: var(--ink-soft); margin-bottom: 22px; line-height: 1.1; font-weight: 400 }
+    .popup-sub strong { color: var(--ink); font-weight: 600 }
+    .popup-btn { background: var(--green); color: #fff; font-weight: 600; font-size: 15px; letter-spacing: .4px; text-transform: uppercase; padding: 15px; width: 100%; border: none; border-radius: var(--radius-md); cursor: pointer; transition: filter .15s; box-shadow: none }
+    .popup-btn:hover { filter: brightness(.92) }
+
+    @media(max-width:380px) {
+      .intro-headline { font-size: 23px }
+      .step-title { font-size: 21px }
+    }
+    @media(max-height:680px) {
+      .inner { padding-top: 8px }
+      .step-sub { margin-bottom: 14px }
+      .nav { margin-top: 14px }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       CLONE VISUAL KIWIFY — classes e valores extraídos direto
+       do bundle CSS oficial (pay.kiwify.com.br), escopado em #sc-checkout
+    ══════════════════════════════════════════════════════════ */
+    #sc-checkout {
+      background: #eff1f3;
+      margin: -16px -16px 0;
+      padding: 0 0 24px;
+      min-height: 100%;
+      font-family: 'Open Sans', sans-serif, Arial;
+      color: #000;
+    }
+    #sc-checkout .kw-content { max-width: 1000px; margin: 0 auto; padding: 8px; }
+    #sc-checkout .kw-col-main { max-width: 688px; margin-left: auto; margin-right: auto; }
+
+    #sc-checkout .kw-banner-img { width: 100%; height: auto; display: block; border-radius: 6px; margin-bottom: 8px; }
+
+    #sc-checkout .kw-checkoutblock {
+      background: #fff;
+      color: #000;
+      border-radius: .375rem;
+      padding: 16px 12px;
+      box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+      border: 1px solid #e5e7eb;
+    }
+    @media(min-width:640px){ #sc-checkout .kw-checkoutblock { padding: 16px 24px; } }
+
+    #sc-checkout .kw-prod-header { display: flex; align-items: center; width: 100%; }
+    #sc-checkout .kw-prod-thumb { position: relative; border-radius: .375rem; max-height: 96px; height: auto; width: auto; max-width: 96px; flex-shrink: 0; }
+    #sc-checkout .kw-prod-info { margin-left: 16px; }
+    #sc-checkout .kw-prod-title { font-weight: 700; font-size: 18px; color: #000; margin: 0; }
+    #sc-checkout .kw-prod-sub { margin-top: 6px; font-size: 12px; color: #000; }
+
+    /* kiwi-input — floating label, extraído literal do bundle */
+    #sc-checkout .kiwi-input { position: relative; margin-bottom: 12px; }
+    #sc-checkout .kiwi-input-field {
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: #fff;
+      border: 1px solid #cfcfcf;
+      border-radius: 4px;
+      box-sizing: border-box;
+      color: #333;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      height: 48px;
+      outline: 0;
+      padding: 16px 40px 0 14px;
+      width: 100%;
+      transition: border-color .2s;
+    }
+    #sc-checkout .kiwi-input-field:focus { background: #fff; border-color: #247ef3; box-shadow: 0 0 0 3px rgba(36,126,243,.15); }
+    #sc-checkout .kiwi-input-field:focus + .kiwi-label,
+    #sc-checkout .kiwi-input-field:not(:placeholder-shown) + .kiwi-label,
+    #sc-checkout .kiwi-label.selected { font-size: 12px; transform: translate3d(0,-8px,0); }
+    #sc-checkout .kiwi-label {
+      color: #6c7378;
+      font-size: 15px;
+      font-weight: 500;
+      left: 15px;
+      line-height: 1;
+      pointer-events: none;
+      position: absolute;
+      top: 17px;
+      transform: none;
+      transform-origin: left top 0;
+      transition: all .25s ease-in-out 0s;
+    }
+    #sc-checkout .kiwi-icon { bottom: 15px; position: absolute; right: 12px; color: #000; display: flex; }
+    #sc-checkout .kiwi-icon svg { height: 20px; width: 20px; }
+    #sc-checkout .kiwi-input.error .kiwi-input-field { border-color: #d20000; }
+    #sc-checkout .kiwi-input.error .kiwi-label { color: #d20000; }
+
+    /* select flutuante (parcelas) — css-1t5upd/1bjxe9/1u0qflz literais */
+    #sc-checkout .kw-select-wrap { background-color: #fff; border: 1px solid #cfcfcf; border-radius: 4px; color: #333; position: relative; overflow: hidden; margin-bottom: 12px; }
+    #sc-checkout .kw-select-wrap:before { border-bottom: 1px solid #2c2e2f; border-right: 1px solid #2c2e2f; content: ""; height: 8px; width: 8px; pointer-events: none; position: absolute; right: 16px; top: calc(50% - 2px); transform: translateY(-50%) rotate(45deg); }
+    #sc-checkout .kw-select { -webkit-appearance: none; appearance: none; background-color: transparent; border: none; box-sizing: border-box; color: #333; font-family: 'Open Sans', sans-serif; font-size: 16px; font-weight: 500; height: 48px; outline: 0; padding: 16px 36px 0 14px; width: 100%; }
+    #sc-checkout .kw-select-label { color: #6c7378; font-size: 15px; font-weight: 500; left: 14px; line-height: 1; pointer-events: none; position: absolute; top: 16px; }
+    #sc-checkout .kw-select-label.selected { font-size: 12px; transform: translate3d(0,-8px,0); }
+
+    /* Métodos de pagamento — grid + border/shadow-md do bundle, badge check no canto */
+    #sc-checkout .kw-methods-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; margin-top: 24px; }
+    #sc-checkout .kw-method {
+      display: flex; width: 100%; border: 1px solid #d1d5db; border-radius: 4px; height: 64px;
+      position: relative; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+      justify-content: center; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;
+      color: #374151; background: #fff; transition: border-color .15s, color .15s;
+    }
+    #sc-checkout .kw-method svg, #sc-checkout .kw-method img.kw-icon-img { width: 20px; height: 20px; flex-shrink: 0; }
+    #sc-checkout .kw-method-badge { position: absolute; width: 16px; height: 16px; top: -4px; right: -6px; display: none; }
+    #sc-checkout .kw-badge-icon {
+      display: block; width: 16px; height: 16px; background-color: #22c55e;
+      -webkit-mask-image: url(images/check-circle-fill.svg);
+      mask-image: url(images/check-circle-fill.svg);
+      -webkit-mask-size: contain; mask-size: contain;
+      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+      -webkit-mask-position: center; mask-position: center;
+    }
+    #sc-checkout .kw-method.active { border-color: #4299e1; color: #4299e1; }
+    #sc-checkout .kw-method.active .kw-method-badge { display: block; }
+    #sc-checkout .kw-method.active#methPix { border-color: #48bb78; color: #16a34a; }
+
+    /* Painel do cartão — checkout-bg #fafafa literal */
+    #sc-checkout .kw-card-panel { width: 100%; padding: 16px; padding-top: 12px; border-radius: 4px; border: 1px solid #9ca3af; background-color: #fafafa; }
+    @media(min-width:640px){ #sc-checkout .kw-card-panel { padding: 12px 16px; } }
+
+    /* Pix — CTA button dedicado */
+    #sc-checkout .kw-pix-panel { padding-top: 8px; }
+
+    /* Botão Pagar agora — background-color #28b463 literal, font system-ui literal */
+    #sc-checkout .kw-pay-btn {
+      width: 100%; padding: 16px; border-radius: .375rem; text-align: center; color: #fff;
+      font-size: 18px; font-weight: 600; cursor: pointer; border: none;
+      background-color: #28b463 !important;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif !important;
+      transition: opacity .075s; margin-top: 24px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    #sc-checkout .kw-pay-btn:hover { opacity: .75; }
+    #sc-checkout .kw-pay-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    #sc-checkout .kw-security-row { width: 100%; font-size: 13px; color: #4b5563; display: flex; align-items: center; margin-top: 16px; }
+    #sc-checkout .kw-security-row .kw-sec-icon { padding: 8px; display: flex; justify-content: center; align-items: center; color: #000; flex-shrink: 0; }
+    #sc-checkout .kw-security-row .kw-sec-icon svg { width: 20px; height: 20px; }
+    #sc-checkout .kw-security-row .kw-sec-text { font-size: 11px; }
+
+    #sc-checkout .kw-erro { background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 11px; font-size: 13px; color: #d20000; margin-top: 10px; display: none; font-weight: 600; }
+    #sc-checkout .kw-erro:not(:empty) { display: block; }
+
+    /* Order bump — layout idêntico ao print: dashed border, título no topo, seta+check+imagem+texto embaixo */
+    #sc-checkout .kw-ob { background: #eff6ff; border: 2px dashed #93c5fd; border-radius: 8px; padding: 14px 12px; margin-top: 18px; cursor: pointer; }
+    #sc-checkout .kw-ob-title { text-align: center; color: #1d6fd8; font-weight: 800; font-size: 13.5px; margin-bottom: 12px; letter-spacing: .2px; }
+    #sc-checkout .kw-ob-row { display: flex; align-items: center; gap: 10px; }
+    #sc-checkout .kw-ob-arrow { width: 22px; height: 22px; flex-shrink: 0; color: #dc2626; }
+    #sc-checkout .kw-ob-check { width: 20px; height: 20px; border-radius: 4px; border: 2px solid #9ca3af; background: #fff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: transparent; transition: all .15s; }
+    #sc-checkout .kw-ob-check.on { background: #4299e1; border-color: #4299e1; color: #fff; }
+    #sc-checkout .kw-ob-img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+    #sc-checkout .kw-ob-desc { font-size: 13px; color: #111; line-height: 1.4; }
+    #sc-checkout .kw-ob-headline { color: #dc2626; font-weight: 800; }
+
+    /* Footer — logo + termos, texto literal */
+    #sc-checkout .kw-footer { text-align: center; padding-top: 8px; color: #6b7280; font-size: 11px; }
+    #sc-checkout .kw-footer img { width: 120px; height: auto; margin: 8px auto; display: block; }
+    #sc-checkout .kw-footer article { text-align: left; margin-top: 8px; }
+    #sc-checkout .kw-footer a { font-weight: 700; color: #6b7280; }
+    #sc-checkout .kw-footer button { font-weight: 700; background: none; border: none; color: #6b7280; font-size: 11px; cursor: pointer; padding: 0; margin-top: 6px; }
+
+    /* PIX gerado (fora do padrão Kiwify, mas mantendo paleta) */
+    #sc-checkout .kw-pix-result { text-align: center; }
+    #sc-checkout .kw-pix-result .kw-pix-title { font-size: 17px; font-weight: 800; color: #000; margin-bottom: 3px; }
+    #sc-checkout .kw-pix-result .kw-pix-sub { font-size: 12.5px; color: #6c7378; margin-bottom: 16px; }
+    #sc-checkout .kw-qr-wrap { width: 170px; height: 170px; margin: 0 auto 14px; background: #fff; border: 1px solid #e4e4e8; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center; }
+    #sc-checkout .kw-qr-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    #sc-checkout .kw-pix-total { font-size: 25px; font-weight: 800; color: #28b463; margin-bottom: 14px; }
+    #sc-checkout .kw-cc-label { font-size: 11px; font-weight: 700; color: #6c7378; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .3px; text-align: left; }
+    #sc-checkout .kw-cc-box { display: flex; background: #f2f2f4; border: 1px solid #cfcfcf; border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+    #sc-checkout .kw-cc-text { flex: 1; padding: 10px 12px; font-size: 11px; color: #5a5a68; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
+    #sc-checkout .kw-copy-pix-btn { background-color: #28b463 !important; margin-top: 0; margin-bottom: 16px; }
+    #sc-checkout .kw-await-bar { display: flex; align-items: center; gap: 9px; padding: 12px; background: rgba(40,180,99,.08); border: 1px solid rgba(40,180,99,.2); border-radius: 8px; font-size: 12.5px; color: #16a34a; margin-bottom: 6px; text-align: left; }
+    #sc-checkout .kw-spin { width: 14px; height: 14px; border: 2px solid rgba(40,180,99,.3); border-top-color: #28b463; border-radius: 50%; animation: sc_spin .8s linear infinite; flex-shrink: 0; }
+    @keyframes sc_spin { to { transform: rotate(360deg); } }
+    #sc-checkout .kw-pix-timer { text-align: center; font-size: 12px; color: #6c7378; margin-top: 4px; }
+    #sc-checkout .kw-pix-steps { padding: 16px 0 0; text-align: left; }
+    #sc-checkout .kw-pix-steps-title { font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+    #sc-checkout .kw-pix-step { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 10px; }
+    #sc-checkout .kw-pix-step-num { width: 22px; height: 22px; border-radius: 50%; background: #e8f5e9; border: 1.5px solid #a5d6a7; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800; color: #16a34a; flex-shrink: 0; margin-top: 1px; }
+    #sc-checkout .kw-pix-step-txt { font-size: 13px; color: #5a5a68; line-height: 1.5; }
+    #sc-checkout .kw-pix-step-txt strong { color: #000; }
+
+    /* Reviews — cards exatamente como o bundle: rounded-md max-w-sm border border-gray-200 */
+    #sc-checkout .kw-reviews { margin-top: 16px; }
+    #sc-checkout .kw-review-card { border-radius: .375rem; max-width: 100%; width: 100%; padding: 24px 16px; border: 1px solid #e5e7eb; background: #fff; margin-bottom: 12px; text-align: center; }
+    #sc-checkout .kw-review-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin: 0 auto; display: block; }
+    #sc-checkout .kw-review-quote { font-weight: 600; font-size: 15px; margin-top: 10px; color: #000; }
+    #sc-checkout .kw-review-stars { display: flex; justify-content: center; gap: 2px; margin-top: 10px; color: #faca15; }
+    #sc-checkout .kw-review-stars svg { width: 20px; height: 20px; }
+    #sc-checkout .kw-review-name { font-size: 13px; margin-top: 10px; color: #000; }
+
+    /* ── TRANSIÇÃO RÁPIDA PRO CHECKOUT ── */
+    #sc-redirect.active { display: flex; align-items: center; justify-content: center; min-height: 60vh }
+    .redirect-wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center }
+    .redirect-spinner {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 3px solid #DCEBFB; border-top-color: var(--blue);
+      animation: redirectSpin .7s linear infinite;
+    }
+    @keyframes redirectSpin { to { transform: rotate(360deg) } }
+    .redirect-text { font-family: var(--display); font-size: 17px; font-weight: 600; color: var(--ink) }
+    .redirect-track { width: 200px; height: 4px; background: #DCEBFB; border-radius: 4px; overflow: hidden }
+    .redirect-fill { height: 100%; width: 0%; background: var(--blue); border-radius: 4px; transition: width 1.1s cubic-bezier(.4,0,.2,1) }
+
+    /* ── TELA DE AGRADECIMENTO (pós-compra) ── */
+    .ty-wrap { padding: 24px 4px; text-align: center }
+    .ty-icon {
+      width: 72px; height: 72px; border-radius: 50%; background: var(--green-bg);
+      border: 2px solid var(--green); display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; font-size: 30px; animation: checkPop .4s ease;
+    }
+    .ty-title { font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 8px }
+    .ty-sub { color: var(--ink-soft); font-size: 14px; line-height: 1.6; margin-bottom: 24px }
+    .ty-email { color: var(--green); word-break: break-all }
+
+    .ty-steps { background: var(--bg-card); border-radius: var(--radius-md); padding: 18px 16px; text-align: left; margin-bottom: 16px }
+    .ty-step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px }
+    .ty-step:last-child { margin-bottom: 0 }
+    .ty-step-icon { font-size: 20px; flex-shrink: 0; line-height: 1.3 }
+    .ty-step-txt { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5 }
+    .ty-step-txt strong { color: var(--ink) }
+
+    .ty-warning { background: #FFF8E8; border: 1px solid #F5DFA0; border-radius: var(--radius-md); padding: 14px 16px; text-align: left; margin-bottom: 16px }
+    .ty-warning-title { font-size: 13.5px; font-weight: 700; color: #92650A; margin-bottom: 6px }
+    .ty-warning-txt { font-size: 13px; color: #7A5B0F; line-height: 1.55 }
+    .ty-warning-txt strong { font-weight: 700 }
+
+    .ty-support { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; text-align: center }
+    .ty-support-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px }
+    .ty-support-txt { font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 12px }
+    .ty-support-email {
+      display: inline-flex; align-items: center; gap: 8px; background: var(--ink);
+      color: #fff; padding: 11px 18px; border-radius: var(--radius-sm); font-weight: 600;
+      font-size: 14px; text-decoration: none; transition: opacity .15s;
+    }
+    .ty-support-email:hover { opacity: .85 }
+
+  </style>
+<script src="js/player.js" async=""></script></head>
+<body>
+
+<div class="overlay" id="overlay">
+  <div class="inner">
+    <div class="card-wrap">
+
+      <div class="site-header">
+        <img class="brand-logo" src="images/ChatGPT%20Image%2017%20de%20jun.%20de%202026%2C%2014_54_47.png" alt="Sua Historinha" loading="eager" decoding="async" fetchpriority="high" onerror="this.style.display='none'" style="display: none;">
+      </div>
+
+      <div id="progWrap" style="display:none" class="prog-wrap">
+        <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+        <div class="step-count" id="stepCount"></div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           INTRO
+      ══════════════════════════════════ -->
+      <div class="screen active" id="sc-intro">
+        <div class="promo-bar">🎁 Edição Especial — Dia das Crianças</div>
+
+        <h1 class="intro-headline">O presente que vira <em>a história favorita</em> de uma criança</h1>
+
+        <div class="intro-hero-banner">
+          <img loading="eager" decoding="async" fetchpriority="high" src="images/ChatGPT%20Image%204%20de%20set.%20de%202026%2C%2014_43_48%20%281%29_11zon%20%281%29.webp" alt="Criança com seu livro personalizado">
+        </div>
+
+        <p class="intro-sub">Crie um livro ilustrado personalizado com o nome, o jeitinho e a aparência de quem você ama — <strong>filho(a), neto(a), sobrinho(a) ou afilhado(a).</strong></p>
+
+        <button class="btn-cta btn-pulse" onclick="goTo('social')">Quero Criar o Livro Agora</button>
+
+        <div class="minute-badge">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Leva só 1 minuto para responder
+        </div>
+
+        <div class="guarantee-row" style="margin-top:20px">
+          <div class="g-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+          <p><strong>Satisfação garantida.</strong> Se você não amar o livrinho, devolvemos 100% do valor em até 7 dias.</p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           PROVA SOCIAL
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-social">
+        <div class="social-headline">Mais de <strong>4.187 livros</strong> já foram criados por famílias como a sua</div>
+
+        <div class="carousel-wrap">
+          <div class="carousel-track" id="socialCarousel"><img src="images/crian%C3%A7a%20%281%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%285%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%284%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%283%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%282%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%281%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%285%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%284%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%283%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%282%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%281%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%285%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%284%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%283%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%282%29.webp" alt="" loading="lazy" decoding="async"></div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <img src="images/pessoa2%20%281%29.webp" alt="Fernanda" class="review-avatar" loading="lazy" decoding="async">
+            <div class="review-info"><h4>Fernanda M. — mãe da Isabela, 5 anos</h4><div class="review-stars">★★★★★</div></div>
+          </div>
+          <div class="review-text">Minha filha ficou <strong>emocionada</strong> quando viu o personagem com o cabelo cacheado igual ao dela. Lemos todo dia antes de dormir!</div>
+          <span class="review-date">Compradora verificada · Há 2 dias</span>
+        </div>
+
+        <button class="btn-cta btn-pulse" style="margin-top:22px" onclick="goTo(1)">Vamos Começar! →</button>
+
+        <div class="badge-row">
+          <div class="mini-badge"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>Compra 100% Segura</div>
+          <div class="mini-badge"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Garantia de 7 Dias</div>
+          <div class="mini-badge"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>4.9/5 de Avaliação</div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           1 — NOME + IDADE
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-1">
+        <div class="quiz-card">
+          <div class="step-title">Vamos conhecer o <em>herói da história!</em></div>
+          <div class="step-sub">Como ele(a) se chama e quantos anos tem?</div>
+          <div class="fld">
+            <label class="lbl">Nome da Criança</label>
+            <input type="text" class="inp" id="q-child-name" placeholder="Ex: Sophia, Miguel, Valentina…" autocomplete="off">
+          </div>
+          <div class="fld">
+            <label class="lbl">Idade</label>
+            <div class="opt-grid" id="age-grid">
+              <div class="opt-chip" onclick="selOptChip(this,'age-grid','q-age','2-3')">
+                <span class="opt-chip-label">2 – 3 anos</span>
+                <span class="opt-chip-sub">Palavras simples</span>
+              </div>
+              <div class="opt-chip" onclick="selOptChip(this,'age-grid','q-age','4-5')">
+                <span class="opt-chip-label">4 – 5 anos</span>
+                <span class="opt-chip-sub">Frases curtas</span>
+              </div>
+              <div class="opt-chip" onclick="selOptChip(this,'age-grid','q-age','6-7')">
+                <span class="opt-chip-label">6 – 7 anos</span>
+                <span class="opt-chip-sub">Histórias elaboradas</span>
+              </div>
+              <div class="opt-chip" onclick="selOptChip(this,'age-grid','q-age','8-10')">
+                <span class="opt-chip-label">8 – 10 anos</span>
+                <span class="opt-chip-sub">Aventuras completas</span>
+              </div>
+            </div>
+            <input type="hidden" id="q-age">
+          </div>
+        </div>
+        <div class="nav"><button class="btn-next" id="bn-1" disabled="" onclick="goTo(2)">Vamos Criar o Personagem <span class="child-name-dyn"></span>!</button></div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           2 — SEXO
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-2">
+        <div class="quiz-card">
+          <div class="step-title">O personagem <em class="child-name-dyn"></em> é menino ou menina?</div>
+          <div class="step-sub">Isso define a aparência do personagem nas próximas etapas.</div>
+          <div class="gender-grid" id="gender-grid">
+            <div class="gender-card" onclick="selGender(this,'menina',3)">
+              <div class="gender-card-pic">
+                <div class="ph-skeleton"></div>
+                <img loading="lazy" decoding="async" src="images/menina.webp" alt="Menina" onload="this.previousElementSibling.style.display='none'">
+                <div class="tile-card-scrim"></div>
+                <div class="tile-card-label">Menina</div>
+              </div>
+            </div>
+            <div class="gender-card" onclick="selGender(this,'menino',3)">
+              <div class="gender-card-pic">
+                <div class="ph-skeleton"></div>
+                <img loading="lazy" decoding="async" src="images/menino.webp" alt="Menino" onload="this.previousElementSibling.style.display='none'">
+                <div class="tile-card-scrim"></div>
+                <div class="tile-card-label">Menino</div>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="q-gender">
+        </div>
+        <div class="mini-back" onclick="goTo(1)">← Voltar</div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           3 — TOM DE PELE (coluna, imagens grandes)
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-3">
+        <div class="quiz-card">
+          <div class="step-title">Qual o tom de pele <em class="child-name-dyn"></em>?</div>
+          <div class="step-sub">Escolha o tom mais parecido com o de <span class="child-name-solo"></span>.</div>
+          <div class="tile-list" id="skin-grid"></div>
+          <input type="hidden" id="q-skin">
+        </div>
+        <div class="mini-back" onclick="goTo(2)">← Voltar</div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           4 — COR DO CABELO
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-4">
+        <div class="quiz-card">
+          <div class="step-title">Qual a cor do cabelo <em class="child-name-dyn"></em>?</div>
+          <div class="step-sub">Escolha a cor mais parecida com a de <span class="child-name-solo"></span>.</div>
+          <div class="img-grid" id="haircolor-grid"></div>
+          <input type="hidden" id="q-hair-color">
+        </div>
+        <div class="mini-back" onclick="goTo(3)">← Voltar</div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           5 — TIPO DE CABELO (coluna)
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-5">
+        <div class="quiz-card">
+          <div class="step-title">E o tipo de cabelo <em class="child-name-dyn"></em>, como é?</div>
+          <div class="step-sub">Escolha o tipo mais parecido com o de <span class="child-name-solo"></span>.</div>
+          <div class="img-grid col1" id="hairtype-grid"></div>
+          <input type="hidden" id="q-hair-type">
+        </div>
+        <div class="mini-back" onclick="goTo(4)">← Voltar</div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           6 — OLHOS
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-6">
+        <div class="quiz-card">
+          <div class="step-title">Qual a cor dos olhinhos <em class="child-name-dyn"></em>?</div>
+          <div class="step-sub">O detalhe que faz o personagem ganhar vida.</div>
+          <div class="img-grid" id="eyes-grid">
+            <div class="img-chip" onclick="selImgChip(this,'eyes-grid','q-eyes','castanhos','fb-rosto')">
+              <div class="img-chip-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/olhocastanho.webp" alt="Olhos castanhos" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="img-chip-label"><span class="chip-label">Castanhos</span></div>
+            </div>
+            <div class="img-chip" onclick="selImgChip(this,'eyes-grid','q-eyes','pretos','fb-rosto')">
+              <div class="img-chip-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/olhopreto.webp" alt="Olhos pretos" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="img-chip-label"><span class="chip-label">Pretos</span></div>
+            </div>
+            <div class="img-chip" onclick="selImgChip(this,'eyes-grid','q-eyes','azuis','fb-rosto')">
+              <div class="img-chip-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/olhoazul.webp" alt="Olhos azuis" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="img-chip-label"><span class="chip-label">Azuis</span></div>
+            </div>
+            <div class="img-chip" onclick="selImgChip(this,'eyes-grid','q-eyes','verdes','fb-rosto')">
+              <div class="img-chip-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/olhoverde.webp" alt="Olhos verdes" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="img-chip-label"><span class="chip-label">Verdes</span></div>
+            </div>
+          </div>
+          <input type="hidden" id="q-eyes">
+        </div>
+        <div class="mini-back" onclick="goTo(5)">← Voltar</div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           FEEDBACK — ROSTO
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-fb-rosto">
+        <div class="fb-wrap">
+          <div class="fb-icon">
+            <img src="images/icone-rosto.webp" alt="" onerror="this.style.display='none'" style="display: none;">
+          </div>
+          <div class="fb-text">Legal! Já estamos esboçando o rostinho <span class="child-name-dyn"></span></div>
+          <div class="fb-sub">Enquanto isso, vamos definir a história de <span class="child-name-solo"></span>.</div>
+          <div class="fb-loader" id="fbRostoLoader"><div class="fb-loader-track"><div class="fb-loader-fill" id="fbRostoFill"></div></div></div>
+          <div class="fb-check" id="fbRostoCheck" style="display:none"><svg viewBox="0 0 24 24"><polyline points="5 12.5 9.5 17 19 7.5"></polyline></svg></div>
+          <button class="btn-cta" id="fbRostoBtn" style="display:none" onclick="goTo(7)">Continuar a História <span class="child-name-dyn"></span></button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           7 — ENSINAMENTO (coluna, imagens grandes)
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-7">
+        <div class="quiz-card">
+          <div class="step-title">Qual ensinamento a <em>história vai carregar?</em></div>
+          <div class="step-sub">A moral é o coração da narrativa. Escolha o que importa agora.</div>
+          <div class="tile-list" id="moral-grid">
+            <div class="tile-card" onclick="selTileCard(this,'moral-grid','q-moral','amizade',8)">
+              <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/amizade.webp" alt="Amizade" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="tile-card-scrim"></div>
+              <div class="tile-card-label">Amizade<div class="tile-card-sub">Ajudar e ser ajudado</div></div>
+            </div>
+            <div class="tile-card" onclick="selTileCard(this,'moral-grid','q-moral','fe',8)">
+              <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/f%C3%A9.webp" alt="Fé" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="tile-card-scrim"></div>
+              <div class="tile-card-label">Fé<div class="tile-card-sub">Acreditar e confiar</div></div>
+            </div>
+            <div class="tile-card" onclick="selTileCard(this,'moral-grid','q-moral','obediencia',8)">
+              <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/obediencia.webp" alt="Obediência" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="tile-card-scrim"></div>
+              <div class="tile-card-label">Obediência<div class="tile-card-sub">Ouvir quem ama</div></div>
+            </div>
+          </div>
+          <input type="hidden" id="q-moral">
+        </div>
+        <div class="mini-back" onclick="goTo(6)">← Voltar</div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           8 — CENÁRIO (coluna, imagens grandes)
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-8">
+        <div class="quiz-card">
+          <div class="step-title">Onde vai acontecer a <em>aventura <span class="child-name-dyn"></span>?</em></div>
+          <div class="step-sub">Escolha o cenário onde <span class="child-name-solo"></span> vai viver a história.</div>
+          <div class="tile-list" id="setting-grid">
+            <div class="tile-card" onclick="selTileCard(this,'setting-grid','q-setting','floresta encantada','fb-aventura'); closeCustomScenario()">
+              <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/floresta.webp" alt="Floresta Encantada" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="tile-card-scrim"></div>
+              <div class="tile-card-label">Floresta Encantada</div>
+            </div>
+            <div class="tile-card" onclick="selTileCard(this,'setting-grid','q-setting','reino encantado','fb-aventura'); closeCustomScenario()">
+              <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/reino.webp" alt="Reino Encantado" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="tile-card-scrim"></div>
+              <div class="tile-card-label">Reino Encantado</div>
+            </div>
+            <div class="tile-card" onclick="selTileCard(this,'setting-grid','q-setting','fazendinha','fb-aventura'); closeCustomScenario()">
+              <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/fazendinha.webp" alt="Fazendinha" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="tile-card-scrim"></div>
+              <div class="tile-card-label">Fazendinha</div>
+            </div>
+            <div class="tile-card" onclick="selTileCard(this,'setting-grid','q-setting','fundo do mar','fb-aventura'); closeCustomScenario()">
+              <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/fundo-mar.webp" alt="Fundo do Mar" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="tile-card-scrim"></div>
+              <div class="tile-card-label">Fundo do Mar</div>
+            </div>
+          </div>
+          <div class="custom-toggle" id="customToggle" onclick="openCustomScenario()">Quero escolher outro cenário</div>
+          <div class="custom-scenario-fld" id="customScenarioFld">
+            <label class="lbl">Descreva o cenário</label>
+            <input type="text" class="inp" id="q-setting-custom" placeholder="Ex: Uma ilha tropical, uma cidade de brinquedo…" autocomplete="off">
+            <div class="hint">Pode escrever livremente — vamos usar exatamente como você descrever.</div>
+          </div>
+          <input type="hidden" id="q-setting">
+        </div>
+        <div class="nav" id="customScenarioNav" style="display:none">
+          <button class="btn-next" id="btnCustomScenario" style="flex:1" disabled="" onclick="goTo('fb-aventura')">Show, é Nesse Cenário que <span class="child-name-solo"></span> Vive!</button>
+        </div>
+        <div class="mini-back" onclick="goTo(7)">← Voltar</div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           FEEDBACK — AVENTURA
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-fb-aventura">
+        <div class="fb-wrap">
+          <div class="fb-icon">
+            <img src="images/icone-aventura.webp" alt="" onerror="this.style.display='none'" style="display: none;">
+          </div>
+          <div class="fb-text"><span class="child-name-solo"></span> já tem um mundo mágico à espera!</div>
+          <div class="fb-sub">Faltam só os últimos detalhes pra história ficar completa.</div>
+          <button class="btn-cta" onclick="goTo(9)">Ver os Últimos Detalhes <span class="child-name-dyn"></span></button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           9 — DESCRIÇÃO (personalidade + áudio)
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-9">
+        <div class="quiz-card">
+          <div class="step-title">Como <em class="child-name-solo"></em> realmente é?</div>
+          <div class="step-sub">Conte mais sobre a personalidade de <span class="child-name-solo"></span> — isso deixa a história ainda mais parecida com a realidade. (Opcional)</div>
+          <div class="fld">
+            <label class="lbl">Descreva a personalidade</label>
+            <textarea class="inp" id="q-special" placeholder="Ex: É brincalhona, tem medo do escuro mas é corajosa, adora dinossauros, sempre diz 'eu consigo!'…"></textarea>
+            <div class="hint">Quanto mais detalhe, mais única fica a história.</div>
+          </div>
+        </div>
+        <div class="nav"><button class="btn-next" onclick="goTo(10)">Perfeito, <span class="child-name-solo"></span> Está Ganhando Vida! →</button></div>
+        <div class="mini-back" onclick="goTo(8)">← Voltar</div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           10 — E-MAIL + DEDICATÓRIA
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-10">
+        <div class="quiz-card">
+          <div class="step-title">Falta pouco! Onde <em>enviamos o livro <span class="child-name-dyn"></span>?</em></div>
+          <div class="step-sub">Você recebe o link de finalização e o livro pronto neste e-mail.</div>
+          <div class="fld">
+            <label class="lbl">Seu Melhor E-mail</label>
+            <input type="email" class="inp" id="q-email" placeholder="seuemail@exemplo.com" autocomplete="off">
+          </div>
+          <div class="fld">
+            <label class="lbl">Seu Nome (para a dedicatória)</label>
+            <input type="text" class="inp" id="q-mom-name" placeholder="Ex: Ana, Juliana, Camila…" autocomplete="off">
+            <div class="hint">"Com todo o amor, [seu nome]" — aparece na página de dedicatória.</div>
+          </div>
+        </div>
+        <div class="nav"><button class="btn-next" id="bn-10" disabled="" onclick="goTo('fb-final')">Quase lá! Finalizar Personalização</button></div>
+        <div class="mini-back" onclick="goTo(9)">← Voltar</div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           FEEDBACK — FINAL
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-fb-final">
+        <div class="fb-wrap">
+          <div class="fb-icon">
+            <img src="images/icone-final.webp" alt="" onerror="this.style.display='none'" style="display: none;">
+          </div>
+          <div class="fb-text">Prontinho! As últimas peças da história <span class="child-name-dyn"></span> já estão no lugar.</div>
+          <div class="fb-sub">Só falta deixar o presente ainda mais especial.</div>
+          <div class="fb-loader" id="fbFinalLoader"><div class="fb-loader-track"><div class="fb-loader-fill" id="fbFinalFill"></div></div></div>
+          <div class="fb-check" id="fbFinalCheck" style="display:none"><svg viewBox="0 0 24 24"><polyline points="5 12.5 9.5 17 19 7.5"></polyline></svg></div>
+          <button class="btn-cta" id="fbFinalBtn" style="display:none" onclick="goTo(11)">Deixar Ainda Mais Especial</button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           11 — ADICIONAIS
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-11">
+        <div class="quiz-card">
+          <div class="step-title">Deixe o presente <em class="child-name-dyn"></em> ainda mais completo</div>
+          <div class="step-sub">Aproveite o desconto de Dia das Crianças, adicione também os presentes abaixo:</div>
+
+          <div class="included-tag">✓ Já incluso: 1 Livro Personalizado de 20 Páginas Ilustrado · PDF para ler e imprimir</div>
+
+          <div class="addon-section-tag">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"></path></svg>
+            95% das famílias também levam
+          </div>
+
+          <div class="addon-card" id="addon-colorir" onclick="togAddon('colorir')">
+            <div class="addon-body">
+              <div class="addon-thumb"><img loading="lazy" decoding="async" src="images/colorir.webp" alt="Versão para colorir"><span class="addon-ribbon">Mais Escolhido</span></div>
+              <div class="addon-info">
+                <div class="addon-name">Versão para Colorir</div>
+                <div class="addon-desc">As mesmas cenas em traços para a criança pintar. Perfeito para imprimir e brincar.</div>
+                <div class="addon-price-row"><span class="addon-price-old">R$ 14,90</span><span class="addon-price">R$ 7,90</span></div>
+              </div>
+            </div>
+            <div class="addon-action"><div class="addon-check" id="adcheck-colorir"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"></polyline></svg></div><span class="addon-action-txt">Quero a versão para colorir também</span></div>
+          </div>
+
+          <div class="addon-card" id="addon-expressa" onclick="togAddon('expressa')">
+            <div class="addon-body">
+              <div class="addon-thumb"><img loading="lazy" decoding="async" src="images/entrega-expressa.webp" alt="Entrega expressa"></div>
+              <div class="addon-info">
+                <div class="addon-name">Prioridade: Entrega Expressa</div>
+                <div class="addon-desc">Seu pedido pula a fila e é finalizado com prioridade máxima.</div>
+                <div class="addon-price-row"><span class="addon-price-old">R$ 9,90</span><span class="addon-price">R$ 3,90</span></div>
+              </div>
+            </div>
+            <div class="addon-action"><div class="addon-check" id="adcheck-expressa"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"></polyline></svg></div><span class="addon-action-txt">Quero prioridade na entrega também</span></div>
+          </div>
+
+          <div class="receipt" id="rec-11"></div>
+        </div>
+        <div class="nav-stack">
+          <button class="btn-cta" onclick="goTo('loading')">Ver o Livro <span class="child-name-dyn"></span></button>
+          <button class="btn-mini-back" onclick="goTo('fb-final')">Voltar</button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           LOADING
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-loading">
+        <div class="loading-wrap">
+          <div class="ld-icon-wrap"><img src="images/ChatGPT%20Image%2020%20de%20ago.%20de%202026%2C%2017_11_51%20%281%29.webp" alt="Livro sendo criado" loading="lazy" decoding="async"></div>
+          <div class="ld-msg">Preparando o livro personalizado <span class="child-name-dyn"></span></div>
+
+          <div class="ld-bars">
+            <div>
+              <div class="ld-bar-line"><span>Personalizando a aparência</span><span class="ld-bar-pct" id="lb1-pct">0%</span></div>
+              <div class="ld-bar-track"><div class="ld-bar-fill" id="lb1-fill"></div></div>
+            </div>
+            <div>
+              <div class="ld-bar-line"><span>Escrevendo a aventura</span><span class="ld-bar-pct" id="lb2-pct">0%</span></div>
+              <div class="ld-bar-track"><div class="ld-bar-fill" id="lb2-fill"></div></div>
+            </div>
+            <div>
+              <div class="ld-bar-line"><span>Ilustrando as páginas</span><span class="ld-bar-pct" id="lb3-pct">0%</span></div>
+              <div class="ld-bar-track"><div class="ld-bar-fill" id="lb3-fill"></div></div>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" id="q-temperamento">
+        <input type="hidden" id="q-preferencia">
+        <input type="hidden" id="q-compromisso">
+      </div>
+
+      <!-- ══════════════════════════════════
+           RESULTADO / PAYWALL
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-result">
+        <div style="text-align:center;margin-bottom:16px">
+          <div class="result-headline">O livro <span class="child-name-dyn"></span> está quase pronto</div>
+          <div class="result-sub">Em poucos minutos, <span class="child-name-solo"></span> pode abrir um livro com o próprio nome na capa. Finalize seu pedido agora — as vagas de hoje são limitadas.</div>
+        </div>
+
+        <div class="social-proof-row">
+          <div class="social-proof-avatars">
+            <img src="images/pessoa2%20%281%29.webp" alt="" loading="lazy" decoding="async" width="28" height="28">
+            <img src="images/pessoa1%20%281%29.webp" alt="" loading="lazy" decoding="async" width="28" height="28">
+            <img src="images/1728566696715.webp" alt="" loading="lazy" decoding="async" width="28" height="28">
+          </div>
+          <div class="social-proof-text"><strong>4.238 livros</strong> já foram criados</div>
+        </div>
+
+        <div class="book-result-wrap">
+          <div class="book-result" id="bookResult">
+            <div class="br-star-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></div>
+            <div class="br-name child-name-solo">…</div>
+            <div class="br-sub">e a Grande Aventura</div>
+          </div>
+          <div class="book-result-sparkle s1"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></div>
+          <div class="book-result-sparkle s2"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></div>
+        </div>
+
+        <div class="urgency-timer" id="urgencyTimer">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>Livro reservado por <strong id="urgencyClock">15:00</strong></span>
+        </div>
+
+        <div class="price-anchor-card">
+          <div class="price-anchor-old">De R$ 39,90 por apenas</div>
+          <div class="price-anchor-new" id="price-result">R$ 14,90</div>
+          <div class="price-anchor-tag" id="price-result-tag">Desconto de Dia das Crianças ativo nesta sessão</div>
+        </div>
+
+        <div class="bonus-stack">
+          <div class="bonus-stack-title">Comprando hoje, você também leva:</div>
+          <div class="bonus-list">
+            <div class="bonus-card">
+              <div class="bonus-thumb"><img loading="lazy" decoding="async" src="images/bonus-37-livros.webp" alt="+37 Livros Infantis Clássicos"><span class="bonus-ribbon">Bônus</span></div>
+              <div class="bonus-info"><div class="bonus-name">+37 Livros Infantis Clássicos</div><div class="bonus-desc">PDF bônus com histórias ilustradas prontas</div></div>
+            </div>
+            <div class="bonus-card">
+              <div class="bonus-thumb"><img loading="lazy" decoding="async" src="images/bonus-certificado.webp" alt="Certificado Pequeno Leitor"><span class="bonus-ribbon">Bônus</span></div>
+              <div class="bonus-info"><div class="bonus-name">Certificado "Pequeno Leitor"</div><div class="bonus-desc">Personalizado com o nome <span class="child-name-dyn"></span></div></div>
+            </div>
+            <div class="bonus-card">
+              <div class="bonus-thumb"><img loading="lazy" decoding="async" src="images/bonus-guia.webp" alt="Guia de Rotina de Sono e Leitura"><span class="bonus-ribbon">Bônus</span></div>
+              <div class="bonus-info"><div class="bonus-name">Guia: Rotina de Sono e Leitura</div><div class="bonus-desc">E-book bônus com dicas para os pais</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="price-pick-wrap">
+          <button class="btn-cta btn-pulse" id="btnFinalCTA" onclick="irParaCheckout()">Quero o Livro <span class="child-name-dyn"></span> Agora</button>
+          <div class="price-pick-info">Você será direcionado para o pagamento seguro</div>
+        </div>
+
+        <div class="security-badges"><img src="images/IMG-COMBO-34.webp" alt="Selos de segurança" loading="lazy" decoding="async"></div>
+
+        <div class="section-heading">Veja a Reação de Quem Já Recebeu</div>
+        <div class="section-sub">Depoimentos reais de famílias que já surpreenderam seus pequenos</div>
+
+        <div class="video-review-stack">
+          <vturb-smartplayer id="vid-6aa8579893c6be5534cbd406" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer>
+          <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/5a997ec4-709f-4ac4-8078-16082f6a9347/players/6aa8579893c6be5534cbd406/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
+        </div>
+
+        <div class="carousel-wrap">
+          <div class="carousel-track" id="resultCarousel"><img src="images/crian%C3%A7a%20%281%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%285%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%284%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%283%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%282%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%281%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%285%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%284%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%283%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%282%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%281%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%285%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%284%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%283%29.webp" alt="" loading="lazy" decoding="async"><img src="images/crian%C3%A7a%20%282%29.webp" alt="" loading="lazy" decoding="async"></div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header"><img src="images/pessoa1%20%281%29.webp" alt="Camila" class="review-avatar" loading="lazy" decoding="async"><div class="review-info"><h4>Camila R. — mãe do Theo, 7 anos</h4><div class="review-stars">★★★★★</div></div></div>
+          <div class="review-text">Comprei com a moral de coragem porque meu filho tem medo do escuro. A história falou direto com ele. Hoje ele pede para ler antes de dormir e <strong>já não precisa mais da luz acesa.</strong></div>
+          <span class="review-date">Compradora verificada · Há 4 dias</span>
+        </div>
+        <div class="review-card">
+          <div class="review-header"><img src="images/1728566696715.webp" alt="Priscila" class="review-avatar" loading="lazy" decoding="async"><div class="review-info"><h4>Priscila A. — avó da Sofia, 4 anos</h4><div class="review-stars">★★★★★</div></div></div>
+          <div class="review-text">Dei de presente pra minha netinha. Quando ela viu o nome dela na capa deu um gritinho que eu nunca vou esquecer. <strong>A narração em áudio virou parte da rotina de dormir.</strong> Super recomendo!</div>
+          <span class="review-date">Compradora verificada · Há 1 semana</span>
+        </div>
+        <div class="review-card">
+          <div class="review-header"><img src="images/pessoa3%20%281%29.webp" alt="Renata" class="review-avatar" loading="lazy" decoding="async"><div class="review-info"><h4>Renata S. — mãe do Pedro, 6 anos</h4><div class="review-stars">★★★★★</div></div></div>
+          <div class="review-text">Meu filho pediu para ler <strong>toda noite</strong>. A melhor coisa que já comprei para ele. Ele trata o livro como um tesouro.</div>
+          <span class="review-date">Compradora verificada · Há 3 dias</span>
+        </div>
+
+        <div class="guarantee-row" style="margin-top:10px">
+          <div class="g-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+          <p><strong>Risco zero.</strong> Se o livro não encantar, devolvemos 100% em até 7 dias. Sem perguntas.</p>
+        </div>
+
+        <div class="section-heading" style="margin-top:32px">Dúvidas frequentes</div>
+        <div class="faq-item"><div class="faq-q" onclick="togFaq(this)">O que exatamente eu recebo?</div><div class="faq-a">Um livro ilustrado em PDF com história personalizada, ilustrações com os traços físicos da criança, capa e dedicatória. Em até 24h no seu e-mail.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="togFaq(this)">Posso presentear alguém que não é meu filho(a)?</div><div class="faq-a">Sim! É perfeito para netos, sobrinhos, afilhados ou qualquer criança que você queira presentear com carinho.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="togFaq(this)">As ilustrações realmente se parecem com a criança?</div><div class="faq-a">Usamos IA de última geração com os traços que você informou — tom de pele, cor e tipo de cabelo, cor dos olhos. O personagem fica muito próximo da aparência real dela.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="togFaq(this)">Posso imprimir o livro?</div><div class="faq-a">Sim! O PDF é otimizado para impressão em A4. Você pode imprimir em casa ou numa gráfica para ter um livro físico para guardar.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="togFaq(this)">É seguro comprar no site?</div><div class="faq-a">Sim, o pagamento é processado por parceiros certificados, com criptografia de ponta a ponta — seus dados nunca ficam armazenados aqui.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="togFaq(this)">Quanto tempo leva pra receber?</div><div class="faq-a">Em até 24h após a confirmação do pagamento, direto no seu e-mail.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="togFaq(this)">E se eu não gostar do resultado?</div><div class="faq-a">Garantia de 7 dias. Basta enviar um e-mail e devolvemos 100% do seu dinheiro. Sem burocracia.</div></div>
+
+        <button class="btn-cta btn-pulse" style="margin-top:28px" onclick="irParaCheckout()">Sim, Quero o Livro <span class="child-name-dyn"></span>!</button>
+      </div>
+
+      <!-- ══════════════════════════════════
+      <!-- ══════════════════════════════════
+           TRANSIÇÃO RÁPIDA PARA O CHECKOUT
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-redirect">
+        <div class="redirect-wrap">
+          <div class="redirect-spinner"></div>
+          <div class="redirect-text">Indo para o pagamento</div>
+          <div class="redirect-track"><div class="redirect-fill" id="redirectFill"></div></div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           CHECKOUT EMBUTIDO — CLONE FIEL DA KIWIFY
+           (estrutura extraída do HTML server-rendered oficial)
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-checkout">
+        <div class="kw-content">
+          <div class="kw-col-main">
+
+            <img class="kw-banner-img" src="images/ChatGPT%20Image%208%20de%20set.%20de%202026%2C%2001_43_47%20%281%29%20%281%29%20%281%29.webp" alt="Sua Historinha" fetchpriority="high">
+
+            <div class="kw-checkoutblock">
+
+              <div class="kw-prod-header">
+                <img class="kw-prod-thumb" src="images/ChatGPT%20Image%2017%20de%20jun.%20de%202026%2C%2014_54_47.png" alt="Sua Historinha" width="96" height="96">
+                <div class="kw-prod-info">
+                  <h3 class="kw-prod-title">Sua Historinha</h3>
+                  <p class="kw-prod-sub">Entrega digital instantânea após o pagamento.</p>
+                </div>
+              </div>
+
+              <!-- Campos — apenas Email e Telefone (nome já veio do quiz) -->
+              <div style="margin-top:16px">
+                <div class="kiwi-input">
+                  <input class="kiwi-input-field" id="fEmail" type="email" placeholder=" " autocomplete="email">
+                  <label class="kiwi-label">E-mail</label>
+                  <div class="kiwi-icon">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                  </div>
+                </div>
+                <div class="kiwi-input">
+                  <input class="kiwi-input-field" id="fTel" type="tel" placeholder=" " autocomplete="tel" inputmode="numeric" maxlength="16">
+                  <label class="kiwi-label">Telefone</label>
+                  <div class="kiwi-icon">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Resumo do pedido -->
+              <div id="rec-checkout" style="margin-top:4px"></div>
+
+              <!-- Order Bump — layout idêntico ao print enviado -->
+              <div class="kw-ob" id="obWrap" onclick="toggleOb()">
+                <div class="kw-ob-title">SIM, EU ACEITO ESSA OFERTA ESPECIAL!</div>
+                <div class="kw-ob-row">
+                  <svg class="kw-ob-arrow" viewBox="0 0 512 512" width="22" height="22" fill="#dc2626"><path fill="currentColor" d="M481,256L263.3,38.3v130.6H31v174.2h232.3v130.6L481,256z"></path></svg>
+                  <div class="kw-ob-check" id="obCheck"></div>
+                  <img class="kw-ob-img" src="images/ChatGPT%20Image%208%20de%20set.%20de%202026%2C%2001_33_44%20%281%29%20%281%29.webp" alt="Historinhas extras" width="56" height="56" loading="lazy">
+                  <div class="kw-ob-desc">
+                    <span class="kw-ob-headline">APENAS HOJE:</span> LEVE + 2 HISTÓRIAS EXTRAS 100% PERSONALIZADAS - <span id="obPreco">R$ 9,90</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Método de pagamento — grid 2 colunas, Pix esquerda pré-selecionado, Cartão direita -->
+              <div id="paymentMethodCard">
+              <div class="kw-methods-grid">
+                <div class="kw-method active" id="methPix" onclick="selMethod('pix')">
+                  <div class="kw-method-badge">
+                    <span class="kw-badge-icon"></span>
+                  </div>
+                  <img class="kw-icon-img" src="images/pix.svg" alt="Pix" width="20" height="20">
+                  Pix
+                </div>
+                <div class="kw-method" id="methCard" onclick="selMethod('card')">
+                  <div class="kw-method-badge">
+                    <span class="kw-badge-icon"></span>
+                  </div>
+                  <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"></path></svg>
+                  Cartão
+                </div>
+              </div>
+
+              <!-- Painel PIX -->
+              <div id="pixPanel" class="kw-pix-panel">
+                <button class="kw-pay-btn" id="btnPix" onclick="pagarPix()">
+                  <img src="images/pix.svg" alt="" width="20" height="20" style="filter:brightness(0) invert(1)">
+                  Pagar agora <span id="ctaPricePix" style="display:none">R$ 0,00</span>
+                </button>
+              </div>
+
+              <!-- Painel Cartão — dados enviados ao backend Amplo Pay -->
+              <div id="cardPanel" class="kw-card-panel" style="display:none">
+                <div class="amplo-card-grid">
+                  <input class="kiwi-input-field" id="cardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="Número do cartão">
+                  <input class="kiwi-input-field" id="cardOwner" autocomplete="cc-name" placeholder="Nome no cartão">
+                  <input class="kiwi-input-field" id="cardExpiry" inputmode="numeric" autocomplete="cc-exp" placeholder="Validade (AAAA-MM)">
+                  <input class="kiwi-input-field" id="cardCvv" inputmode="numeric" autocomplete="cc-csc" placeholder="CVV">
+                  <input class="kiwi-input-field" id="cardZip" inputmode="numeric" autocomplete="postal-code" placeholder="CEP">
+                  <input class="kiwi-input-field" id="cardState" autocomplete="address-level1" placeholder="Estado (ex.: SP)">
+                  <input class="kiwi-input-field" id="cardCity" autocomplete="address-level2" placeholder="Cidade">
+                  <input class="kiwi-input-field" id="cardNeighborhood" autocomplete="address-line2" placeholder="Bairro">
+                  <input class="kiwi-input-field" id="cardStreet" autocomplete="address-line1" placeholder="Rua">
+                  <input class="kiwi-input-field" id="cardNumberAddress" inputmode="numeric" autocomplete="address-line3" placeholder="Número">
+                  <select class="kiwi-input-field" id="cardInstallments"><option value="1">1x sem juros</option><option value="2">2x</option><option value="3">3x</option><option value="4">4x</option><option value="5">5x</option><option value="6">6x</option></select>
+                </div>
+                <button class="kw-pay-btn" id="btnCard" type="button" onclick="pagarCartaoAmplo()">Pagar com cartão</button>
+                <div class="kw-erro" id="erroCartaoBrick"></div>
+              </div>
+
+              <div class="kw-erro" id="erroCheckout"></div>
+
+              <div class="kw-security-row">
+                <div class="kw-sec-icon">
+                  <svg viewBox="0 0 512.005 512.005" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M440.888,64.609l-181.333-64c-2.292-0.813-4.812-0.813-7.104,0l-181.333,64c-4.26,1.51-7.115,5.542-7.115,10.063v128c0,165.646,24.563,226.188,187.198,308.188c1.51,0.76,3.156,1.146,4.802,1.146c1.646,0,3.292-0.385,4.802-1.146c162.635-82,187.198-142.542,187.198-308.188v-128C448.003,70.151,445.148,66.12,440.888,64.609z M352.003,320.005 c0,11.76-9.573,21.333-21.333,21.333H181.336c-11.76,0-21.333-9.573-21.333-21.333V213.339c0-11.76,9.573-21.333,21.333-21.333 v-10.667c0-41.167,33.5-74.667,74.667-74.667s74.667,33.5,74.667,74.667v10.667c11.76,0,21.333,9.573,21.333,21.333V320.005z"></path></svg>
+                </div>
+                <div class="kw-sec-text">Protegemos seus dados de pagamento com criptografia para garantir segurança bancária.</div>
+              </div>
+              </div><!-- /paymentMethodCard -->
+
+              <!-- Resultado PIX gerado -->
+              <div class="kw-pix-result" id="pixDisplay" style="display:none;margin-top:20px">
+                <div class="kw-pix-title">Pague com Pix</div>
+                <div class="kw-pix-sub">Escaneie o QR Code ou copie o código abaixo</div>
+                <div class="kw-qr-wrap"><img id="qrImg" src="" alt="QR Code Pix"></div>
+                <div class="kw-pix-total" id="pixTotalDisplay">R$ 0,00</div>
+                <div class="kw-cc-label">Código Pix copia e cola</div>
+                <div class="kw-cc-box">
+                  <div class="kw-cc-text" id="pixCode">Aguardando...</div>
+                </div>
+                <button class="kw-pay-btn kw-copy-pix-btn" id="copyBtn" onclick="copiarPix()">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copiar Código Pix
+                </button>
+                <div class="kw-await-bar">
+                  <div class="kw-spin"></div>
+                  Aguardando confirmação do pagamento…
+                </div>
+                <div class="kw-pix-timer">Expira em <span id="expTimer">30:00</span></div>
+                <div class="kw-pix-steps">
+                  <div class="kw-pix-steps-title">Como pagar com Pix</div>
+                  <div class="kw-pix-step"><div class="kw-pix-step-num">1</div><div class="kw-pix-step-txt">Abra o <strong>app do seu banco</strong> e acesse a área Pix</div></div>
+                  <div class="kw-pix-step"><div class="kw-pix-step-num">2</div><div class="kw-pix-step-txt">Toque em <strong>Copiar Código Pix</strong> acima ou escaneie o <strong>QR code</strong></div></div>
+                  <div class="kw-pix-step"><div class="kw-pix-step-num">3</div><div class="kw-pix-step-txt">Cole o código na opção <strong>Pix Copia e Cola</strong> do app</div></div>
+                  <div class="kw-pix-step"><div class="kw-pix-step-num">4</div><div class="kw-pix-step-txt"><strong>Confirme o pagamento</strong> — é aprovado na hora</div></div>
+                  <div class="kw-pix-step"><div class="kw-pix-step-num">5</div><div class="kw-pix-step-txt">Seu livro chega no <strong>e-mail em instantes</strong> ✉️</div></div>
+                </div>
+              </div>
+
+              <!-- Footer de segurança -->
+              <div class="kw-footer">
+                <article>
+                  <div>
+                    Ao clicar em pagar, você confirma que leu e concorda com os <a href="#" target="_blank">Termos de Compra</a>, <a href="#" target="_blank">Termos de Uso</a> e <a href="#" target="_blank">Política de Privacidade</a>.
+                  </div>
+                  <button type="button">Denunciar esse produto.</button>
+                  <div style="margin-top:6px">
+                    <div>Este site é protegido pelo Google reCAPTCHA.</div>
+                    <a href="https://policies.google.com/privacy" target="_blank">Política de Privacidade</a> e <a href="https://policies.google.com/terms" target="_blank">Termos de Serviço</a>.
+                  </div>
+                </article>
+              </div>
+
+            </div><!-- /kw-checkoutblock -->
+
+            <!-- Avaliações — layout idêntico ao sidebar oficial (rounded-md, border-gray-200) -->
+            <div class="kw-reviews">
+              <div class="kw-review-card">
+                <img class="kw-review-avatar" src="images/pessoa2%20%281%29.webp" alt="Karla M." loading="lazy">
+                <div class="kw-review-quote">Fiz a historinha personalizada para o meu filho e quando chegou eu fiquei encantada.</div>
+                <div class="kw-review-stars">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                </div>
+                <div class="kw-review-name">Karla M.</div>
+              </div>
+              <div class="kw-review-card">
+                <img class="kw-review-avatar" src="images/1744932129998.webp" alt="Carminha L." loading="lazy">
+                <div class="kw-review-quote">Eu queria dar algo pro meu neto que não fosse apenas mais um brinquedo e encontrei, amei muito!</div>
+                <div class="kw-review-stars">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                </div>
+                <div class="kw-review-name">Carminha L.</div>
+              </div>
+              <div class="kw-review-card">
+                <img class="kw-review-avatar" src="images/pessoa3%20%281%29.webp" alt="Renata S." loading="lazy">
+                <div class="kw-review-quote">Ameiii! Conseguiram fazer igualzinho minha filha, todos os detalhes! Perfeito 😍😍😍😍</div>
+                <div class="kw-review-stars">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                </div>
+                <div class="kw-review-name">Renata S.</div>
+              </div>
+            </div>
+
+          </div><!-- /kw-col-main -->
+        </div><!-- /kw-content -->
+      </div><!-- /sc-checkout -->
+
+      <!-- ══════════════════════════════════
+           APROVADO
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-aprovado">
+        <div class="ty-wrap">
+
+          <div class="ty-icon">✅</div>
+          <div class="ty-title">Pagamento confirmado!</div>
+          <div class="ty-sub">Seu livro personalizado está sendo criado com carinho e chega em instantes no e-mail<br><strong id="okEmail" class="ty-email"></strong></div>
+
+          <div class="ty-steps">
+            <div class="ty-step">
+              <div class="ty-step-icon">🎨</div>
+              <div class="ty-step-txt"><strong>Agora:</strong> nossa equipe está gerando as ilustrações e o texto personalizado da história.</div>
+            </div>
+            <div class="ty-step">
+              <div class="ty-step-icon">📧</div>
+              <div class="ty-step-txt"><strong>Em poucos minutos:</strong> o PDF do livro completo chega no e-mail que você usou na compra.</div>
+            </div>
+            <div class="ty-step">
+              <div class="ty-step-icon">📖</div>
+              <div class="ty-step-txt"><strong>Depois disso:</strong> é só baixar, imprimir se quiser, e aproveitar a leitura com a criança.</div>
+            </div>
+          </div>
+
+          <div class="ty-warning">
+            <div class="ty-warning-title">⚠️ Não encontrou o e-mail?</div>
+            <div class="ty-warning-txt">
+              Verifique a caixa de <strong>spam</strong> ou <strong>lixo eletrônico</strong> — às vezes provedores de e-mail (Gmail, Outlook, Hotmail) classificam entregas automáticas ali por engano.
+              Se achar, marque como "Não é spam" para receber tudo certinho.
+            </div>
+          </div>
+
+          <div class="ty-support">
+            <div class="ty-support-title">Ainda não recebeu?</div>
+            <div class="ty-support-txt">
+              Se depois de algum tempo o livro não chegar em nenhuma das duas caixas, fala com a gente que resolvemos rapidinho:
+            </div>
+            <a href="#" class="ty-support-email">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+              Fale com o nosso suporte
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- POPUP CUPOM -->
+<div class="popup-overlay" id="couponPopup">
+  <div class="popup-card">
+    <div class="popup-icon"><img src="images/icone-presente.webp" alt="" style="width: 56px; height: 56px; object-fit: contain; display: none;" onerror="this.style.display='none'"></div>
+    <div class="popup-title">Você ganhou um <em>desconto de Dia das Crianças!</em></div>
+    <div class="popup-sub">Para comemorar o Dia das Crianças, liberamos <strong>R$ 25,00</strong> de desconto no livro <span class="child-name-dyn"></span> — mas ele <strong>expira ao sair desta tela.</strong></div>
+    <button class="popup-btn" onclick="applyDiscount()">Ativar Meu Desconto</button>
+  </div>
+</div>
+
+<!-- POPUP MICRO-PERGUNTA (loading) -->
+<div class="popup-overlay" id="microPopup">
+  <div class="popup-card">
+    <div class="popup-title" id="microPopupQ" style="font-size:19px">…</div>
+    <div class="micro-note" id="microPopupNote" style="display:none"></div>
+    <div class="micro-opts" id="microPopupOpts"></div>
+  </div>
+</div>
+
+<script>
+const PRICES = { base: 39.90, discount: 25.00, colorir: 7.90, expressa: 3.90 };
+let step = 'intro', addons = { colorir: false, expressa: false }, hasDiscount = false;
+const SESSION_EID = 'ev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+const TOTAL_STEPS = 11;
+const IMG_BASE = 'images/';
+
+// Checkout agora é embutido — sem links externos
+
+// ════════════════════════════════════════════
+//  IMAGE SETS — CONDICIONAIS POR GÊNERO
+// ════════════════════════════════════════════
+const SKIN_OPTIONS = {
+  menina: [
+    { val: 'clara',  label: 'Clara',  img: 'branca-menina.webp' },
+    { val: 'morena', label: 'Morena', img: 'morena-menina.webp' },
+    { val: 'negra',  label: 'Negra',  img: 'negra-menina.webp' },
+  ],
+  menino: [
+    { val: 'clara',  label: 'Clara',  img: 'branco-menino.webp' },
+    { val: 'morena', label: 'Morena', img: 'moreno-menino.webp' },
+    { val: 'negra',  label: 'Negra',  img: 'negro-menino.webp' },
+  ],
+};
+const HAIRCOLOR_OPTIONS = {
+  menina: [
+    { val: 'loiro',    label: 'Loiro',    img: 'loiro-menina.webp' },
+    { val: 'castanho', label: 'Castanho', img: 'castanho-menina.webp' },
+    { val: 'preto',    label: 'Preto',    img: 'preto-menina.webp' },
+    { val: 'ruivo',    label: 'Ruivo',    img: 'ruivo-menina.webp' },
+  ],
+  menino: [
+    { val: 'loiro',    label: 'Loiro',    img: 'loiro-menino.webp' },
+    { val: 'castanho', label: 'Castanho', img: 'castanho-menino.webp' },
+    { val: 'preto',    label: 'Preto',    img: 'preto-menino.webp' },
+    { val: 'ruivo',    label: 'Ruivo',    img: 'ruivo-menino.webp' },
+  ],
+};
+const HAIRTYPE_OPTIONS = {
+  menina: [
+    { val: 'liso',     label: 'Liso',     img: 'liso-menina.webp' },
+    { val: 'cacheado', label: 'Cacheado', img: 'cacheado-menina.webp' },
+    { val: 'crespo',   label: 'Crespo',   img: 'crespo-menina.webp' },
+  ],
+  menino: [
+    { val: 'liso',     label: 'Liso',     img: 'liso-menino.webp' },
+    { val: 'cacheado', label: 'Cacheado', img: 'cacheado-menino.webp' },
+    { val: 'crespo',   label: 'Crespo',   img: 'crespo-menino.webp' },
+  ],
+};
+
+function imgChipHTML(gridId, hiddenId, opt, wide, next) {
+  return `<div class="img-chip" onclick="selImgChip(this,'${gridId}','${hiddenId}','${opt.val}',${next})">
+    <div class="img-chip-pic${wide ? ' wide' : ''}"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="${IMG_BASE}${opt.img}" alt="${opt.label}" onload="this.previousElementSibling.style.display='none'"></div>
+    <div class="img-chip-label"><span class="chip-label">${opt.label}</span></div>
+  </div>`;
+}
+function tileCardHTML(gridId, hiddenId, opt, next) {
+  return `<div class="tile-card" onclick="selTileCard(this,'${gridId}','${hiddenId}','${opt.val}',${next})">
+    <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="${IMG_BASE}${opt.img}" alt="${opt.label}" onload="this.previousElementSibling.style.display='none'">
+    <div class="tile-bullet tile-bullet-left">${opt.label}</div></div>
+  </div>`;
+}
+
+let selectedGender = null;
+function renderGenderDependentGrids() {
+  const g = selectedGender || 'menina';
+  document.getElementById('skin-grid').innerHTML = SKIN_OPTIONS[g].map(o => tileCardHTML('skin-grid', 'q-skin', o, 4)).join('');
+  document.getElementById('haircolor-grid').innerHTML = HAIRCOLOR_OPTIONS[g].map(o => imgChipHTML('haircolor-grid', 'q-hair-color', o, false, 5)).join('');
+  document.getElementById('hairtype-grid').innerHTML = HAIRTYPE_OPTIONS[g].map(o => imgChipHTML('hairtype-grid', 'q-hair-type', o, false, 6)).join('');
+}
+
+// ════════════════════════════════════════════
+//  CARROSSEL INFINITO (prova social + result)
+// ════════════════════════════════════════════
+const CAROUSEL_IMGS = [
+  IMG_BASE + 'crian%C3%A7a%20(1).webp',
+  IMG_BASE + 'crian%C3%A7a%20(5).webp',
+  IMG_BASE + 'crian%C3%A7a%20(4).webp',
+  IMG_BASE + 'crian%C3%A7a%20(3).webp',
+  IMG_BASE + 'crian%C3%A7a%20(2).webp',
+];
+function buildCarousel(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const doubled = CAROUSEL_IMGS.concat(CAROUSEL_IMGS).concat(CAROUSEL_IMGS);
+  el.innerHTML = doubled.map(src => `<img src="${src}" alt="" loading="lazy" decoding="async">`).join('');
+}
+buildCarousel('socialCarousel');
+buildCarousel('resultCarousel');
+
+// ════════════════════════════════════════════
+//  META / UTMs
+// ════════════════════════════════════════════
+function getCookie(n){const m=document.cookie.match(new RegExp('(^| )'+n+'=([^;]+)'));return m?m[2]:null}
+function getFbp(){return getCookie('_fbp')}
+function getFbc(){let f=getCookie('_fbc');if(!f){const c=new URLSearchParams(window.location.search).get('fbclid');if(c)f=`fb.1.${Date.now()}.${c}`}return f}
+function capUTMs(){const p=new URLSearchParams(window.location.search),u={};['utm_source','utm_medium','utm_campaign','utm_content','utm_term','src','sck','fbclid','gclid'].forEach(k=>{if(p.get(k))u[k]=p.get(k)});try{if(window.utmify&&typeof window.utmify==='object')['utm_source','utm_medium','utm_campaign','utm_content','utm_term','src','sck'].forEach(k=>{if(window.utmify[k]&&!u[k])u[k]=window.utmify[k]})}catch(_){}try{const s=sessionStorage.getItem('_utms');if(s){const j=JSON.parse(s);Object.keys(j).forEach(k=>{if(!u[k])u[k]=j[k]})}}catch(_){}if(Object.keys(u).length)try{sessionStorage.setItem('_utms',JSON.stringify(u))}catch(_){}return u}
+let UTMs=capUTMs();
+function getUTMsFresh(){const f=capUTMs();if(Object.keys(f).length>Object.keys(UTMs).length)UTMs=f;return UTMs}
+
+function getVal(id){const el=document.getElementById(id);return el?el.value.trim():''}
+function fmtBRL(v){return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function isValidEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
+
+function childFirstName(){
+  const raw = getVal('q-child-name');
+  if (!raw) return '';
+  return raw.trim().split(/\s+/)[0];
+}
+function childDisplayName(){ return childFirstName() || 'a criança' }
+function childGender(){ return getVal('q-gender') || 'menina' }
+function isMenino(){ return childGender() === 'menino' }
+
+function updateDynNames(){
+  const cn = childDisplayName();
+  const prefix = cn === 'a criança' ? 'da criança' : 'de ' + cn;
+  document.querySelectorAll('.child-name-dyn').forEach(el => el.textContent = prefix);
+  document.querySelectorAll('.child-name-solo').forEach(el => el.textContent = cn);
+  const bookEl = document.getElementById('bookResult');
+  if(bookEl){ bookEl.classList.remove('menino','menina'); bookEl.classList.add(childGender()); }
+}
+
+// ════════════════════════════════════════════
+//  SELEÇÃO
+// ════════════════════════════════════════════
+function selImgChip(el,gridId,hiddenId,val,next){
+  document.getElementById(gridId).querySelectorAll('.img-chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  const h=document.getElementById(hiddenId);if(h)h.value=val;
+  validate();
+  if(next!==undefined) setTimeout(()=>goTo(next),380);
+}
+function selTileCard(el,gridId,hiddenId,val,next){
+  document.getElementById(gridId).querySelectorAll('.tile-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  const h=document.getElementById(hiddenId);if(h)h.value=val;
+  validate();
+  if(next!==undefined) setTimeout(()=>goTo(next),380);
+}
+function selOptChip(el,gridId,hiddenId,val){
+  document.getElementById(gridId).querySelectorAll('.opt-chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  const h=document.getElementById(hiddenId);if(h)h.value=val;
+  validate();
+}
+function selGender(el,val,next){
+  document.getElementById('gender-grid').querySelectorAll('.gender-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedGender=val;
+  document.getElementById('q-gender').value=val;
+  renderGenderDependentGrids();
+  window._gridsRendered=true;
+  validate();
+  if(next!==undefined) setTimeout(()=>goTo(next),380);
+}
+function openCustomScenario(){
+  document.getElementById('customScenarioFld').style.display='block';
+  document.getElementById('customToggle').style.display='none';
+  document.getElementById('customScenarioNav').style.display='flex';
+  document.getElementById('setting-grid').querySelectorAll('.tile-card').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('q-setting').value='';
+  validate();
+}
+function closeCustomScenario(){
+  document.getElementById('customScenarioFld').style.display='none';
+  document.getElementById('customToggle').style.display='block';
+  document.getElementById('customScenarioNav').style.display='none';
+  document.getElementById('q-setting-custom').value='';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  // Captura manual da tela intro — não passa por goTo()
+  window.posthog&&posthog.capture('Historinha_Intro',{step_raw:'intro',session_id:SESSION_EID});
+
+  const customInput=document.getElementById('q-setting-custom');
+  if(customInput){
+    customInput.addEventListener('input',()=>{
+      document.getElementById('q-setting').value=customInput.value.trim();
+      validate();
+    });
+  }
+});
+
+// ════════════════════════════════════════════
+//  NAVEGAÇÃO
+// ════════════════════════════════════════════
+function goTo(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  const scId = s==='loading' ? 'sc-loading' : s==='result' ? 'sc-result' : s==='checkout' ? 'sc-checkout' : s==='aprovado' ? 'sc-aprovado' : 'sc-'+s;
+  const sc=document.getElementById(scId);
+  if(sc){sc.classList.add('active');sc.style.animation='none';sc.offsetHeight;sc.style.animation=''}
+  step=s;
+
+  if(s===3 && !window._gridsRendered){renderGenderDependentGrids();window._gridsRendered=true}
+
+  const pw=document.getElementById('progWrap'),sc2=document.getElementById('stepCount');
+  if(typeof s==='number'&&s>=1&&s<=TOTAL_STEPS){
+    pw.style.display='block';sc2.textContent='Passo '+s+' de '+TOTAL_STEPS;
+    document.getElementById('progFill').style.width=(((s-1)/(TOTAL_STEPS-1))*100)+'%';
+  }else{pw.style.display='none';sc2.textContent=''}
+  document.getElementById('overlay').scrollTop=0;
+  updateDynNames();validate();
+  const STEP_EVENTS = {
+    'intro':       'Historinha_Intro',
+    'social':      'Historinha_SocialProof',
+    1:             'Historinha_NomeIdade',
+    2:             'Historinha_Genero',
+    3:             'Historinha_TomPele',
+    4:             'Historinha_CorCabelo',
+    5:             'Historinha_TipoCabelo',
+    6:             'Historinha_CorOlhos',
+    'fb-rosto':    'Historinha_FbRosto',
+    7:             'Historinha_MoralHistoria',
+    8:             'Historinha_Cenario',
+    'fb-aventura': 'Historinha_FbAventura',
+    9:             'Historinha_Personalidade',
+    10:            'Historinha_EmailMae',
+    'fb-final':    'Historinha_FbFinal',
+    11:            'Historinha_Upsell',
+    'loading':     'Historinha_Loading',
+    'result':      'Historinha_Resultado',
+  };
+  const eventName = STEP_EVENTS[s] || ('Historinha_Step_' + String(s));
+  window.posthog&&posthog.capture(eventName,{step_raw:String(s),session_id:SESSION_EID});
+
+  if(s===11&&!hasDiscount&&!window._popupShown){
+    window._popupShown=true;
+    setTimeout(()=>{const p=document.getElementById('couponPopup');p.style.display='flex';setTimeout(()=>p.classList.add('active'),10)},900);
+  }
+
+  if(s==='fb-rosto'){ runFbLoader('fbRostoLoader','fbRostoFill','fbRostoCheck','fbRostoBtn',2300) }
+  if(s==='fb-final'){ runFbLoader('fbFinalLoader','fbFinalFill','fbFinalCheck','fbFinalBtn',2300) }
+
+  if(s==='loading'){
+    fetch('/track-ic',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        valor:calcTotal().tot,utms:getUTMsFresh(),eventId:SESSION_EID,fbp:getFbp(),fbc:getFbc()
+      })}).catch(()=>{});
+    startLoading();
+  }
+  if(s==='result'){
+    document.getElementById('price-result').textContent=fmtBRL(calcTotal().tot);
+    updatePriceResultTag();
+    startUrgencyTimer();
+  }
+}
+
+function runFbLoader(loaderId,fillId,checkId,btnId,dur){
+  const loader=document.getElementById(loaderId),fill=document.getElementById(fillId),check=document.getElementById(checkId),btn=document.getElementById(btnId);
+  if(btn) btn.style.display='none';
+  if(check) check.style.display='none';
+  if(loader) loader.style.display='block';
+  if(fill) fill.style.width='0%';
+  const start=performance.now();
+  function step(t){
+    const p=Math.min(1,(t-start)/dur);
+    if(fill) fill.style.width=(p*100)+'%';
+    if(p<1) requestAnimationFrame(step);
+    else{
+      if(loader) loader.style.display='none';
+      if(check) check.style.display='flex';
+      setTimeout(()=>{ if(btn) btn.style.display='flex'; }, 500);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// ════════════════════════════════════════════
+//  TELA DE LOADING — BARRAS + MICRO-PERGUNTAS
+//  (perguntas curtas, sempre com só 2 opções, sem
+//  precisar cobrir todas as variações possíveis)
+// ════════════════════════════════════════════
+function animatePct(fillId,pctId,dur,cb){
+  const fill=document.getElementById(fillId),pctEl=document.getElementById(pctId);
+  const start=performance.now();
+  function step(t){
+    const p=Math.min(1,(t-start)/dur);
+    const val=Math.round(p*100);
+    if(fill)fill.style.width=val+'%';
+    if(pctEl)pctEl.textContent=val+'%';
+    if(p<1) requestAnimationFrame(step); else cb&&cb();
+  }
+  requestAnimationFrame(step);
+}
+function showMicroPopup(q,onDone){
+  const p=document.getElementById('microPopup');
+  document.getElementById('microPopupQ').textContent=q.text();
+  const noteEl=document.getElementById('microPopupNote');
+  if(q.note){ noteEl.textContent=q.note; noteEl.style.display='block'; } else { noteEl.style.display='none'; }
+  const optsWrap=document.getElementById('microPopupOpts');
+  optsWrap.innerHTML='';
+  q.opts.forEach(([label,val,variant])=>{
+    const b=document.createElement('button');
+    b.className='micro-opt-btn'+(variant?' '+variant:'');
+    b.textContent=label;
+    b.onclick=()=>{
+      const h=document.getElementById(q.field); if(h) h.value=val;
+      p.classList.remove('active');
+      setTimeout(()=>{p.style.display='none';onDone()},250);
+    };
+    optsWrap.appendChild(b);
+  });
+  p.style.display='flex';
+  setTimeout(()=>p.classList.add('active'),10);
+}
+function startLoading(){
+  ['lb1-fill','lb2-fill','lb3-fill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width='0%'});
+  ['lb1-pct','lb2-pct','lb3-pct'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='0%'});
+
+  const nome = childFirstName();
+  const suj = isMenino() ? 'Ele' : 'Ela';
+  const tim = isMenino() ? 'tímido' : 'tímida';
+  const ext = isMenino() ? 'extrovertido' : 'extrovertida';
+
+  const bars=[
+    {fill:'lb1-fill',pct:'lb1-pct',dur:2200,q:{text:()=>`${nome||suj} é mais ${tim} ou ${ext}?`,opts:[[tim.charAt(0).toUpperCase()+tim.slice(1),'timido'],[ext.charAt(0).toUpperCase()+ext.slice(1),'extrovertido']],field:'q-temperamento'}},
+    {fill:'lb2-fill',pct:'lb2-pct',dur:2200,q:{text:()=>`${suj} prefere ficar mais em casa ou explorando lá fora?`,opts:[['Em casa','casa'],['Lá fora','fora']],field:'q-preferencia'}},
+    {fill:'lb3-fill',pct:'lb3-pct',dur:2200,q:{text:()=>'Nosso número de pedidos é muito limitado, pois cada livro é único. Você se compromete com a vaga?',note:'Apenas 3 livros disponíveis hoje',opts:[['Sim, me comprometo','sim','primary'],['Não','nao','secondary']],field:'q-compromisso'}},
+  ];
+  let i=0;
+  function runBar(){
+    if(i>=bars.length){ goTo('result'); return; }
+    const b=bars[i];
+    animatePct(b.fill,b.pct,b.dur,()=>{ showMicroPopup(b.q,()=>{ i++; runBar(); }) });
+  }
+  runBar();
+}
+
+// ════════════════════════════════════════════
+//  VALIDAÇÃO
+// ════════════════════════════════════════════
+function validate(){
+  const en=(id,ok)=>{const b=document.getElementById(id);if(b)b.disabled=!ok};
+  if(step===1)en('bn-1',!!(getVal('q-child-name')&&getVal('q-age')));
+  if(step===8)en('btnCustomScenario',!!getVal('q-setting-custom'));
+  if(step===10)en('bn-10',!!(getVal('q-email')&&isValidEmail(getVal('q-email'))&&getVal('q-mom-name')));
+}
+document.querySelectorAll('.inp').forEach(el=>{el.addEventListener('input',()=>{validate();updateDynNames()});el.addEventListener('change',()=>{validate();updateDynNames()})});
+
+// ════════════════════════════════════════════
+//  PREÇO / ADDONS
+// ════════════════════════════════════════════
+function togAddon(a){
+  addons[a]=!addons[a];
+  document.getElementById('addon-'+a).classList.toggle('sel',addons[a]);
+  updateReceipts();
+  window.posthog&&posthog.capture('addon_toggled',{addon:a,active:addons[a]});
+}
+function calcTotal(){
+  let tot=PRICES.base-(hasDiscount?PRICES.discount:0);
+  if(addons.colorir)tot+=PRICES.colorir;if(addons.expressa)tot+=PRICES.expressa;
+  return{sub:PRICES.base,disc:hasDiscount?PRICES.discount:0,tot:parseFloat(tot.toFixed(2))};
+}
+function buildReceiptHTML(){
+  const c=calcTotal();
+  let h=`<div class="rr sub"><span class="rl">Livro Ilustrado Personalizado</span><span class="rv">${fmtBRL(c.sub)}</span></div>`;
+  h+=`<div class="rr disc"><span class="rl">Desconto Dia das Crianças${hasDiscount?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
+  h+=hasDiscount?`<span class="rv">-${fmtBRL(c.disc)}</span></div>`:`<span class="rv" style="opacity:.35">-${fmtBRL(c.disc)}</span></div>`;
+  if(addons.colorir)h+=`<div class="rr add"><span class="rl">Versão para Colorir</span><span class="rv">+${fmtBRL(PRICES.colorir)}</span></div>`;
+  if(addons.expressa)h+=`<div class="rr add"><span class="rl">Entrega Expressa</span><span class="rv">+${fmtBRL(PRICES.expressa)}</span></div>`;
+  h+=`<div class="rr tot"><span class="rl">Total a Pagar</span><span class="rv">${fmtBRL(c.tot)}</span></div>`;
+  return h;
+}
+function syncReceipt(id){const el=document.getElementById(id);if(el)el.innerHTML=buildReceiptHTML()}
+function updatePriceResultTag(){
+  const tag=document.getElementById('price-result-tag');
+  if(!tag)return;
+  const extras=[];
+  if(addons.colorir)extras.push('Colorir');
+  if(addons.expressa)extras.push('Expressa');
+  tag.textContent = extras.length
+    ? `Inclui ${extras.join(' + ')} · Desconto de Dia das Crianças ativo`
+    : 'Desconto de Dia das Crianças ativo nesta sessão';
+}
+function updateReceipts(){
+  syncReceipt('rec-11');
+  const pr=document.getElementById('price-result');if(pr)pr.textContent=fmtBRL(calcTotal().tot);
+  updatePriceResultTag();
+}
+function applyDiscount(){
+  hasDiscount=true;updateReceipts();
+  const p=document.getElementById('couponPopup');p.classList.remove('active');setTimeout(()=>{p.style.display='none'},300);
+  window.posthog&&posthog.capture('discount_applied');
+}
+
+// ════════════════════════════════════════════
+//  TIMER DE URGÊNCIA (paywall)
+// ════════════════════════════════════════════
+let urgencyDeadline=null;
+function startUrgencyTimer(){
+  const KEY='_urgencyDeadline';
+  let dl=null;
+  try{ dl=sessionStorage.getItem(KEY); }catch(_){}
+  if(dl){ urgencyDeadline=parseInt(dl,10); }
+  else{
+    urgencyDeadline=Date.now()+15*60*1000;
+    try{ sessionStorage.setItem(KEY,String(urgencyDeadline)); }catch(_){}
+  }
+  tickUrgency();
+  if(window._urgencyInt) clearInterval(window._urgencyInt);
+  window._urgencyInt=setInterval(tickUrgency,1000);
+}
+function tickUrgency(){
+  const el=document.getElementById('urgencyClock');
+  if(!el||!urgencyDeadline) return;
+  const remaining=Math.max(0,urgencyDeadline-Date.now());
+  const m=Math.floor(remaining/60000), s=Math.floor((remaining%60000)/1000);
+  el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+// ════════════════════════════════════════════
+//  QUIZ DATA
+// ════════════════════════════════════════════
+function getQuizData(){
+  return{
+    child_name:        childFirstName(),
+    child_name_full:   getVal('q-child-name'),
+    mom_name:          getVal('q-mom-name'),
+    email:             getVal('q-email'),
+    child_age:         getVal('q-age'),
+    child_gender:      getVal('q-gender'),
+    skin_tone:         getVal('q-skin'),
+    hair_color:        getVal('q-hair-color'),
+    hair_type:         getVal('q-hair-type'),
+    eye_color:         getVal('q-eyes'),
+    moral:             getVal('q-moral'),
+    setting:           getVal('q-setting')||getVal('q-setting-custom'),
+    setting_is_custom: !!getVal('q-setting-custom'),
+    special_notes:     getVal('q-special')||'Nenhum',
+    temperamento:      getVal('q-temperamento'),
+    preferencia:       getVal('q-preferencia'),
+    compromisso:       getVal('q-compromisso'),
+    addon_colorir:     addons.colorir  ? 'Sim':'Não',
+    addon_expressa:    addons.expressa ? 'Sim':'Não',
+    has_discount:      hasDiscount ? 'Sim':'Não',
+    total:             calcTotal().tot,
+  };
+}
+
+function togFaq(el){el.parentElement.classList.toggle('open')}
+
+// ════════════════════════════════════════════
+//  CHECKOUT EMBUTIDO
+// ════════════════════════════════════════════
+let obExtras   = false;
+let metodoPag  = 'pix';
+let pixId      = null;
+let pollingInt = null;
+let expInterval= null;
+let srvCfg     = {};
+let ctTimerInt = null;
+let mpClientObj  = null;
+let cardBrickController = null;
+
+// Preço do order bump — atualizado via /config
+let OB_PRECO = 9.90;
+
+// ── MÁSCARA TELEFONE — (DD) 9XXXX-XXXX ────────────────────────────────────────
+(function(){
+  const tel = document.getElementById('fTel');
+  if(!tel) return;
+  function formatarTel(v){
+    v = v.replace(/\D/g,'').slice(0,11);
+    if(v.length === 0) return '';
+    if(v.length <= 2)  return `(${v}`;
+    if(v.length <= 7)  return `(${v.slice(0,2)}) ${v.slice(2)}`;
+    return `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+  }
+  tel.addEventListener('input', (e)=>{
+    const pos = e.target.selectionStart;
+    const before = e.target.value.length;
+    e.target.value = formatarTel(e.target.value);
+    const diff = e.target.value.length - before;
+    e.target.setSelectionRange(pos + diff, pos + diff);
+  });
+})();
+
+function toggleOb(){
+  obExtras = !obExtras;
+  const check = document.getElementById('obCheck');
+  check.classList.toggle('on', obExtras);
+  check.textContent = obExtras ? '✓' : '';
+  syncCheckoutReceipt();
+  refreshCardBrickIfNeeded();
+}
+
+function calcTotalCheckout(){
+  let tot = calcTotal().tot;
+  if(obExtras) tot += OB_PRECO;
+  return parseFloat(tot.toFixed(2));
+}
+
+function syncCheckoutReceipt(){
+  const tot = calcTotal();
+  let h = `<div class="rr sub"><span class="rl">Livro Ilustrado Personalizado</span><span class="rv">${fmtBRL(tot.sub)}</span></div>`;
+  h += `<div class="rr disc"><span class="rl">Desconto Dia das Crianças${hasDiscount?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
+  h += hasDiscount ? `<span class="rv">-${fmtBRL(tot.disc)}</span></div>` : `<span class="rv" style="opacity:.35">-${fmtBRL(tot.disc)}</span></div>`;
+  if(addons.colorir)  h += `<div class="rr add"><span class="rl">Versão para Colorir</span><span class="rv">+${fmtBRL(PRICES.colorir)}</span></div>`;
+  if(addons.expressa) h += `<div class="rr add"><span class="rl">Entrega Expressa</span><span class="rv">+${fmtBRL(PRICES.expressa)}</span></div>`;
+  if(obExtras)         h += `<div class="rr add"><span class="rl">+2 Historinhas Extras</span><span class="rv">+${fmtBRL(OB_PRECO)}</span></div>`;
+  const totalFinal = calcTotalCheckout();
+  h += `<div class="rr tot"><span class="rl">Total a Pagar</span><span class="rv">${fmtBRL(totalFinal)}</span></div>`;
+
+  const el = document.getElementById('rec-checkout');
+  if(el) el.innerHTML = h;
+  const ctaPix = document.getElementById('ctaPricePix');
+  if(ctaPix) ctaPix.textContent = fmtBRL(totalFinal);
+}
+
+function selMethod(m){
+  metodoPag = m;
+  const isPix = m === 'pix';
+  document.getElementById('methPix').classList.toggle('active', isPix);
+  document.getElementById('methCard').classList.toggle('active', !isPix);
+  document.getElementById('pixPanel').style.display  = isPix  ? 'block' : 'none';
+  document.getElementById('cardPanel').style.display = !isPix ? 'block' : 'none';
+  if(!isPix) initCardBrick();
+}
+
+function showErroCheckout(txt){
+  const el = document.getElementById('erroCheckout');
+  el.textContent = txt;
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function hideErroCheckout(){ document.getElementById('erroCheckout').textContent=''; }
+
+function getCheckoutEmail(){
+  return (document.getElementById('fEmail')?.value || '').trim();
+}
+function getCheckoutTel(){
+  const raw = (document.getElementById('fTel')?.value || '').replace(/\D/g,'');
+  return raw ? (raw.startsWith('55') ? raw : '55'+raw) : '';
+}
+
+// ── PAGAR PIX ────────────────────────────────────────────────────────────────
+async function pagarPix(){
+  hideErroCheckout();
+  const email = getCheckoutEmail();
+  const tel   = getCheckoutTel();
+  if(!email || !isValidEmail(email)){ showErroCheckout('Preencha um e-mail válido.'); return; }
+  if(!tel || tel.length < 12){ showErroCheckout('Preencha seu telefone com DDD.'); return; }
+
+  const btn = document.getElementById('btnPix');
+  btn.disabled = true;
+  btn.innerHTML = '<div style="width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spinAnim .6s linear infinite"></div> Gerando código…';
+
+  const total = calcTotalCheckout();
+  const quizData = getQuizData();
+  quizData.addon_colorir  = addons.colorir  ? 'Sim' : 'Não';
+  quizData.addon_expressa = addons.expressa ? 'Sim' : 'Não';
+
+  try{
+    const r = await fetch('/criar-pix',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        email, telefone: tel, total, quizData,
+        utms: getUTMsFresh(), eventId: SESSION_EID, fbp: getFbp(), fbc: getFbc(),
+        obExtras, addon_colorir: addons.colorir, addon_expressa: addons.expressa,
+      }),
+    });
+    const data = await r.json();
+    if(!r.ok || data.erro) throw new Error(data.erro || 'Erro ao gerar PIX');
+
+    pixId = data.id || data.transactionId;
+    const pixCode = data.qr_code || data.pix?.code || '';
+    document.getElementById('pixTotalDisplay').textContent = fmtBRL(data.total || data.amount || total);
+    document.getElementById('pixCode').textContent = pixCode;
+    document.getElementById('qrImg').src = data.qr_code_base64
+      ? `data:image/png;base64,${data.qr_code_base64}`
+      : (data.pix?.image || `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(pixCode)}`);
+
+    document.getElementById('paymentMethodCard').style.display = 'none';
+    document.getElementById('pixDisplay').style.display = 'block';
+    document.getElementById('pixDisplay').scrollIntoView({behavior:'smooth',block:'start'});
+
+    startPolling(pixId, email);
+    startExpTimer();
+
+  }catch(err){
+    showErroCheckout(err.message || 'Erro ao gerar PIX. Tente novamente.');
+  }finally{
+    btn.disabled = false;
+    btn.innerHTML = `<img src="images/pix.svg" alt="" width="20" height="20" style="filter:brightness(0) invert(1)"> Pagar agora <span id="ctaPricePix" style="display:none">${fmtBRL(calcTotalCheckout())}</span>`;
+  }
+}
+
+// ── COPIAR PIX ────────────────────────────────────────────────────────────────
+function copiarPix(){
+  const code = document.getElementById('pixCode').textContent;
+  navigator.clipboard.writeText(code).then(()=>{
+    const btn = document.getElementById('copyBtn');
+    const original = btn.innerHTML;
+    btn.innerHTML = `<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Código copiado!`;
+    setTimeout(()=>{ btn.innerHTML = original; }, 2500);
+  });
+}
+
+// ── POLLING PIX ───────────────────────────────────────────────────────────────
+function startPolling(id, email){
+  if(pollingInt) clearInterval(pollingInt);
+  pollingInt = setInterval(async()=>{
+    try{
+      const r = await fetch('/status/'+id);
+      const d = await r.json();
+      if(['approved','OK','COMPLETED'].includes(d.status) || d.transactionStatus === 'COMPLETED'){
+        clearInterval(pollingInt); clearInterval(expInterval);
+        // Purchase é enviado apenas via CAPI (server-side) — evita duplicidade e funciona mesmo com bloqueadores de anúncio
+        document.getElementById('okEmail').textContent = email;
+        goTo('aprovado');
+      }
+    }catch(_){}
+  },4000);
+}
+
+function startExpTimer(){
+  let s = 30*60;
+  const el = document.getElementById('expTimer');
+  if(expInterval) clearInterval(expInterval);
+  expInterval = setInterval(()=>{
+    if(s<=0){ clearInterval(expInterval); if(el) el.textContent='Expirado'; return; }
+    s--;
+    const m=String(Math.floor(s/60)).padStart(2,'0'), sec=String(s%60).padStart(2,'0');
+    if(el) el.textContent=`${m}:${sec}`;
+  },1000);
+}
+
+// ── BLOCO LEGADO DE CARTÃO (NÃO UTILIZADO) ───────────────────────────────────
+async function initCardBrick(){
+  if(!srvCfg.publicKey){
+    document.getElementById('erroCartaoBrick').textContent = 'Pagamento por cartão indisponível no momento. Use o Pix.';
+    return;
+  }
+  if(typeof LegacyCardProvider === 'undefined'){ setTimeout(initCardBrick,400); return; }
+  if(cardBrickController) return; // já montado — refreshCardBrickIfNeeded() cuida de atualizar o valor
+
+  if(!mpClientObj) mpClientObj = new LegacyCardProvider(srvCfg.publicKey,{locale:'pt-BR'});
+  const total = calcTotalCheckout();
+
+  try{
+    const builder = mpClientObj.bricks();
+    cardBrickController = await builder.create('legacy-card','legacy-card-container',{
+      initialization: { amount: total },
+      customization: {
+        paymentMethods: { maxInstallments: srvCfg.maxParcelas || 3 },
+        fields: {
+          cardholderIdentification: { mode: 'required' },
+        },
+      },
+      callbacks: {
+        onReady: ()=>{},
+        onSubmit: async (data)=>{
+          document.getElementById('erroCartaoBrick').textContent = '';
+          const email = getCheckoutEmail() || data.payer?.email || '';
+          if(!email || !isValidEmail(email)){
+            document.getElementById('erroCartaoBrick').textContent = 'Preencha seu e-mail no topo do checkout antes de pagar.';
+            throw new Error('email ausente');
+          }
+          const quizData = getQuizData();
+          quizData.addon_colorir  = addons.colorir  ? 'Sim' : 'Não';
+          quizData.addon_expressa = addons.expressa ? 'Sim' : 'Não';
+
+          try{
+            const r = await fetch('/criar-cartao',{
+              method:'POST', headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({
+                token:           data.token,
+                installments:    data.installments,
+                paymentMethodId: data.payment_method_id,
+                issuerId:        data.issuer_id,
+                email,
+                telefone: getCheckoutTel(),
+                identification: data.payer?.identification || null,
+                total: calcTotalCheckout(),
+                quizData,
+                utms:    getUTMsFresh(),
+                eventId: SESSION_EID,
+                fbc:     getFbc(),
+                obExtras, addon_colorir: addons.colorir, addon_expressa: addons.expressa,
+              }),
+            });
+            const d = await r.json();
+            if(d.status === 'rejected' || d.erro){
+              document.getElementById('erroCartaoBrick').textContent = (d.erro || 'Cartão recusado.') + ' Tente outro cartão ou use o Pix.';
+              return;
+            }
+            if(d.status === 'approved'){
+              // Purchase é enviado apenas via CAPI (server-side)
+              document.getElementById('okEmail').textContent = email;
+              goTo('aprovado');
+            } else {
+              document.getElementById('erroCartaoBrick').textContent = 'Pagamento não aprovado. Tente outro cartão ou use o Pix.';
+            }
+          }catch(e){
+            document.getElementById('erroCartaoBrick').textContent = e.message || 'Erro ao processar cartão.';
+          }
+        },
+        onError: (e)=>{ console.error('Brick error:', e); },
+      },
+    });
+  }catch(e){
+    console.error('Erro ao montar Brick:', e);
+    document.getElementById('erroCartaoBrick').textContent = 'Erro ao carregar o formulário de cartão. Recarregue a página.';
+  }
+}
+
+// Reconstrói o Brick quando o valor total muda (order bump, addons) enquanto cartão está aberto
+async function refreshCardBrickIfNeeded(){
+  if(metodoPag !== 'card' || !cardBrickController) return;
+  try{ await cardBrickController.unmount(); }catch(_){}
+  cardBrickController = null;
+  initCardBrick();
+}
+
+// ── CHECKOUT CARTÃO AMPLO PAY ───────────────────────────────────────────────
+// As chaves da Amplo Pay ficam no backend que atende /criar-cartao.
+async function initCardBrick(){
+  // Mantém o nome usado pelo fluxo antigo para não alterar a navegação.
+}
+
+async function pagarCartaoAmplo(){
+  const erro = document.getElementById('erroCartaoBrick');
+  const btn = document.getElementById('btnCard');
+  const email = getCheckoutEmail();
+  const tel = getCheckoutTel();
+  const required = ['cardNumber','cardOwner','cardExpiry','cardCvv','cardZip','cardState','cardCity','cardNeighborhood','cardStreet','cardNumberAddress'];
+  if(!email || !isValidEmail(email)){ erro.textContent='Preencha um e-mail válido.'; return; }
+  if(!tel || tel.length < 12){ erro.textContent='Preencha seu telefone com DDD.'; return; }
+  if(required.some(id=>!getVal(id))){ erro.textContent='Preencha todos os dados do cartão e endereço.'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Processando…';
+  erro.textContent = '';
+  const quizData = getQuizData();
+  quizData.addon_colorir = addons.colorir ? 'Sim' : 'Não';
+  quizData.addon_expressa = addons.expressa ? 'Sim' : 'Não';
+
+  try{
+    const r = await fetch('/criar-cartao',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        identifier: 'HIST-' + SESSION_EID,
+        amount: calcTotalCheckout(),
+        email, telefone: tel, total: calcTotalCheckout(), quizData,
+        client: {
+          name: getVal('q-mom-name') || getVal('q-child-name'),
+          email, phone: tel,
+          address: {
+            country:'BR', zipCode:getVal('cardZip'), state:getVal('cardState'), city:getVal('cardCity'),
+            neighborhood:getVal('cardNeighborhood'), street:getVal('cardStreet'), number:getVal('cardNumberAddress')
+          }
+        },
+        card: {
+          number:getVal('cardNumber'), owner:getVal('cardOwner'),
+          expiresAt:getVal('cardExpiry'), cvv:getVal('cardCvv')
+        },
+        installments:Number(getVal('cardInstallments')) || 1,
+        products:[{id:'sua-historinha',name:'Sua Historinha',quantity:1,price:calcTotalCheckout()}],
+        metadata:{provider:'Amplo Pay',orderId:'HIST-'+SESSION_EID},
+        obExtras, addon_colorir:addons.colorir, addon_expressa:addons.expressa,
+        utms:getUTMsFresh()
+      })
+    });
+    const d = await r.json();
+    if(!r.ok || d.erro || ['FAILED','REJECTED','CANCELED'].includes(d.status)) throw new Error(d.erro || d.errorDescription || 'Pagamento recusado.');
+    if(d.status === 'OK' || d.status === 'approved' || d.transactionStatus === 'COMPLETED'){
+      document.getElementById('okEmail').textContent = email;
+      goTo('aprovado');
+    }else{
+      erro.textContent = 'Pagamento em análise. Aguarde a confirmação.';
+    }
+  }catch(e){ erro.textContent = e.message || 'Erro ao processar cartão.'; }
+  finally{ btn.disabled=false; btn.textContent='Pagar com cartão'; }
+}
+
+// ── GOTO — adicionar sc-checkout e sc-aprovado ────────────────────────────────
+// ── TRANSIÇÃO RÁPIDA PRO CHECKOUT ─────────────────────────────────────────────
+function irParaCheckout(){
+  goTo('redirect');
+  const fill = document.getElementById('redirectFill');
+  if(fill){
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+    fill.offsetHeight; // força reflow pra garantir que o reset seja aplicado antes da animação
+    fill.style.transition = '';
+    requestAnimationFrame(()=>{ fill.style.width = '100%'; });
+  }
+  setTimeout(()=>{ goTo('checkout'); }, 1100);
+}
+
+const _goToOrig = goTo;
+window.goTo = function(s){
+  const siteHeader = document.querySelector('.site-header');
+  if(siteHeader) siteHeader.style.display = (s === 'checkout' || s === 'aprovado') ? 'none' : 'flex';
+
+  if(s === 'checkout'){
+    document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+    document.getElementById('sc-checkout').classList.add('active');
+    step = 'checkout';
+    document.getElementById('progWrap').style.display = 'none';
+    document.getElementById('stepCount').textContent = '';
+    document.getElementById('overlay').scrollTop = 0;
+
+    const emailQuiz = getVal('q-email');
+    if(emailQuiz){ const fe = document.getElementById('fEmail'); if(fe) fe.value = emailQuiz; }
+
+    document.getElementById('paymentMethodCard').style.display = 'block';
+    document.getElementById('pixDisplay').style.display = 'none';
+
+    syncCheckoutReceipt();
+    selMethod('pix');
+
+    return;
+  }
+  if(s === 'aprovado'){
+    document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+    document.getElementById('sc-aprovado').classList.add('active');
+    step = 'aprovado';
+    document.getElementById('progWrap').style.display = 'none';
+    document.getElementById('overlay').scrollTop = 0;
+    return;
+  }
+  _goToOrig(s);
+};
+
+// ── INIT SERVIDOR ─────────────────────────────────────────────────────────────
+(async function initSrv(){
+  try{
+    const r = await fetch('/config');
+    srvCfg = await r.json();
+    if(srvCfg.orderBump?.preco) OB_PRECO = srvCfg.orderBump.preco;
+    const obPrecoEl = document.getElementById('obPreco');
+    if(obPrecoEl && srvCfg.orderBump) obPrecoEl.textContent = fmtBRL(srvCfg.orderBump.preco||9.90);
+  }catch(_){}
+})();
+</script>
+
+</body></html>
