@@ -43,3 +43,9 @@ test('pixel navegador: ID e valor do servidor; repetições e storage bloqueado 
  const purchases=calls.filter(c=>c[1]==='Purchase');assert.equal(purchases.length,1);
  assert.equal(purchases[0][2].value,36.6);assert.equal(purchases[0][3].eventID,data.metaEventId);
 });
+test('HTML inclui o código base inline detectável pela Meta',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/connect\.facebook\.net\/en_US\/fbevents\.js/);
+ assert.match(html,/fbq\('init','2175744060029065'\)/);
+ assert.match(html,/fbq\('track','PageView'\)/);
+});
