@@ -4,6 +4,12 @@ const fs=require('node:fs');const vm=require('node:vm');
 const p=require('../lib/payment');
 const pix=require('../api/criar-pix');const card=require('../api/criar-cartao');const status=require('../api/status');
 const originalFetch=global.fetch;
+test('Pix e cartão aprovados usam a mesma tela com a mensagem de entrega solicitada',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html, /id="sc-aprovado"[\s\S]*?Seu pedido entrou na fila de geração! Você receberá o PDF no e-mail informado em até 10 horas\./);
+ assert.match(html, /if\(data.status==='approved'\)\{[^}]*goTo\('aprovado'\)/);
+ assert.match(html, /if\(d.status === 'approved' \|\| d.transactionStatus === 'COMPLETED'\)\{[^}]*goTo\('aprovado'\)/);
+});
 afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
 function setup(){process.env.AMPLO_PUBLIC_KEY='test-public';process.env.AMPLO_SECRET_KEY='test-secret';}
 function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',document:'529.982.247-25',quizData:{mom_name:'Responsável'},total:14.9,hasDiscount:true};}
