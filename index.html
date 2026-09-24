@@ -1320,7 +1320,7 @@
                 <div class="amplo-card-grid">
                   <input class="kiwi-input-field" id="cardNumber" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="Número do cartão">
                   <input class="kiwi-input-field" id="cardOwner" autocomplete="cc-name" placeholder="Nome no cartão">
-                  <input class="kiwi-input-field" id="cardExpiry" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="Validade (MM/AA)">
+                  <input class="kiwi-input-field" id="cardExpiry" inputmode="numeric" autocomplete="cc-exp" maxlength="7" placeholder="Validade (MM/AA ou MM/AAAA)">
                   <input class="kiwi-input-field" id="cardCvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="CVV">
                   <input class="kiwi-input-field" id="cardZip" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="CEP">
                   <input class="kiwi-input-field" id="cardState" autocomplete="address-level1" maxlength="2" placeholder="Estado (ex.: SP)">
@@ -1531,7 +1531,7 @@ if(cardNumberField) cardNumberField.addEventListener('input', function(){
 });
 const cardExpiryField = document.getElementById('cardExpiry');
 if(cardExpiryField) cardExpiryField.addEventListener('input', function(){
-  const d=this.value.replace(/\D/g,'').slice(0,4); this.value=d.length>2?d.slice(0,2)+'/'+d.slice(2):d;
+  const d=this.value.replace(/\D/g,'').slice(0,6); this.value=d.length>2?d.slice(0,2)+'/'+d.slice(2):d;
 });
 const cardCvvField = document.getElementById('cardCvv');
 if(cardCvvField) cardCvvField.addEventListener('input', function(){this.value=this.value.replace(/\D/g,'').slice(0,4)});
@@ -2230,8 +2230,9 @@ async function pagarCartaoAmplo(){
   if(required.some(id=>!getVal(id))){ erro.textContent='Preencha todos os dados do cartão e endereço.'; return; }
   const expiryInput=getVal('cardExpiry');
   const expiryParts=expiryInput.split('/');
-  const expiresAt=/^\d{2}\/\d{2}$/.test(expiryInput) ? `20${expiryParts[1]}-${expiryParts[0]}` : expiryInput;
-  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(expiresAt)){ erro.textContent='Informe a validade no formato MM/AA.'; return; }
+  const expiresAt=/^\d{2}\/\d{2}$/.test(expiryInput) ? `20${expiryParts[1]}-${expiryParts[0]}`
+    : /^\d{2}\/\d{4}$/.test(expiryInput) ? `${expiryParts[1]}-${expiryParts[0]}` : expiryInput;
+  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(expiresAt)){ erro.textContent='Informe a validade no formato MM/AA ou MM/AAAA.'; return; }
 
   btn.disabled = true;
   btn.textContent = 'Processando…';

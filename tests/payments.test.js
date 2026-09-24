@@ -27,6 +27,12 @@ test('checkout de cartão tem máscara e busca automática de CEP',()=>{
  assert.match(html,/20\$\{expiryParts\[1\]\}-\$\{expiryParts\[0\]\}/);
  assert.match(html,/id="cardNumber"[^>]*maxlength="23"/);
 });
+test('validade aceita ano com dois ou quatro dígitos e CVV segue 3 ou 4',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/maxlength="7" placeholder="Validade \(MM\/AA ou MM\/AAAA\)"/);
+ assert.match(html,/maxlength="4" placeholder="CVV"/);
+ assert.match(html,/\^\\d\{2\}\\\/\\d\{4\}\$/);
+});
 afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
 function setup(){process.env.AMPLO_PUBLIC_KEY='test-public';process.env.AMPLO_SECRET_KEY='test-secret';}
 function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',document:'529.982.247-25',quizData:{mom_name:'Responsável'},total:14.9,hasDiscount:true};}
