@@ -55,6 +55,11 @@ test('HTML inclui o código base inline detectável pela Meta',()=>{
  assert.match(html,/fbq\('init','2175744060029065'\)/);
  assert.match(html,/fbq\('track','PageView'\)/);
 });
+test('Microsoft Clarity está instalado com o ID correto',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/https:\/\/www\.clarity\.ms\/tag\/\s*'\s*\+i/);
+ assert.match(html,/['"]yniarw5ab5['"]/);
+});
 test('checkout dispara InitiateCheckout com valor em BRL e event ID',()=>{
  const calls=[];const context={window:{fbq:(...args)=>calls.push(args)}};
  vm.runInNewContext(fs.readFileSync('js/meta-pixel.js','utf8'),context);
