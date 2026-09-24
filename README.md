@@ -29,3 +29,8 @@ Para produção completa, adicionar armazenamento durável, idempotência e cont
 ## Verificação
 
 `npm test`: testes com gateway simulado, sem criar cobranças. Nenhum teste de pagamento real foi executado. Para validar uma implantação, verificar o deploy concluído, a resposta JSON de `/api/config` e os logs de execução das funções (sem registrar credenciais ou cartões).
+# Meta Pixel
+
+Pixel `2175744060029065`: PageView na visita e Purchase **na geração bem-sucedida do Pix**, a pedido do responsável pela campanha. Purchase NÃO significa pagamento confirmado neste projeto. Valores incluem os adicionais selecionados. Cartão não dispara este evento.
+
+Para ativar também a Conversions API, configure `META_ACCESS_TOKEN` como variável secreta de Production na Vercel e faça redeploy. Nunca coloque o token no HTML ou neste repositório. O evento do navegador funciona sem essa variável. Browser/CAPI usam o mesmo ID derivado da transação para deduplicação. Não enviamos dados do quiz, da criança, CPF ou cartão à Meta; o e-mail do comprador é enviado em SHA-256. Falhas da Meta não impedem exibição do Pix. Não há fila de reenvio CAPI.

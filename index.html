@@ -2,6 +2,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sua Historinha — Livro Personalizado para Crianças</title>
+  <script defer src="js/meta-pixel.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link rel="preload" as="image" href="images/ChatGPT%20Image%2017%20de%20jun.%20de%202026%2C%2014_54_47.png" fetchpriority="high">
@@ -2067,6 +2068,7 @@ async function pagarPix(){
     document.getElementById('paymentCheck').style.display='block';
     retryAllowed = false;
     startExpTimer(data.pix?.expiresAt);
+    if(typeof window.trackPixPurchase === 'function') window.trackPixPurchase(data);
 
   }catch(err){
     if(err.uncertain || err instanceof TypeError) retryAllowed=false;
