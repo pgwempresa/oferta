@@ -1318,18 +1318,19 @@
               <!-- Painel Cartão — dados enviados ao backend Amplo Pay -->
               <div id="cardPanel" class="kw-card-panel" style="display:none">
                 <div class="amplo-card-grid">
-                  <input class="kiwi-input-field" id="cardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="Número do cartão">
+                  <input class="kiwi-input-field" id="cardNumber" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="Número do cartão">
                   <input class="kiwi-input-field" id="cardOwner" autocomplete="cc-name" placeholder="Nome no cartão">
-                  <input class="kiwi-input-field" id="cardExpiry" inputmode="numeric" autocomplete="cc-exp" placeholder="Validade (AAAA-MM)">
-                  <input class="kiwi-input-field" id="cardCvv" inputmode="numeric" autocomplete="cc-csc" placeholder="CVV">
-                  <input class="kiwi-input-field" id="cardZip" inputmode="numeric" autocomplete="postal-code" placeholder="CEP">
-                  <input class="kiwi-input-field" id="cardState" autocomplete="address-level1" placeholder="Estado (ex.: SP)">
+                  <input class="kiwi-input-field" id="cardExpiry" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="Validade (MM/AA)">
+                  <input class="kiwi-input-field" id="cardCvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="CVV">
+                  <input class="kiwi-input-field" id="cardZip" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="CEP">
+                  <input class="kiwi-input-field" id="cardState" autocomplete="address-level1" maxlength="2" placeholder="Estado (ex.: SP)">
                   <input class="kiwi-input-field" id="cardCity" autocomplete="address-level2" placeholder="Cidade">
                   <input class="kiwi-input-field" id="cardNeighborhood" autocomplete="address-line2" placeholder="Bairro">
                   <input class="kiwi-input-field" id="cardStreet" autocomplete="address-line1" placeholder="Rua">
                   <input class="kiwi-input-field" id="cardNumberAddress" inputmode="numeric" autocomplete="address-line3" placeholder="Número">
                   <select class="kiwi-input-field" id="cardInstallments"><option value="1">1x</option></select>
                 </div>
+                <p id="cepStatus" style="font-size:12px;color:var(--ink-soft);margin:-8px 0 12px"></p>
                 <button class="kw-pay-btn" id="btnCard" type="button" onclick="pagarCartaoAmplo()">Pagar com cartão</button>
                 <div class="kw-erro" id="erroCartaoBrick"></div>
               </div>
@@ -1522,6 +1523,45 @@ if(documentField) documentField.addEventListener('input', function(){
     this.value = digits.replace(/(\d{2})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1/$2').replace(/(\d{4})(\d{1,2})$/,'$1-$2');
   }
 });
+
+// Máscaras e preenchimento automático do endereço pelo CEP (ViaCEP).
+const cardNumberField = document.getElementById('cardNumber');
+if(cardNumberField) cardNumberField.addEventListener('input', function(){
+  this.value = this.value.replace(/\D/g,'').slice(0,19).replace(/(.{4})/g,'$1 ').trim();
+});
+const cardExpiryField = document.getElementById('cardExpiry');
+if(cardExpiryField) cardExpiryField.addEventListener('input', function(){
+  const d=this.value.replace(/\D/g,'').slice(0,4); this.value=d.length>2?d.slice(0,2)+'/'+d.slice(2):d;
+});
+const cardCvvField = document.getElementById('cardCvv');
+if(cardCvvField) cardCvvField.addEventListener('input', function(){this.value=this.value.replace(/\D/g,'').slice(0,4)});
+const cardStateField = document.getElementById('cardState');
+if(cardStateField) cardStateField.addEventListener('input', function(){this.value=this.value.replace(/[^a-z]/gi,'').slice(0,2).toUpperCase()});
+const cardZipField = document.getElementById('cardZip');
+let lastCepLookup='';
+async function lookupCep(){
+  const cep=cardZipField?.value.replace(/\D/g,'')||'';
+  if(cep.length!==8||cep===lastCepLookup)return;
+  lastCepLookup=cep;
+  const status=document.getElementById('cepStatus');
+  if(status)status.textContent='Buscando endereço…';
+  try{
+    const response=await fetch('https://viacep.com.br/ws/'+cep+'/json/');
+    const data=await response.json();
+    if(data.erro)throw Error('CEP não encontrado');
+    document.getElementById('cardState').value=data.uf||'';
+    document.getElementById('cardCity').value=data.localidade||'';
+    document.getElementById('cardNeighborhood').value=data.bairro||'';
+    document.getElementById('cardStreet').value=data.logradouro||'';
+    if(status)status.textContent='Endereço preenchido automaticamente. Confira antes de continuar.';
+  }catch(_){if(status)status.textContent='Não encontramos esse CEP. Preencha o endereço manualmente.';lastCepLookup='';}
+}
+if(cardZipField){
+  cardZipField.addEventListener('input',function(){
+    const d=this.value.replace(/\D/g,'').slice(0,8); this.value=d.length>5?d.slice(0,5)+'-'+d.slice(5):d; lookupCep();
+  });
+  cardZipField.addEventListener('blur',lookupCep);
+}
 
 // O player VTurb é externo; desabilita qualquer repetição quando o vídeo termina.
 (function preventVideoLoop(){
@@ -2188,6 +2228,10 @@ async function pagarCartaoAmplo(){
   if(!tel || tel.length < 12){ erro.textContent='Preencha seu telefone com DDD.'; return; }
   if(!BuyerDocument.valid(getVal('fDocument'))){erro.textContent='Informe um CPF ou CNPJ válido do comprador.';document.getElementById('fDocument').focus();return;}
   if(required.some(id=>!getVal(id))){ erro.textContent='Preencha todos os dados do cartão e endereço.'; return; }
+  const expiryInput=getVal('cardExpiry');
+  const expiryParts=expiryInput.split('/');
+  const expiresAt=/^\d{2}\/\d{2}$/.test(expiryInput) ? `20${expiryParts[1]}-${expiryParts[0]}` : expiryInput;
+  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(expiresAt)){ erro.textContent='Informe a validade no formato MM/AA.'; return; }
 
   btn.disabled = true;
   btn.textContent = 'Processando…';
@@ -2214,7 +2258,7 @@ async function pagarCartaoAmplo(){
         },
         card: {
           number:getVal('cardNumber'), owner:getVal('cardOwner'),
-          expiresAt:getVal('cardExpiry'), cvv:getVal('cardCvv')
+          expiresAt, cvv:getVal('cardCvv')
         },
         installments:Number(getVal('cardInstallments')) || 1,
         products:[{id:'sua-historinha',name:'Sua Historinha',quantity:1,price:calcTotalCheckout()}],
