@@ -10,6 +10,16 @@ test('Pix e cartão aprovados usam a mesma tela com a mensagem de entrega solici
  assert.match(html, /if\(data.status==='approved'\)\{[^}]*goTo\('aprovado'\)/);
  assert.match(html, /if\(d.status === 'approved' \|\| d.transactionStatus === 'COMPLETED'\)\{[^}]*goTo\('aprovado'\)/);
 });
+test('documento do checkout limita a 14 dígitos e formata CPF/CNPJ',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/id="fDocument"[^>]*maxlength="18"/);
+ assert.match(html,/replace\(\/\\D\/g,''\)\.slice\(0,14\)/);
+});
+test('player não deve repetir o vídeo ao terminar',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/video\.loop = false/);
+ assert.match(html,/video\.addEventListener\('ended'/);
+});
 afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
 function setup(){process.env.AMPLO_PUBLIC_KEY='test-public';process.env.AMPLO_SECRET_KEY='test-secret';}
 function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',document:'529.982.247-25',quizData:{mom_name:'Responsável'},total:14.9,hasDiscount:true};}

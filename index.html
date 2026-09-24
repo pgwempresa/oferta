@@ -1512,6 +1512,33 @@ const SESSION_EID = 'ev_' + Date.now() + '_' + Math.random().toString(36).slice(
 const TOTAL_STEPS = 11;
 const IMG_BASE = 'images/';
 
+// Limita e formata o documento do responsável: CPF (11) ou CNPJ (14) dígitos.
+const documentField = document.getElementById('fDocument');
+if(documentField) documentField.addEventListener('input', function(){
+  const digits = this.value.replace(/\D/g,'').slice(0,14);
+  if(digits.length <= 11) {
+    this.value = digits.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  } else {
+    this.value = digits.replace(/(\d{2})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1/$2').replace(/(\d{4})(\d{1,2})$/,'$1-$2');
+  }
+});
+
+// O player VTurb é externo; desabilita qualquer repetição quando o vídeo termina.
+(function preventVideoLoop(){
+  const stopLoop = () => {
+    const host = document.querySelector('vturb-smartplayer');
+    const video = host?.shadowRoot?.querySelector('video');
+    if(!video || video.dataset.noLoopGuard) return;
+    video.dataset.noLoopGuard = '1';
+    video.loop = false;
+    video.removeAttribute('loop');
+    video.addEventListener('ended', () => { video.loop = false; video.pause(); }, false);
+  };
+  stopLoop();
+  const timer = setInterval(stopLoop, 1000);
+  setTimeout(() => clearInterval(timer), 30000);
+})();
+
 // Checkout agora é embutido — sem links externos
 
 // ════════════════════════════════════════════
