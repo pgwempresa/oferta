@@ -12,16 +12,22 @@
       sent.add(id);
     } catch (_) { /* Pixel must not interrupt checkout. */ }
   };
-  window.trackPixPurchase = function (data) {
+  window.trackPurchase = function (data) {
     try {
-      const id = data.metaEventId;
+      const id = data.eventId;
       if (!id || sent.has(id)) return;
       try { if (sessionStorage.getItem('meta:' + id)) return; } catch (_) {}
       window.fbq('track', 'Purchase', {
-        value: data.total, currency: 'BRL', payment_method: 'pix', payment_status: 'pending'
+        value: Number(data.total) || 0, currency: 'BRL',
+        payment_method: data.paymentMethod || 'unknown',
+        payment_status: data.paymentStatus || 'pending'
       }, {eventID: id});
       sent.add(id);
       try { sessionStorage.setItem('meta:' + id, '1'); } catch (_) {}
     } catch (_) { /* Pixel must not interrupt checkout. */ }
+  };
+  // Compatibility name for any cached page still calling the old function.
+  window.trackPixPurchase = function (data) {
+    window.trackPurchase({eventId:data.metaEventId,total:data.total,paymentMethod:'pix',paymentStatus:'pending'});
   };
 })();

@@ -39,9 +39,15 @@ test('falha da Meta não transforma Pix criado em erro',async()=>{
 test('pixel navegador: ID e valor do servidor; repetições e storage bloqueado seguros',()=>{
  const calls=[];const context={window:{fbq:(...args)=>calls.push(args)},sessionStorage:{getItem(){throw Error('blocked')},setItem(){throw Error('blocked')}}};
  vm.runInNewContext(fs.readFileSync('js/meta-pixel.js','utf8'),context);
- const data={metaEventId:'pix_tx1',total:36.6};context.window.trackPixPurchase(data);context.window.trackPixPurchase(data);
+ const data={eventId:'pix_tx1',total:36.6,paymentMethod:'pix',paymentStatus:'pending'};context.window.trackPurchase(data);context.window.trackPurchase(data);
  const purchases=calls.filter(c=>c[1]==='Purchase');assert.equal(purchases.length,1);
- assert.equal(purchases[0][2].value,36.6);assert.equal(purchases[0][3].eventID,data.metaEventId);
+ assert.equal(purchases[0][2].value,36.6);assert.equal(purchases[0][3].eventID,data.eventId);
+});
+test('Purchase é configurado tanto para Pix quanto para cartão aprovado',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/paymentMethod:'pix'/);
+ assert.match(html,/paymentMethod:'card'/);
+ assert.match(html,/mailto:nscompany223@gmail\.com/);
 });
 test('HTML inclui o código base inline detectável pela Meta',()=>{
  const html=fs.readFileSync('index.html','utf8');

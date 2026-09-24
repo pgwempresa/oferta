@@ -8,7 +8,7 @@ test('Pix e cartão aprovados usam a mesma tela com a mensagem de entrega solici
  const html=fs.readFileSync('index.html','utf8');
  assert.match(html, /id="sc-aprovado"[\s\S]*?Seu pedido entrou na fila de geração! Você receberá o PDF no e-mail informado em até 10 horas\./);
  assert.match(html, /if\(data.status==='approved'\)\{[^}]*goTo\('aprovado'\)/);
- assert.match(html, /if\(d.status === 'approved' \|\| d.transactionStatus === 'COMPLETED'\)\{[^}]*goTo\('aprovado'\)/);
+ assert.match(html, /if\(d.status === 'approved' \|\| d.transactionStatus === 'COMPLETED'\)\{[\s\S]{0,700}?goTo\('aprovado'\)/);
 });
 test('documento do checkout limita a 14 dígitos e formata CPF/CNPJ',()=>{
  const html=fs.readFileSync('index.html','utf8');

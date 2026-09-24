@@ -1473,7 +1473,7 @@
             <div class="ty-support-txt">
               Se depois de algum tempo o livro não chegar em nenhuma das duas caixas, fala com a gente que resolvemos rapidinho:
             </div>
-            <a href="#" class="ty-support-email">
+            <a href="mailto:nscompany223@gmail.com?subject=Suporte%20-%20Sua%20Historinha" class="ty-support-email">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
               Fale com o nosso suporte
             </a>
@@ -2145,7 +2145,9 @@ async function pagarPix(){
     document.getElementById('paymentCheck').style.display='block';
     retryAllowed = false;
     startExpTimer(data.pix?.expiresAt);
-    if(typeof window.trackPixPurchase === 'function') window.trackPixPurchase(data);
+    if(typeof window.trackPurchase === 'function') window.trackPurchase({
+      eventId:data.metaEventId, total:data.total, paymentMethod:'pix', paymentStatus:'pending'
+    });
 
   }catch(err){
     if(err.uncertain || err instanceof TypeError) retryAllowed=false;
@@ -2272,6 +2274,9 @@ async function pagarCartaoAmplo(){
     if(!r.ok || d.erro || ['FAILED','REJECTED','CANCELED'].includes(d.status)) throw new Error(d.erro || d.errorDescription || 'Pagamento recusado.');
     if(d.status === 'approved' || d.transactionStatus === 'COMPLETED'){
       document.getElementById('okEmail').textContent = email;
+      if(typeof window.trackPurchase === 'function') window.trackPurchase({
+        eventId:'card_'+(d.id || SESSION_EID), total:d.total || calcTotalCheckout(), paymentMethod:'card', paymentStatus:'approved'
+      });
       goTo('aprovado');
     }else{
       pendingPayment={statusToken:d.statusToken,email};
