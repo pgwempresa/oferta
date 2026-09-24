@@ -1237,7 +1237,7 @@
                 </div>
               </div>
 
-              <!-- Campos — apenas Email e Telefone (nome já veio do quiz) -->
+              <!-- Dados do comprador (nome já veio do quiz) -->
               <div style="margin-top:16px">
                 <div class="kiwi-input">
                   <input class="kiwi-input-field" id="fEmail" type="email" placeholder=" " autocomplete="email">
@@ -1254,6 +1254,12 @@
                   </div>
                 </div>
               </div>
+
+              <div class="kiwi-input">
+                <input class="kiwi-input-field" id="fDocument" type="text" placeholder=" " inputmode="numeric" maxlength="18" autocomplete="off" required aria-describedby="documentHint">
+                <label class="kiwi-label" for="fDocument">CPF ou CNPJ do comprador</label>
+              </div>
+              <p id="documentHint" style="font-size:12px;color:var(--ink-soft);margin:4px 0 16px">Informe o documento do responsável pela compra, não o da criança.</p>
 
               <!-- Resumo do pedido -->
               <div id="rec-checkout" style="margin-top:4px"></div>
@@ -1487,6 +1493,7 @@
   </div>
 </div>
 
+<script src="js/document.js"></script>
 <script>
 const PRICES = { base: 39.90, discount: 25.00, colorir: 7.90, expressa: 3.90 };
 let step = 'intro', addons = { colorir: false, expressa: false }, hasDiscount = false;
@@ -2020,6 +2027,7 @@ async function pagarPix(){
   const tel   = getCheckoutTel();
   if(!email || !isValidEmail(email)){ showErroCheckout('Preencha um e-mail válido.'); return; }
   if(!tel || tel.length < 12){ showErroCheckout('Preencha seu telefone com DDD.'); return; }
+  if(!BuyerDocument.valid(getVal('fDocument'))){showErroCheckout('Informe um CPF ou CNPJ válido do comprador.');document.getElementById('fDocument').focus();return;}
 
   const btn = document.getElementById('btnPix');
   btn.disabled = true;
@@ -2035,7 +2043,7 @@ async function pagarPix(){
     const r = await fetch('/api/criar-pix',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        email, telefone: tel, total, quizData, identifier: SESSION_EID, hasDiscount,
+        email, telefone: tel, document: BuyerDocument.normalize(getVal('fDocument')), total, quizData, identifier: SESSION_EID, hasDiscount,
         utms: getUTMsFresh(), eventId: SESSION_EID, fbp: getFbp(), fbc: getFbc(),
         obExtras, addon_colorir: addons.colorir, addon_expressa: addons.expressa,
       }),
@@ -2139,6 +2147,7 @@ async function pagarCartaoAmplo(){
   const required = ['cardNumber','cardOwner','cardExpiry','cardCvv','cardZip','cardState','cardCity','cardNeighborhood','cardStreet','cardNumberAddress'];
   if(!email || !isValidEmail(email)){ erro.textContent='Preencha um e-mail válido.'; return; }
   if(!tel || tel.length < 12){ erro.textContent='Preencha seu telefone com DDD.'; return; }
+  if(!BuyerDocument.valid(getVal('fDocument'))){erro.textContent='Informe um CPF ou CNPJ válido do comprador.';document.getElementById('fDocument').focus();return;}
   if(required.some(id=>!getVal(id))){ erro.textContent='Preencha todos os dados do cartão e endereço.'; return; }
 
   btn.disabled = true;
@@ -2158,7 +2167,7 @@ async function pagarCartaoAmplo(){
         email, telefone: tel, total: calcTotalCheckout(), quizData,
         client: {
           name: getVal('q-mom-name') || getVal('q-child-name'),
-          email, phone: tel,
+          email, phone: tel, document: BuyerDocument.normalize(getVal('fDocument')),
           address: {
             country:'BR', zipCode:getVal('cardZip'), state:getVal('cardState'), city:getVal('cardCity'),
             neighborhood:getVal('cardNeighborhood'), street:getVal('cardStreet'), number:getVal('cardNumberAddress')

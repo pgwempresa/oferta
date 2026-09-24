@@ -6,7 +6,7 @@ const pix=require('../api/criar-pix');const card=require('../api/criar-cartao');
 const originalFetch=global.fetch;
 afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
 function setup(){process.env.AMPLO_PUBLIC_KEY='test-public';process.env.AMPLO_SECRET_KEY='test-secret';}
-function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',quizData:{mom_name:'Responsável'},total:14.9,hasDiscount:true};}
+function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',document:'529.982.247-25',quizData:{mom_name:'Responsável'},total:14.9,hasDiscount:true};}
 async function call(fn,b,method='POST'){
   let code,data;const headers={};
   await fn({method,body:b,headers:{host:'loja.example',origin:'https://loja.example'},socket:{remoteAddress:'127.0.0.1'}},{setHeader(k,v){headers[k]=v},status(v){code=v;return this},json(v){data=v}});
@@ -37,6 +37,16 @@ test('cartão usa IP do servidor e OK sem COMPLETED permanece pendente',async()=
  global.fetch=async(url,opts)=>{assert.equal(JSON.parse(opts.body).clientIp,'127.0.0.1');return new Response(JSON.stringify({transactionId:'tx-card',status:'OK'}))};const r=await call(card,b);assert.equal(r.code,200);assert.equal(r.data.status,'pending');assert.ok(!JSON.stringify(r.data).includes('4111111111111111'));
 });
 test('método incorreto rejeitado como JSON',async()=>{assert.equal((await call(pix,{},'GET')).code,405)});
+test('CPF/CNPJ validado, formatado e enviado para ambos os métodos',()=>{
+ setup();const v=require('../js/document');assert.ok(v.valid('529.982.247-25'));assert.ok(v.valid('11.222.333/0001-81'));
+ for(const d of ['', '11111111111','52998224724','11222333000180','52998224725abc'])assert.equal(v.valid(d),false);
+ assert.equal(p.buildOrder(body(),'pix',{}).client.document,'52998224725');
+ assert.equal(p.buildOrder({...body(),document:undefined,client:{document:'11.222.333/0001-81'}},'pix',{}).client.document,'11222333000181');
+});
+test('documento ausente bloqueia cobrança antes de chamar a operadora',async()=>{
+ setup();let called=false;global.fetch=async()=>{called=true;throw Error('Não deveria chamar')};
+ const r=await call(pix,{...body(),document:''});assert.equal(r.code,400);assert.match(r.data.erro,/CPF ou CNPJ/);assert.equal(called,false);
+});
 test('telefone nacional é enviado com DDD sem prefixo 55 duplicado',()=>{setup();assert.equal(p.buildOrder(body(),'pix',{}).client.phone,'11999999999')});
 test('mostra código e campo recusado sem expor dados do comprador ou credenciais',async()=>{
  setup();global.fetch=async()=>new Response(JSON.stringify({errorCode:'GATEWAY_INVALID_DATA',message:'Dados inválidos',details:[{path:'client.phone',error:{message:'Invalid phone 5511999999999 for teste@example.com test-secret test-public'}}]}),{status:400});
