@@ -37,6 +37,20 @@ test('cartão usa IP do servidor e OK sem COMPLETED permanece pendente',async()=
  global.fetch=async(url,opts)=>{assert.equal(JSON.parse(opts.body).clientIp,'127.0.0.1');return new Response(JSON.stringify({transactionId:'tx-card',status:'OK'}))};const r=await call(card,b);assert.equal(r.code,200);assert.equal(r.data.status,'pending');assert.ok(!JSON.stringify(r.data).includes('4111111111111111'));
 });
 test('método incorreto rejeitado como JSON',async()=>{assert.equal((await call(pix,{},'GET')).code,405)});
+test('ícone Pix referenciado usa extensão correspondente ao PNG',()=>{
+ const html=fs.readFileSync('index.html','utf8');assert.ok(!html.includes('images/pix.svg'));assert.equal((html.match(/images\/pix.png/g)||[]).length,3);assert.equal(fs.readFileSync('images/pix.png').subarray(0,8).toString('hex'),'89504e470d0a1a0a');
+});
+test('16 combinações de desconto e adicionais: UI, total e itens da operadora coincidem',()=>{
+ setup();const html=fs.readFileSync('index.html','utf8');
+ const source=html.match(/const PRICES = .*?;/)[0]+'\n'+html.match(/function calcTotal\(\)\{[\s\S]*?\n\}/)[0]+'\n'+html.match(/function calcTotalCheckout\(\)\{[\s\S]*?\n\}/)[0];
+ for(let mask=0;mask<16;mask++){
+   const b={...body(),hasDiscount:!!(mask&1),addon_colorir:!!(mask&2),addon_expressa:!!(mask&4),obExtras:!!(mask&8)};
+   const ctx={hasDiscount:b.hasDiscount,addons:{colorir:b.addon_colorir,expressa:b.addon_expressa},obExtras:b.obExtras,OB_PRECO:9.9};vm.createContext(ctx);vm.runInContext(source,ctx);
+   b.total=vm.runInContext('calcTotalCheckout()',ctx);const order=p.buildOrder(b,'pix',{});
+   assert.equal(order.amount,b.total);assert.equal(order.products.reduce((sum,item)=>sum+Math.round(item.price*100)*item.quantity,0),Math.round(b.total*100));
+   assert.equal(order.products.length,1+Number(b.addon_colorir)+Number(b.addon_expressa)+Number(b.obExtras));assert.equal(order.metadata.obExtras,b.obExtras);
+ }
+});
 test('CPF/CNPJ validado, formatado e enviado para ambos os métodos',()=>{
  setup();const v=require('../js/document');assert.ok(v.valid('529.982.247-25'));assert.ok(v.valid('11.222.333/0001-81'));
  for(const d of ['', '11111111111','52998224724','11222333000180','52998224725abc'])assert.equal(v.valid(d),false);

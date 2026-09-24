@@ -1284,7 +1284,7 @@
                   <div class="kw-method-badge">
                     <span class="kw-badge-icon"></span>
                   </div>
-                  <img class="kw-icon-img" src="images/pix.svg" alt="Pix" width="20" height="20">
+                  <img class="kw-icon-img" src="images/pix.png" alt="Pix" width="20" height="20">
                   Pix
                 </div>
                 <div class="kw-method" id="methCard" onclick="selMethod('card')">
@@ -1299,7 +1299,7 @@
               <!-- Painel PIX -->
               <div id="pixPanel" class="kw-pix-panel">
                 <button class="kw-pay-btn" id="btnPix" onclick="pagarPix()">
-                  <img src="images/pix.svg" alt="" width="20" height="20" style="filter:brightness(0) invert(1)">
+                  <img src="images/pix.png" alt="" width="20" height="20" style="filter:brightness(0) invert(1)">
                   Pagar agora <span id="ctaPricePix" style="display:none">R$ 0,00</span>
                 </button>
               </div>
@@ -2073,7 +2073,7 @@ async function pagarPix(){
     showErroCheckout(err.message || 'Erro ao gerar PIX. Tente novamente.');
   }finally{
     btn.disabled = !retryAllowed;
-    btn.innerHTML = `<img src="images/pix.svg" alt="" width="20" height="20" style="filter:brightness(0) invert(1)"> Pagar agora <span id="ctaPricePix" style="display:none">${fmtBRL(calcTotalCheckout())}</span>`;
+    btn.innerHTML = `<img src="images/pix.png" alt="" width="20" height="20" style="filter:brightness(0) invert(1)"> Pagar agora <span id="ctaPricePix" style="display:none">${fmtBRL(calcTotalCheckout())}</span>`;
   }
 }
 
