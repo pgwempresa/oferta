@@ -32,10 +32,11 @@ test('ícones das telas de feedback e popup estão visíveis e usam os arquivos 
    assert.doesNotMatch(html,new RegExp('images/'+icon+'[^>]*style="display: none;"'));
  }
 });
-test('checkout mostra o ícone visual do Mercado Pago no método de cartão',()=>{
+test('checkout mostra o logo do Mercado Pago abaixo da mensagem de segurança',()=>{
  const html=fs.readFileSync('index.html','utf8');
- assert.match(html,/class="kw-mp-logo" src="images\/mercadopago-nuevo-logo-png_seeklogo-397917%20%281%29\.png"/);
- assert.match(html,/\.kw-method img\.kw-mp-logo/);
+ assert.match(html,/class="kw-mp-trust"><img src="images\/mercadopago-nuevo-logo-png_seeklogo-397917%20%281%29\.png"/);
+ assert.match(html,/\.kw-mp-trust/);
+ assert.doesNotMatch(html,/kw-mp-logo/);
 });
 test('checkout de cartão tem máscara e busca automática de CEP',()=>{
  const html=fs.readFileSync('index.html','utf8');
@@ -46,9 +47,16 @@ test('checkout de cartão tem máscara e busca automática de CEP',()=>{
 });
 test('validade aceita ano com dois ou quatro dígitos e CVV segue 3 ou 4',()=>{
  const html=fs.readFileSync('index.html','utf8');
- assert.match(html,/maxlength="7" placeholder="Validade \(MM\/AA ou MM\/AAAA\)"/);
- assert.match(html,/maxlength="4" placeholder="CVV"/);
+ assert.match(html,/id="cardExpiry"[^>]*maxlength="7" placeholder="MM\/AA"/);
+ assert.match(html,/id="cardCvv"[^>]*maxlength="4" placeholder="Ex\.: 123"/);
  assert.match(html,/\^\\d\{2\}\\\/\\d\{4\}\$/);
+});
+test('cartão mantém campos da cobrança e hierarquia visual do checkout',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ for(const id of ['cardNumber','cardExpiry','cardCvv','cardOwner','cardZip','cardStreet','cardNumberAddress','cardNeighborhood','cardCity','cardState','cardInstallments']) assert.match(html,new RegExp('id="'+id+'"'));
+ assert.match(html,/class="card-panel-title">Cartão de crédito ou débito/);
+ assert.match(html,/class="card-address-title">Endereço de cobrança/);
+ assert.match(html,/class="card-brands"/);
 });
 afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
 function setup(){process.env.AMPLO_PUBLIC_KEY='test-public';process.env.AMPLO_SECRET_KEY='test-secret';}

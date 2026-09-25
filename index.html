@@ -541,8 +541,6 @@
       color: #374151; background: #fff; transition: border-color .15s, color .15s;
     }
     #sc-checkout .kw-method svg, #sc-checkout .kw-method img.kw-icon-img { width: 20px; height: 20px; flex-shrink: 0; }
-    #sc-checkout .kw-method img.kw-mp-logo { width: 58px; height: 20px; object-fit: contain; flex-shrink: 0; }
-    #sc-checkout #methCard svg { display: none; }
     #sc-checkout .kw-method-badge { position: absolute; width: 16px; height: 16px; top: -4px; right: -6px; display: none; }
     #sc-checkout .kw-badge-icon {
       display: block; width: 16px; height: 16px; background-color: #22c55e;
@@ -556,9 +554,28 @@
     #sc-checkout .kw-method.active .kw-method-badge { display: block; }
     #sc-checkout .kw-method.active#methPix { border-color: #48bb78; color: #16a34a; }
 
-    /* Painel do cartão — checkout-bg #fafafa literal */
-    #sc-checkout .kw-card-panel { width: 100%; padding: 16px; padding-top: 12px; border-radius: 4px; border: 1px solid #9ca3af; background-color: #fafafa; }
-    @media(min-width:640px){ #sc-checkout .kw-card-panel { padding: 12px 16px; } }
+    /* Cartão — formulário visual com hierarquia semelhante ao checkout de referência. */
+    #sc-checkout .kw-card-panel { width: 100%; padding: 26px 22px 22px; border-radius: 22px; border: 1px solid #e7e9ee; background: #fff; box-shadow: 0 10px 30px rgba(30,37,61,.06); }
+    #sc-checkout .card-panel-title { margin: 0 0 18px; color: #202124; font-size: 25px; line-height: 1.15; font-weight: 700; letter-spacing: -.3px; }
+    #sc-checkout .card-brands { display: flex; align-items: center; gap: 9px; margin-bottom: 30px; }
+    #sc-checkout .card-brand { width: 54px; height: 34px; border: 1px solid #e1e4eb; border-radius: 7px; background: #fff; display: flex; align-items: center; justify-content: center; font-family: Arial,sans-serif; font-weight: 800; font-size: 11px; color: #162d6b; }
+    #sc-checkout .card-brand.mastercard { gap: 0; }
+    #sc-checkout .card-brand.mastercard i { width: 17px; height: 17px; border-radius: 50%; display: block; background: #eb001b; }
+    #sc-checkout .card-brand.mastercard i+ i { background: #f79e1b; margin-left: -7px; opacity: .96; }
+    #sc-checkout .card-brand.elo { color: #1d5ea8; font-style: italic; }
+    #sc-checkout .card-brand.amex { color: #0879be; font-size: 8px; border-color: #0879be; }
+    #sc-checkout .card-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+    #sc-checkout .card-field label { color: #242424; font-size: 15px; font-weight: 600; line-height: 1.2; }
+    #sc-checkout .card-field .kiwi-input-field { box-sizing: border-box; width: 100%; min-height: 52px; padding: 13px 14px; border: 1.5px solid #c7cad1; border-radius: 10px; color: #242424; background: #fff; font-size: 18px; }
+    #sc-checkout .card-field .kiwi-input-field:focus { border-color: #3483fa; box-shadow: 0 0 0 3px rgba(52,131,250,.13); outline: none; }
+    #sc-checkout .card-field .kiwi-input-field::placeholder { color: #87898e; }
+    #sc-checkout .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    #sc-checkout .card-address-title { margin: 8px 0 15px; padding-top: 18px; border-top: 1px solid #edf0f4; color: #242424; font-size: 17px; font-weight: 700; }
+    #sc-checkout .card-address-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+    #sc-checkout .card-address-grid .card-field:first-child, #sc-checkout .card-address-grid .card-field:nth-child(4) { grid-column: 1 / -1; }
+    #sc-checkout .kw-card-panel .kw-pay-btn { margin-top: 6px; border-radius: 10px; min-height: 56px; background: #3483fa !important; box-shadow: 0 5px 12px rgba(52,131,250,.18); font-size: 19px; }
+    #sc-checkout .kw-card-panel .kw-pay-btn:hover { opacity: 1; background: #2968c8 !important; }
+    @media(max-width:420px){ #sc-checkout .kw-card-panel { padding: 22px 16px 18px; } #sc-checkout .card-panel-title { font-size: 22px; } #sc-checkout .card-row, #sc-checkout .card-address-grid { grid-template-columns: 1fr; } #sc-checkout .card-address-grid .card-field:first-child, #sc-checkout .card-address-grid .card-field:nth-child(4) { grid-column: auto; } }
 
     /* Pix — CTA button dedicado */
     #sc-checkout .kw-pix-panel { padding-top: 8px; }
@@ -579,6 +596,8 @@
     #sc-checkout .kw-security-row .kw-sec-icon { padding: 8px; display: flex; justify-content: center; align-items: center; color: #000; flex-shrink: 0; }
     #sc-checkout .kw-security-row .kw-sec-icon svg { width: 20px; height: 20px; }
     #sc-checkout .kw-security-row .kw-sec-text { font-size: 11px; }
+    #sc-checkout .kw-mp-trust { display: flex; justify-content: center; margin: 10px 0 2px; }
+    #sc-checkout .kw-mp-trust img { width: 92px; height: 25px; object-fit: contain; }
 
     #sc-checkout .kw-erro { background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 11px; font-size: 13px; color: #d20000; margin-top: 10px; display: none; font-weight: 600; }
     #sc-checkout .kw-erro:not(:empty) { display: block; }
@@ -1313,7 +1332,6 @@
                     <span class="kw-badge-icon"></span>
                   </div>
                   <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"></path></svg>
-                  <img class="kw-mp-logo" src="images/mercadopago-nuevo-logo-png_seeklogo-397917%20%281%29.png" alt="Mercado Pago">
                   Cartão
                 </div>
               </div>
@@ -1328,21 +1346,30 @@
 
               <!-- Painel Cartão — dados enviados ao backend Amplo Pay -->
               <div id="cardPanel" class="kw-card-panel" style="display:none">
-                <div class="amplo-card-grid">
-                  <input class="kiwi-input-field" id="cardNumber" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="Número do cartão">
-                  <input class="kiwi-input-field" id="cardOwner" autocomplete="cc-name" placeholder="Nome no cartão">
-                  <input class="kiwi-input-field" id="cardExpiry" inputmode="numeric" autocomplete="cc-exp" maxlength="7" placeholder="Validade (MM/AA ou MM/AAAA)">
-                  <input class="kiwi-input-field" id="cardCvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="CVV">
-                  <input class="kiwi-input-field" id="cardZip" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="CEP">
-                  <input class="kiwi-input-field" id="cardState" autocomplete="address-level1" maxlength="2" placeholder="Estado (ex.: SP)">
-                  <input class="kiwi-input-field" id="cardCity" autocomplete="address-level2" placeholder="Cidade">
-                  <input class="kiwi-input-field" id="cardNeighborhood" autocomplete="address-line2" placeholder="Bairro">
-                  <input class="kiwi-input-field" id="cardStreet" autocomplete="address-line1" placeholder="Rua">
-                  <input class="kiwi-input-field" id="cardNumberAddress" inputmode="numeric" autocomplete="address-line3" placeholder="Número">
-                  <select class="kiwi-input-field" id="cardInstallments"><option value="1">1x</option></select>
+                <h3 class="card-panel-title">Cartão de crédito ou débito</h3>
+                <div class="card-brands" aria-label="Bandeiras aceitas">
+                  <span class="card-brand mastercard" aria-label="Mastercard"><i></i><i></i></span>
+                  <span class="card-brand">VISA</span><span class="card-brand elo">elo</span>
+                  <span class="card-brand amex">AMERICAN<br>EXPRESS</span>
+                </div>
+                <div class="card-field"><label for="cardNumber">Número do cartão</label><input class="kiwi-input-field" id="cardNumber" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="1234 1234 1234 1234"></div>
+                <div class="card-row">
+                  <div class="card-field"><label for="cardExpiry">Data de vencimento</label><input class="kiwi-input-field" id="cardExpiry" inputmode="numeric" autocomplete="cc-exp" maxlength="7" placeholder="MM/AA"></div>
+                  <div class="card-field"><label for="cardCvv">Código de segurança</label><input class="kiwi-input-field" id="cardCvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="Ex.: 123"></div>
+                </div>
+                <div class="card-field"><label for="cardOwner">Nome do titular como aparece no cartão</label><input class="kiwi-input-field" id="cardOwner" autocomplete="cc-name" placeholder="Maria Santos Pereira"></div>
+                <div class="card-address-title">Endereço de cobrança</div>
+                <div class="card-address-grid">
+                  <div class="card-field"><label for="cardZip">CEP</label><input class="kiwi-input-field" id="cardZip" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000"></div>
+                  <div class="card-field"><label for="cardStreet">Rua</label><input class="kiwi-input-field" id="cardStreet" autocomplete="address-line1" placeholder="Rua e avenida"></div>
+                  <div class="card-field"><label for="cardNumberAddress">Número</label><input class="kiwi-input-field" id="cardNumberAddress" inputmode="numeric" autocomplete="address-line3" placeholder="Número"></div>
+                  <div class="card-field"><label for="cardNeighborhood">Bairro</label><input class="kiwi-input-field" id="cardNeighborhood" autocomplete="address-line2" placeholder="Bairro"></div>
+                  <div class="card-field"><label for="cardCity">Cidade</label><input class="kiwi-input-field" id="cardCity" autocomplete="address-level2" placeholder="Cidade"></div>
+                  <div class="card-field"><label for="cardState">Estado</label><input class="kiwi-input-field" id="cardState" autocomplete="address-level1" maxlength="2" placeholder="SP"></div>
+                  <div class="card-field"><label for="cardInstallments">Parcelamento</label><select class="kiwi-input-field" id="cardInstallments"><option value="1">1x sem juros</option></select></div>
                 </div>
                 <p id="cepStatus" style="font-size:12px;color:var(--ink-soft);margin:-8px 0 12px"></p>
-                <button class="kw-pay-btn" id="btnCard" type="button" onclick="pagarCartaoAmplo()">Pagar com cartão</button>
+                <button class="kw-pay-btn" id="btnCard" type="button" onclick="pagarCartaoAmplo()">🔒 Pagar com cartão</button>
                 <div class="kw-erro" id="erroCartaoBrick"></div>
               </div>
 
@@ -1354,6 +1381,7 @@
                 </div>
                 <div class="kw-sec-text">Protegemos seus dados de pagamento com criptografia para garantir segurança bancária.</div>
               </div>
+              <div class="kw-mp-trust"><img src="images/mercadopago-nuevo-logo-png_seeklogo-397917%20%281%29.png" alt="Mercado Pago"></div>
               </div><!-- /paymentMethodCard -->
               <div id="paymentCheck" style="display:none;margin:18px 0"><button class="kw-pay-btn" id="checkPayment" onclick="verificarPagamento()">Já paguei — verificar confirmação</button><p id="paymentStatusMessage" role="status" style="margin-top:12px"></p></div>
 
