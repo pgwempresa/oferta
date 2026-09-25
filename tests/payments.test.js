@@ -54,7 +54,7 @@ test('validade aceita ano com dois ou quatro dígitos e CVV segue 3 ou 4',()=>{
 test('cartão mantém campos da cobrança e hierarquia visual do checkout',()=>{
  const html=fs.readFileSync('index.html','utf8');
  for(const id of ['cardNumber','cardExpiry','cardCvv','cardOwner','cardZip','cardStreet','cardNumberAddress','cardNeighborhood','cardCity','cardState','cardInstallments']) assert.match(html,new RegExp('id="'+id+'"'));
- assert.match(html,/class="card-panel-title">Cartão de crédito ou débito/);
+ assert.match(html,/class="card-panel-title">Cartão de crédito/);
  assert.match(html,/class="card-address-title">Endereço de cobrança/);
  assert.match(html,/class="card-brands"/);
 });
