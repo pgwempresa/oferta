@@ -32,6 +32,11 @@ test('ícones das telas de feedback e popup estão visíveis e usam os arquivos 
    assert.doesNotMatch(html,new RegExp('images/'+icon+'[^>]*style="display: none;"'));
  }
 });
+test('checkout mostra o ícone visual do Mercado Pago no método de cartão',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/class="kw-mp-logo" src="images\/mercadopago-nuevo-logo-png_seeklogo-397917%20%281%29\.png"/);
+ assert.match(html,/\.kw-method img\.kw-mp-logo/);
+});
 test('checkout de cartão tem máscara e busca automática de CEP',()=>{
  const html=fs.readFileSync('index.html','utf8');
  assert.match(html,/https:\/\/viacep\.com\.br\/ws\//);
