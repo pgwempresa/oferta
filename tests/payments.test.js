@@ -25,6 +25,13 @@ test('player não deve repetir o vídeo ao terminar',()=>{
  assert.match(html,/video\.loop = false/);
  assert.match(html,/video\.addEventListener\('ended'/);
 });
+test('ícones das telas de feedback e popup estão visíveis e usam os arquivos enviados',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ for(const icon of ['icone-rosto.webp','icone-aventura.webp','icone-final.webp','icone-presente.webp']){
+   assert.match(html,new RegExp('images/'+icon));
+   assert.doesNotMatch(html,new RegExp('images/'+icon+'[^>]*style="display: none;"'));
+ }
+});
 test('checkout de cartão tem máscara e busca automática de CEP',()=>{
  const html=fs.readFileSync('index.html','utf8');
  assert.match(html,/https:\/\/viacep\.com\.br\/ws\//);
