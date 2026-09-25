@@ -6,9 +6,14 @@ const pix=require('../api/criar-pix');const card=require('../api/criar-cartao');
 const originalFetch=global.fetch;
 test('Pix e cartão aprovados usam a mesma tela com a mensagem de entrega solicitada',()=>{
  const html=fs.readFileSync('index.html','utf8');
- assert.match(html, /id="sc-aprovado"[\s\S]*?Seu pedido entrou na fila de geração! Você receberá o PDF no e-mail informado em até 10 horas\./);
+ assert.match(html, /id="sc-aprovado"[\s\S]*?Seu pedido entrou na fila de geração! Você receberá o PDF no e-mail informado em até 1 hora\./);
  assert.match(html, /if\(data.status==='approved'\)\{[^}]*goTo\('aprovado'\)/);
  assert.match(html, /if\(d.status === 'approved' \|\| d.transactionStatus === 'COMPLETED'\)\{[\s\S]{0,700}?goTo\('aprovado'\)/);
+});
+test('promessa de entrega é consistente em até uma hora',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.doesNotMatch(html,/10 horas/);
+ assert.match(html,/com entrega por e-mail em até 1 hora\./);
 });
 test('documento do checkout limita a 14 dígitos e formata CPF/CNPJ',()=>{
  const html=fs.readFileSync('index.html','utf8');
