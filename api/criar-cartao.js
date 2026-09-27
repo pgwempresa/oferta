@@ -4,4 +4,4 @@ module.exports=p.route('POST',async req=>{
   const d=await p.request('/gateway/card/receive',order);
   if(!d.transactionId)throw new p.PaymentError('A operadora não retornou o identificador. Confira o painel antes de tentar novamente.',502,true);
   return {id:d.transactionId,total:order.amount,status:d.transactionStatus==='COMPLETED'?'approved':'pending',statusToken:p.ticket(d.transactionId,order.amount)};
-},{rate:{scope:'card-create',max:5,windowMs:15*60*1000}});
+});
