@@ -58,7 +58,7 @@ test('cartão mantém campos da cobrança e hierarquia visual do checkout',()=>{
  assert.match(html,/class="card-address-title">Endereço de cobrança/);
  assert.match(html,/class="card-brands"/);
 });
-afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
+afterEach(()=>{global.fetch=originalFetch;p.resetRateLimits();delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
 function setup(){process.env.AMPLO_PUBLIC_KEY='test-public';process.env.AMPLO_SECRET_KEY='test-secret';}
 function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',document:'529.982.247-25',quizData:{mom_name:'Responsável'},total:14.9,hasDiscount:true};}
 async function call(fn,b,method='POST'){
@@ -70,6 +70,17 @@ test('HTML: scripts válidos e todas as rotas de pagamento apontam para APIs exi
  const html=fs.readFileSync('index.html','utf8');for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);
  for(const endpoint of ['criar-pix','criar-cartao','status','config']){assert.ok(html.includes('/api/'+endpoint));assert.ok(fs.existsSync('api/'+endpoint+'.js'))}
  assert.ok(!html.includes("await r.json()"));assert.ok(!html.includes('MercadoPago'));assert.ok(!html.includes('posthog'));assert.ok(!html.includes("d.status === 'OK'"));
+});
+test('Vercel aplica cabeçalhos que protegem checkout e integrações necessárias',()=>{
+ const config=JSON.parse(fs.readFileSync('vercel.json','utf8'));
+ const all=config.headers.flatMap(rule=>rule.headers);
+ const header=key=>all.find(item=>item.key===key)?.value||'';
+ const csp=header('Content-Security-Policy');
+ for(const directive of ["base-uri 'self'","object-src 'none'","frame-ancestors 'self'","form-action 'self'","https://connect.facebook.net","https://www.clarity.ms","https://viacep.com.br","https://cdn.converteai.net","worker-src 'self' blob:"])assert.match(csp,new RegExp(directive.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
+ assert.equal(header('X-Frame-Options'),'DENY');
+ assert.match(header('Strict-Transport-Security'),/max-age=/);
+ assert.equal(header('X-Content-Type-Options'),'nosniff');
+ assert.equal(header('Referrer-Policy'),'strict-origin-when-cross-origin');
 });
 test('preço calculado pelo servidor e total adulterado rejeitado',()=>{setup();assert.equal(p.total(body()),14.9);assert.equal(p.total({...body(),addon_colorir:true,addon_expressa:true,obExtras:true}),36.6);assert.throws(()=>p.buildOrder({...body(),total:0.01},'pix',{}),/preço/)});
 test('credenciais ausentes resultam em JSON 503, sem chamada ao gateway',async()=>{
@@ -91,6 +102,13 @@ test('cartão usa IP do servidor e OK sem COMPLETED permanece pendente',async()=
  global.fetch=async(url,opts)=>{assert.equal(JSON.parse(opts.body).clientIp,'127.0.0.1');return new Response(JSON.stringify({transactionId:'tx-card',status:'OK'}))};const r=await call(card,b);assert.equal(r.code,200);assert.equal(r.data.status,'pending');assert.ok(!JSON.stringify(r.data).includes('4111111111111111'));
 });
 test('método incorreto rejeitado como JSON',async()=>{assert.equal((await call(pix,{},'GET')).code,405)});
+test('cobranças são limitadas por IP e sessão antes de chamar a operadora',async()=>{
+ setup();let gatewayCalls=0;
+ global.fetch=async()=>{gatewayCalls++;return new Response(JSON.stringify({transactionId:'rate-'+gatewayCalls,status:'OK',pix:{code:'000201'}}))};
+ for(let attempt=0;attempt<5;attempt++)assert.equal((await call(pix,body())).code,200);
+ const blocked=await call(pix,body());
+ assert.equal(blocked.code,429);assert.match(blocked.data.erro,/Muitas tentativas/);assert.equal(gatewayCalls,5);
+});
 test('ícone Pix referenciado usa extensão correspondente ao PNG',()=>{
  const html=fs.readFileSync('index.html','utf8');assert.ok(!html.includes('images/pix.svg'));assert.equal((html.match(/images\/pix.png/g)||[]).length,3);assert.equal(fs.readFileSync('images/pix.png').subarray(0,8).toString('hex'),'89504e470d0a1a0a');
 });
