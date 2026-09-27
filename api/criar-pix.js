@@ -7,4 +7,4 @@ module.exports=p.route('POST',async req=>{
   if(!d.transactionId||!d.pix?.code)throw new p.PaymentError('A operadora não retornou o código Pix. Confira o painel antes de gerar novamente.',502,true);
   const metaEventId=await meta.pixGenerated(req,input,order,d.transactionId);
   return {metaEventId,id:d.transactionId,total:order.amount,qr_code:d.pix.code,pix:{code:d.pix.code,image:typeof d.pix.image==='string'&&d.pix.image.startsWith('https://')?d.pix.image:undefined,expiresAt:d.pix.expiresAt},statusToken:p.ticket(d.transactionId,order.amount),status:'pending'};
-},{rate:{scope:'payment',max:5,windowMs:15*60*1000}});
+},{rate:{scope:'pix-create',max:10,windowMs:15*60*1000}});

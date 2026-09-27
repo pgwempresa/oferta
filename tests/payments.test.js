@@ -105,9 +105,9 @@ test('método incorreto rejeitado como JSON',async()=>{assert.equal((await call(
 test('cobranças são limitadas por IP e sessão antes de chamar a operadora',async()=>{
  setup();let gatewayCalls=0;
  global.fetch=async()=>{gatewayCalls++;return new Response(JSON.stringify({transactionId:'rate-'+gatewayCalls,status:'OK',pix:{code:'000201'}}))};
- for(let attempt=0;attempt<5;attempt++)assert.equal((await call(pix,body())).code,200);
+ for(let attempt=0;attempt<10;attempt++)assert.equal((await call(pix,body())).code,200);
  const blocked=await call(pix,body());
- assert.equal(blocked.code,429);assert.match(blocked.data.erro,/Muitas tentativas/);assert.equal(gatewayCalls,5);
+ assert.equal(blocked.code,429);assert.match(blocked.data.erro,/Muitas tentativas/);assert.equal(gatewayCalls,10);
 });
 test('ícone Pix referenciado usa extensão correspondente ao PNG',()=>{
  const html=fs.readFileSync('index.html','utf8');assert.ok(!html.includes('images/pix.svg'));assert.equal((html.match(/images\/pix.png/g)||[]).length,3);assert.equal(fs.readFileSync('images/pix.png').subarray(0,8).toString('hex'),'89504e470d0a1a0a');
