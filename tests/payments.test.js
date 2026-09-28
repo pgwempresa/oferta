@@ -4,11 +4,12 @@ const fs=require('node:fs');const vm=require('node:vm');
 const p=require('../lib/payment');
 const pix=require('../api/criar-pix');const card=require('../api/criar-cartao');const status=require('../api/status');
 const originalFetch=global.fetch;
-test('Pix e cartão aprovados usam a mesma tela com a mensagem de entrega solicitada',()=>{
+test('Pix e cartão aprovados encaminham principal para upsell e upsell para obrigado',()=>{
  const html=fs.readFileSync('index.html','utf8');
  assert.match(html, /id="sc-aprovado"[\s\S]*?Seu pedido entrou na fila de geração! Você receberá o PDF no e-mail informado em até 1 hora\./);
- assert.match(html, /if\(data.status==='approved'\)\{[^}]*goTo\('aprovado'\)/);
- assert.match(html, /if\(d.status === 'approved' \|\| d.transactionStatus === 'COMPLETED'\)\{[\s\S]{0,700}?goTo\('aprovado'\)/);
+ assert.match(html, /function handleApprovedPayment\(email\)\{[\s\S]*?if\(checkoutMode === 'upsell'\) goTo\('aprovado'\);[\s\S]*?else goTo\('upsell1'\);/);
+ assert.match(html, /if\(data\.status==='approved'\)\{[\s\S]*?handleApprovedPayment\(pendingPayment\.email\)/);
+ assert.match(html, /if\(d\.status === 'approved' \|\| d\.transactionStatus === 'COMPLETED'\)\{[\s\S]*?handleApprovedPayment\(email\)/);
 });
 test('promessa de entrega é consistente em até uma hora',()=>{
  const html=fs.readFileSync('index.html','utf8');
@@ -58,7 +59,7 @@ test('cartão mantém campos da cobrança e hierarquia visual do checkout',()=>{
  assert.match(html,/class="card-address-title">Endereço de cobrança/);
  assert.match(html,/class="card-brands"/);
 });
-afterEach(()=>{global.fetch=originalFetch;p.resetRateLimits();delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
+afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
 function setup(){process.env.AMPLO_PUBLIC_KEY='test-public';process.env.AMPLO_SECRET_KEY='test-secret';}
 function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',document:'529.982.247-25',quizData:{mom_name:'Responsável'},total:14.9,hasDiscount:true};}
 async function call(fn,b,method='POST'){
@@ -102,12 +103,11 @@ test('cartão usa IP do servidor e OK sem COMPLETED permanece pendente',async()=
  global.fetch=async(url,opts)=>{assert.equal(JSON.parse(opts.body).clientIp,'127.0.0.1');return new Response(JSON.stringify({transactionId:'tx-card',status:'OK'}))};const r=await call(card,b);assert.equal(r.code,200);assert.equal(r.data.status,'pending');assert.ok(!JSON.stringify(r.data).includes('4111111111111111'));
 });
 test('método incorreto rejeitado como JSON',async()=>{assert.equal((await call(pix,{},'GET')).code,405)});
-test('cobranças são limitadas por IP e sessão antes de chamar a operadora',async()=>{
+test('cobranças não são bloqueadas por limite local de tentativas',async()=>{
  setup();let gatewayCalls=0;
  global.fetch=async()=>{gatewayCalls++;return new Response(JSON.stringify({transactionId:'rate-'+gatewayCalls,status:'OK',pix:{code:'000201'}}))};
- for(let attempt=0;attempt<10;attempt++)assert.equal((await call(pix,body())).code,200);
- const blocked=await call(pix,body());
- assert.equal(blocked.code,429);assert.match(blocked.data.erro,/Muitas tentativas/);assert.equal(gatewayCalls,10);
+ for(let attempt=0;attempt<12;attempt++)assert.equal((await call(pix,body())).code,200);
+ assert.equal(gatewayCalls,12);
 });
 test('ícone Pix referenciado usa extensão correspondente ao PNG',()=>{
  const html=fs.readFileSync('index.html','utf8');assert.ok(!html.includes('images/pix.svg'));assert.equal((html.match(/images\/pix.png/g)||[]).length,3);assert.equal(fs.readFileSync('images/pix.png').subarray(0,8).toString('hex'),'89504e470d0a1a0a');
@@ -117,7 +117,7 @@ test('16 combinações de desconto e adicionais: UI, total e itens da operadora 
  const source=html.match(/const PRICES = .*?;/)[0]+'\n'+html.match(/function calcTotal\(\)\{[\s\S]*?\n\}/)[0]+'\n'+html.match(/function calcTotalCheckout\(\)\{[\s\S]*?\n\}/)[0];
  for(let mask=0;mask<16;mask++){
    const b={...body(),hasDiscount:!!(mask&1),addon_colorir:!!(mask&2),addon_expressa:!!(mask&4),obExtras:!!(mask&8)};
-   const ctx={hasDiscount:b.hasDiscount,addons:{colorir:b.addon_colorir,expressa:b.addon_expressa},obExtras:b.obExtras,OB_PRECO:9.9};vm.createContext(ctx);vm.runInContext(source,ctx);
+   const ctx={hasDiscount:b.hasDiscount,checkoutRecoveryOffer:false,checkoutMode:'main',upsellDownsellActive:false,addons:{colorir:b.addon_colorir,expressa:b.addon_expressa},obExtras:b.obExtras,OB_PRECO:9.9};vm.createContext(ctx);vm.runInContext(source,ctx);
    b.total=vm.runInContext('calcTotalCheckout()',ctx);const order=p.buildOrder(b,'pix',{});
    assert.equal(order.amount,b.total);assert.equal(order.products.reduce((sum,item)=>sum+Math.round(item.price*100)*item.quantity,0),Math.round(b.total*100));
    assert.equal(order.products.length,1+Number(b.addon_colorir)+Number(b.addon_expressa)+Number(b.obExtras));assert.equal(order.metadata.obExtras,b.obExtras);

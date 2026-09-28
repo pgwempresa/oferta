@@ -697,6 +697,50 @@
     }
     .ty-support-email:hover { opacity: .85 }
 
+    /* ── OFERTA PÓS-COMPRA ── */
+    .post-offer-note { background: #FFF8E8; border: 1.5px solid #FFE7B0; border-radius: var(--radius-sm); padding: 11px 14px; font-size: 12.5px; font-weight: 600; color: var(--ink); text-align: center; line-height: 1.25; margin-bottom: 16px }
+    .post-offer-card { background: var(--bg-card); border: 2px solid var(--green); border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow-md) }
+    .post-offer-total { background: #fff; border-top: 1px solid var(--border); padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px }
+    .post-offer-total-label { color: var(--ink-soft); font-size: 12.5px; font-weight: 600; line-height: 1.1 }
+    .post-offer-total-price { color: var(--green); font-size: 25px; line-height: 1; font-weight: 700; white-space: nowrap }
+    .post-offer-benefits { display: grid; gap: 8px; margin: 0 0 14px }
+    .post-offer-benefit { display: flex; align-items: flex-start; gap: 9px; background: var(--bg-card); border-radius: var(--radius-md); padding: 11px 12px; color: var(--ink); font-size: 13.5px; font-weight: 600; line-height: 1.2 }
+    .post-offer-benefit svg { width: 16px; height: 16px; stroke: var(--green); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; margin-top: 1px }
+    .post-offer-mini { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; padding: 10px; border-radius: var(--radius-md); background: #FFF8E8; border: 1.5px solid #FFE7B0 }
+    .post-offer-mini img { width: 58px; height: 58px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0 }
+    .post-offer-mini strong { display: block; color: var(--ink); font-size: 13.5px; line-height: 1.1; margin-bottom: 3px }
+    .post-offer-mini span { display: block; color: var(--ink-soft); font-size: 12px; line-height: 1.12 }
+    .post-offer-scarcity { color: var(--coral-d); font-size: 12.5px; font-weight: 600; text-align: center; line-height: 1.2; margin: 10px 0 13px }
+    .upsell-name-card { background: linear-gradient(180deg,#fff 0%,#FFF8E8 100%); border: 2.5px solid var(--gold); border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px; box-shadow: var(--shadow-md) }
+    .upsell-name-card .lbl { font-size: 15px; color: var(--coral-d); display:flex; align-items:center; gap:7px }
+    .upsell-name-card .lbl::before { content:'✍️'; font-size:18px }
+    .upsell-name-card .inp { background:#fff; border:2px solid #FFD4DF; font-size:18px; padding:17px 16px; box-shadow:0 4px 14px rgba(255,111,145,.10) }
+    .upsell-name-card .inp:focus { border-color: var(--coral); box-shadow:0 0 0 4px rgba(255,111,145,.14) }
+    .upsell-photo-box { position: relative; display: grid; place-items: center; min-height: 178px; border-radius: var(--radius-md); background: #fff; border: 2.5px dashed #FFD4DF; overflow: hidden; text-align: center; cursor: pointer }
+    .upsell-photo-box input { display: none }
+    .upsell-photo-preview { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none }
+    .upsell-photo-box.has-photo .upsell-photo-preview { display: block }
+    .upsell-photo-empty { position: relative; z-index: 1; display: grid; justify-items: center; gap: 8px; color: var(--coral-d); padding: 18px }
+    .upsell-photo-empty svg { width: 46px; height: 46px; stroke: var(--coral-d); fill: none; stroke-width: 1.8 }
+    .upsell-photo-empty strong { font-size: 16px; line-height: 1.1 }
+    .upsell-photo-empty span { color: var(--ink-soft); font-size: 12.5px; line-height: 1.15 }
+    .upsell-photo-box.has-photo .upsell-photo-empty { opacity: 0 }
+    .downsell-modal { position: fixed; inset: 0; z-index: 80; display: none; align-items: center; justify-content: center; padding: 18px; background: rgba(32,32,61,.58); backdrop-filter: blur(4px) }
+    .downsell-modal.show { display: flex }
+    .downsell-card { width: 100%; max-width: 420px; background: #fff; border-radius: 20px; padding: 22px 18px 18px; box-shadow: 0 18px 50px rgba(32,32,61,.24); text-align: center; animation: riseIn .22s cubic-bezier(.22,1,.36,1) both }
+    .downsell-badge { display: inline-flex; align-items: center; justify-content: center; gap: 6px; color: var(--coral-d); background: #FFF1F5; border: 1.5px solid #FFD4DF; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; margin-bottom: 12px }
+    .downsell-title { font-family: var(--display); font-size: 25px; line-height: 1.08; font-weight: 800; color: var(--ink); letter-spacing: -.4px; margin-bottom: 8px }
+    .downsell-title em { color: var(--coral); font-style: normal }
+    .downsell-text { color: var(--ink-soft); font-size: 15px; line-height: 1.25; margin: 0 auto 12px; max-width: 340px }
+    .downsell-price-box { border: 2px solid var(--green); background: linear-gradient(180deg,#fff 0%,#EAF8EF 100%); border-radius: 16px; padding: 14px 12px; margin: 12px 0 }
+    .downsell-old { color: var(--muted); font-size: 13px; font-weight: 700; text-decoration: line-through; text-decoration-color: var(--coral-d); text-decoration-thickness: 2px }
+    .downsell-price { color: var(--green); font-size: 34px; line-height: 1; font-weight: 900; margin-top: 3px }
+    .downsell-timer { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #FFF8E8; border: 1.5px solid #FFE7B0; border-radius: 12px; color: var(--ink); font-size: 13.5px; font-weight: 800; padding: 10px 12px; margin: 0 0 14px }
+    .downsell-timer strong { color: var(--coral-d); font-variant-numeric: tabular-nums; min-width: 42px }
+    .downsell-actions { display: grid; gap: 8px }
+    .downsell-accept { width: 100%; padding: 16px; border: none; border-radius: var(--radius-md); background: var(--green); color: #fff; font-size: 15px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; cursor: pointer }
+    .downsell-decline { border: none; background: none; color: var(--ink-soft); font-size: 12.5px; font-weight: 700; padding: 9px 6px; cursor: pointer }
+
   </style>
 <script src="js/player.js" async=""></script></head>
 <body>
@@ -1475,6 +1519,158 @@
       </div><!-- /sc-checkout -->
 
       <!-- ══════════════════════════════════
+           OFERTA APÓS A COMPRA
+      ══════════════════════════════════ -->
+      <div class="screen" id="sc-upsell1">
+        <div class="quiz-card">
+          <div class="fb-icon">
+            <img src="images/icone-final.webp" alt="Estrelas mágicas" onerror="this.style.display='none'">
+          </div>
+          <div class="step-title">Última chance: deixe a história de <em class="child-name-dyn"></em> ainda mais emocionante</div>
+          <div class="step-sub">Adicione uma pessoa ou família querida dentro do livro por um valor especial disponível só nesta etapa.</div>
+
+          <div class="carousel-wrap" style="margin-bottom:16px">
+            <div class="carousel-track">
+              <img src="images/upsell/familia-01.jpg" alt="Família com livro personalizado">
+              <img src="images/upsell/familia-02.jpg" alt="Pais com livro personalizado">
+              <img src="images/upsell/familia-03.jpg" alt="Avós com livro personalizado">
+              <img src="images/upsell/familia-04.jpg" alt="Exemplo de páginas do livro">
+              <img src="images/upsell/familia-01.jpg" alt="">
+              <img src="images/upsell/familia-02.jpg" alt="">
+              <img src="images/upsell/familia-03.jpg" alt="">
+              <img src="images/upsell/familia-04.jpg" alt="">
+            </div>
+          </div>
+
+          <div class="addon-section-tag">
+            <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>
+            ADICIONAL EXCLUSIVO COM 50% DE DESCONTO
+          </div>
+
+          <div class="post-offer-card">
+            <div class="addon-body">
+              <div class="addon-thumb">
+                <img src="images/upsell/familia-04.jpg" alt="">
+                <span class="addon-ribbon">50% OFF</span>
+              </div>
+              <div class="addon-info">
+                <div class="addon-name">Colocar pessoa ou família na aventura</div>
+                <div class="addon-desc">Pode ser mãe, pai, avós, padrinhos ou uma foto da família.</div>
+                <div class="addon-price-row"><span class="addon-price-old">De R$ 59,80</span><span class="addon-price">R$ 29,90</span></div>
+              </div>
+            </div>
+            <div class="post-offer-total">
+              <div class="post-offer-total-label">Adicional com<br>nome e foto</div>
+              <div class="post-offer-total-price">R$ 29,90</div>
+            </div>
+          </div>
+
+          <div class="post-offer-benefits">
+            <div class="post-offer-benefit"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg><span><span class="child-name-solo"></span> pode aparecer ao lado de quem ele ama.</span></div>
+            <div class="post-offer-benefit"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg><span>Você informa o nome e envia uma foto da pessoa ou família.</span></div>
+            <div class="post-offer-benefit"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg><span>Pode manter a história atual ou escolher outra aventura personalizada.</span></div>
+          </div>
+
+          <div class="post-offer-mini">
+            <img src="images/upsell/familia-01.jpg" alt="">
+            <div><strong>Fica com cara de presente para a família inteira.</strong><span>Um jeito simples de deixar o livro mais emocionante.</span></div>
+          </div>
+
+          <button class="btn-cta" onclick="acceptUpsellFull()">SIM, QUERO ADICIONAR POR R$ 29,90</button>
+          <div class="post-offer-scarcity">Oferta única: ao sair desta etapa, esse desconto pode não aparecer novamente.</div>
+          <button class="btn-mini-back" onclick="showUpsellDownsell()">Não quero adicionar agora</button>
+        </div>
+      </div>
+
+      <div class="screen" id="sc-upsell2">
+        <div class="quiz-card">
+          <div class="fb-icon">
+            <img src="images/icone-rosto.webp" alt="Rosto mágico" onerror="this.style.display='none'">
+          </div>
+          <div class="step-title">Quem vai aparecer junto com <em class="child-name-dyn"></em>?</div>
+          <div class="step-sub">Preencha o nome e envie uma foto da pessoa ou família. É rápido.</div>
+
+          <div class="post-offer-note">Essas informações serão usadas para personalizar o adicional do livro.</div>
+
+          <div class="upsell-name-card">
+            <div class="fld">
+              <label class="lbl" for="upsellNames">Nome ou nomes</label>
+              <input class="inp" id="upsellNames" type="text" placeholder="Toque aqui e escreva. Ex.: Vovó Maria, Vovô João" autocomplete="off">
+            </div>
+            <label class="upsell-photo-box" id="upsellPhotoBox">
+              <img class="upsell-photo-preview" id="upsellPhotoPreview" alt="">
+              <span class="upsell-photo-empty">
+                <svg viewBox="0 0 24 24"><path d="M4 7h3l2-3h6l2 3h3v13H4z"></path><circle cx="12" cy="13" r="4"></circle><path d="M19 10h.01"></path></svg>
+                <strong>Adicionar foto da pessoa ou família</strong>
+                <span>Toque aqui para escolher a foto.</span>
+              </span>
+              <input id="upsellPhoto" type="file" accept="image/png,image/jpeg,image/webp">
+            </label>
+          </div>
+
+          <div class="section-heading">Como será a história?</div>
+          <div class="opt-grid" id="upsellStoryMode">
+            <div class="opt-chip sel" data-value="original" onclick="setUpsellStoryMode('original')"><span class="opt-chip-label">Manter a história atual</span><span class="opt-chip-sub">mais simples</span></div>
+            <div class="opt-chip" data-value="nova" onclick="setUpsellStoryMode('nova')"><span class="opt-chip-label">Criar outra aventura</span><span class="opt-chip-sub">escolher tema</span></div>
+          </div>
+
+          <div id="upsellNewStory" style="display:none">
+            <div class="section-heading">Tema da nova aventura</div>
+            <div class="opt-grid" id="upsellTheme">
+              <div class="opt-chip sel" data-value="Amizade" onclick="setUpsellChoice('upsellTheme','Amizade')"><span class="opt-chip-label">Amizade</span><span class="opt-chip-sub">união e carinho</span></div>
+              <div class="opt-chip" data-value="Coragem" onclick="setUpsellChoice('upsellTheme','Coragem')"><span class="opt-chip-label">Coragem</span><span class="opt-chip-sub">superar desafios</span></div>
+              <div class="opt-chip" data-value="Fé" onclick="setUpsellChoice('upsellTheme','Fé')"><span class="opt-chip-label">Fé</span><span class="opt-chip-sub">mensagem especial</span></div>
+              <div class="opt-chip" data-value="Família" onclick="setUpsellChoice('upsellTheme','Família')"><span class="opt-chip-label">Família</span><span class="opt-chip-sub">amor de casa</span></div>
+            </div>
+
+            <div class="section-heading">Lugar da aventura</div>
+            <div class="opt-grid" id="upsellPlace">
+              <div class="opt-chip sel" data-value="Floresta encantada" onclick="setUpsellChoice('upsellPlace','Floresta encantada')"><span class="opt-chip-label">Floresta encantada</span></div>
+              <div class="opt-chip" data-value="Reino mágico" onclick="setUpsellChoice('upsellPlace','Reino mágico')"><span class="opt-chip-label">Reino mágico</span></div>
+              <div class="opt-chip" data-value="Fazendinha" onclick="setUpsellChoice('upsellPlace','Fazendinha')"><span class="opt-chip-label">Fazendinha</span></div>
+              <div class="opt-chip" data-value="Fundo do mar" onclick="setUpsellChoice('upsellPlace','Fundo do mar')"><span class="opt-chip-label">Fundo do mar</span></div>
+            </div>
+
+            <div class="fld" style="margin-top:14px">
+              <label class="lbl" for="upsellDetail">Detalhe opcional</label>
+              <textarea class="inp" id="upsellDetail" placeholder="Opcional. Ex.: colocar uma frase especial da família."></textarea>
+            </div>
+          </div>
+
+          <div class="bonus-card" style="margin-top:14px">
+            <div class="bonus-thumb"><img src="images/upsell/familia-01.jpg" alt=""></div>
+            <div>
+              <div class="bonus-title" id="upsellSummary">O adicional vai colocar alguém especial na história de <span class="child-name-solo"></span>.</div>
+              <div class="bonus-sub">Depois é só pagar o adicional de <span class="upsell-price-dyn">R$ 29,90</span> no checkout.</div>
+            </div>
+          </div>
+
+          <div class="nav" style="margin-top:18px">
+            <button class="btn-back" onclick="goTo('upsell1')">Voltar</button>
+            <button class="btn-next" onclick="startUpsellCheckout()">Adicionar por <span class="upsell-price-dyn">R$ 29,90</span></button>
+          </div>
+          <button class="btn-mini-back" onclick="showUpsellDownsell()" style="display:block;margin:10px auto 0">Não quero adicionar agora</button>
+        </div>
+      </div>
+
+      <div class="downsell-modal" id="upsellDownsellModal" role="dialog" aria-modal="true" aria-labelledby="downsellTitle">
+        <div class="downsell-card">
+          <div class="downsell-badge">⏰ Oferta só agora</div>
+          <div class="downsell-title" id="downsellTitle">Espera! Adicione mais pessoas por <em>R$ 14,90</em></div>
+          <div class="downsell-text">Inclua uma pessoa ou família querida no livrinho de <span class="child-name-solo"></span> pagando menos nesta última oferta.</div>
+          <div class="downsell-price-box">
+            <div class="downsell-old">De R$ 29,90</div>
+            <div class="downsell-price">R$ 14,90</div>
+          </div>
+          <div class="downsell-timer">Essa condição termina em <strong id="downsellTimer">05:00</strong></div>
+          <div class="downsell-actions">
+            <button class="downsell-accept" onclick="acceptUpsellDownsell()">Eu quero por R$ 14,90</button>
+            <button class="downsell-decline" onclick="declineUpsellFinal()">Não quero mesmo</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
            APROVADO
       ══════════════════════════════════ -->
       <div class="screen" id="sc-aprovado">
@@ -1535,6 +1731,18 @@
   </div>
 </div>
 
+<!-- POPUP RECUPERAÇÃO CHECKOUT -->
+<div class="popup-overlay" id="checkoutRecoveryPopup">
+  <div class="popup-card">
+    <div class="popup-icon"><img src="images/icone-presente.webp" alt="Oferta especial" style="width: 76px; height: 76px; object-fit: contain;" onerror="this.style.display='none'"></div>
+    <div class="popup-title">Espera! Leve o livro de <em><span class="child-name-dyn"></span> por R$ 9,90</em></div>
+    <div class="popup-sub">Essa é uma oferta especial para finalizar agora. O desconto fica disponível só nesta tela.</div>
+    <div class="downsell-timer" style="margin:0 auto 14px">Termina em <strong id="checkoutRecoveryTimer">05:00</strong></div>
+    <button class="popup-btn" onclick="applyCheckoutRecoveryOffer()">Ativar oferta de R$ 9,90</button>
+    <button class="btn-mini-back" onclick="closeCheckoutRecoveryPopup()" style="display:block;margin:10px auto 0">Continuar sem desconto extra</button>
+  </div>
+</div>
+
 <!-- POPUP MICRO-PERGUNTA (loading) -->
 <div class="popup-overlay" id="microPopup">
   <div class="popup-card">
@@ -1546,8 +1754,19 @@
 
 <script src="js/document.js"></script>
 <script>
-const PRICES = { base: 39.90, discount: 25.00, colorir: 7.90, expressa: 3.90 };
+const PRICES = { base: 39.90, discount: 25.00, checkoutRecoveryDiscount: 30.00, colorir: 7.90, expressa: 3.90, upsellFamiliar: 29.90, upsellDownsell: 14.90 };
 let step = 'intro', addons = { colorir: false, expressa: false }, hasDiscount = false;
+let checkoutMode = 'main';
+let checkoutRecoveryOffer = false;
+let checkoutRecoveryShown = false;
+let checkoutRecoveryArmed = false;
+let checkoutRecoveryTimer = null;
+let checkoutRecoverySeconds = 300;
+let upsellAdded = false;
+let upsellDownsellActive = false;
+let upsellDownsellTimer = null;
+let upsellDownsellSeconds = 300;
+let upsellData = { names: '', photoSelected: false, storyMode: 'original', theme: 'Amizade', place: 'Floresta encantada', detail: '' };
 const SESSION_EID = 'ev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
 const TOTAL_STEPS = 11;
 const IMG_BASE = 'images/';
@@ -1783,6 +2002,21 @@ function closeCustomScenario(){
 }
 document.addEventListener('DOMContentLoaded',()=>{
   // Captura manual da tela intro — não passa por goTo()
+  const previewParams = new URLSearchParams(window.location.search);
+  const previewName = previewParams.get('nome');
+  if(previewName){
+    const childInput = document.getElementById('q-child-name');
+    if(childInput && !childInput.value) childInput.value = previewName;
+    updateDynNames();
+  }
+  if(previewParams.get('checkout') === 'upsell'){
+    const downsell = previewParams.get('downsell') === '1';
+    upsellDownsellActive = downsell;
+    checkoutMode = 'upsell';
+    upsellAdded = true;
+    syncUpsellPriceText();
+    setTimeout(()=>goTo('checkout'),80);
+  }
 
   const customInput=document.getElementById('q-setting-custom');
   if(customInput){
@@ -1812,6 +2046,7 @@ function goTo(s){
   }else{pw.style.display='none';sc2.textContent=''}
   document.getElementById('overlay').scrollTop=0;
   updateDynNames();validate();
+  if(s==='upsell1'||s==='upsell2'||s==='checkout') syncUpsellPriceText();
   const STEP_EVENTS = {
     'intro':       'Historinha_Intro',
     'social':      'Historinha_SocialProof',
@@ -1953,15 +2188,18 @@ function togAddon(a){
   updateReceipts();
 }
 function calcTotal(){
-  let tot=PRICES.base-(hasDiscount?PRICES.discount:0);
+  const discount = checkoutRecoveryOffer ? PRICES.checkoutRecoveryDiscount : (hasDiscount ? PRICES.discount : 0);
+  let tot=PRICES.base-discount;
   if(addons.colorir)tot+=PRICES.colorir;if(addons.expressa)tot+=PRICES.expressa;
-  return{sub:PRICES.base,disc:hasDiscount?PRICES.discount:0,tot:parseFloat(tot.toFixed(2))};
+  return{sub:PRICES.base,disc:discount,tot:parseFloat(tot.toFixed(2))};
 }
 function buildReceiptHTML(){
   const c=calcTotal();
   let h=`<div class="rr sub"><span class="rl">Livro Ilustrado Personalizado</span><span class="rv">${fmtBRL(c.sub)}</span></div>`;
-  h+=`<div class="rr disc"><span class="rl">Desconto Dia das Crianças${hasDiscount?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
-  h+=hasDiscount?`<span class="rv">-${fmtBRL(c.disc)}</span></div>`:`<span class="rv" style="opacity:.35">-${fmtBRL(c.disc)}</span></div>`;
+  const discountLabel = checkoutRecoveryOffer ? 'Oferta especial para finalizar agora' : 'Desconto Dia das Crianças';
+  const discountActive = c.disc > 0;
+  h+=`<div class="rr disc"><span class="rl">${discountLabel}${discountActive?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
+  h+=discountActive?`<span class="rv">-${fmtBRL(c.disc)}</span></div>`:`<span class="rv" style="opacity:.35">-${fmtBRL(PRICES.discount)}</span></div>`;
   if(addons.colorir)h+=`<div class="rr add"><span class="rl">Versão para Colorir</span><span class="rv">+${fmtBRL(PRICES.colorir)}</span></div>`;
   if(addons.expressa)h+=`<div class="rr add"><span class="rl">Entrega Expressa</span><span class="rv">+${fmtBRL(PRICES.expressa)}</span></div>`;
   h+=`<div class="rr tot"><span class="rl">Total a Pagar</span><span class="rv">${fmtBRL(c.tot)}</span></div>`;
@@ -1975,8 +2213,8 @@ function updatePriceResultTag(){
   if(addons.colorir)extras.push('Colorir');
   if(addons.expressa)extras.push('Expressa');
   tag.textContent = extras.length
-    ? `Inclui ${extras.join(' + ')} · Desconto de Dia das Crianças ativo`
-    : 'Desconto de Dia das Crianças ativo nesta sessão';
+    ? `Inclui ${extras.join(' + ')} · ${checkoutRecoveryOffer ? 'Oferta especial ativa' : 'Desconto de Dia das Crianças ativo'}`
+    : (checkoutRecoveryOffer ? 'Oferta especial de R$ 9,90 ativa nesta sessão' : 'Desconto de Dia das Crianças ativo nesta sessão');
 }
 function updateReceipts(){
   syncReceipt('rec-11');
@@ -1984,9 +2222,61 @@ function updateReceipts(){
   updatePriceResultTag();
 }
 function applyDiscount(){
+  checkoutRecoveryOffer=false;
   hasDiscount=true;updateReceipts();
   const p=document.getElementById('couponPopup');p.classList.remove('active');setTimeout(()=>{p.style.display='none'},300);
 }
+
+function renderCheckoutRecoveryTimer(){
+  const el=document.getElementById('checkoutRecoveryTimer');
+  if(!el)return;
+  const m=Math.floor(checkoutRecoverySeconds/60);
+  const s=checkoutRecoverySeconds%60;
+  el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function openCheckoutRecoveryPopup(){
+  if(step!=='checkout'||checkoutMode!=='main'||checkoutRecoveryOffer||checkoutRecoveryShown)return;
+  checkoutRecoveryShown=true;
+  checkoutRecoverySeconds=300;
+  renderCheckoutRecoveryTimer();
+  const p=document.getElementById('checkoutRecoveryPopup');
+  if(p){p.style.display='flex';setTimeout(()=>p.classList.add('active'),10)}
+  clearInterval(checkoutRecoveryTimer);
+  checkoutRecoveryTimer=setInterval(()=>{
+    checkoutRecoverySeconds=Math.max(0,checkoutRecoverySeconds-1);
+    renderCheckoutRecoveryTimer();
+    if(checkoutRecoverySeconds===0)clearInterval(checkoutRecoveryTimer);
+  },1000);
+}
+
+function closeCheckoutRecoveryPopup(){
+  const p=document.getElementById('checkoutRecoveryPopup');
+  if(p){p.classList.remove('active');setTimeout(()=>{p.style.display='none'},300)}
+  clearInterval(checkoutRecoveryTimer);
+}
+
+function applyCheckoutRecoveryOffer(){
+  checkoutRecoveryOffer=true;
+  hasDiscount=true;
+  closeCheckoutRecoveryPopup();
+  updateReceipts();
+  syncCheckoutReceipt();
+  refreshCardBrickIfNeeded();
+}
+
+function armCheckoutBackOffer(){
+  if(checkoutRecoveryArmed)return;
+  checkoutRecoveryArmed=true;
+  try{ history.pushState({checkoutOffer:true},'',location.href); }catch(_){}
+}
+
+window.addEventListener('popstate', ()=>{
+  if(step==='checkout'&&checkoutMode==='main'&&!checkoutRecoveryOffer&&!checkoutRecoveryShown){
+    try{ history.pushState({checkoutOffer:true},'',location.href); }catch(_){}
+    openCheckoutRecoveryPopup();
+  }
+});
 
 // ════════════════════════════════════════════
 //  TIMER DE URGÊNCIA (paywall)
@@ -2038,6 +2328,7 @@ function getQuizData(){
     addon_colorir:     addons.colorir  ? 'Sim':'Não',
     addon_expressa:    addons.expressa ? 'Sim':'Não',
     has_discount:      hasDiscount ? 'Sim':'Não',
+    checkout_recovery_offer: checkoutRecoveryOffer ? 'Sim':'Não',
     total:             calcTotal().tot,
   };
 }
@@ -2089,13 +2380,139 @@ function toggleOb(){
   refreshCardBrickIfNeeded();
 }
 
+function syncUpsellSummary(){
+  const input = document.getElementById('upsellNames');
+  if(input) upsellData.names = input.value.trim();
+  const child = childFirstName() || 'a criança';
+  const text = upsellData.names
+    ? `${upsellData.names} vai aparecer na história de ${child}.`
+    : `O adicional vai colocar alguém especial na história de ${child}.`;
+  const summary = document.getElementById('upsellSummary');
+  if(summary) summary.textContent = text;
+}
+
+function setUpsellChoice(id,value){
+  const group = document.getElementById(id);
+  if(!group) return;
+  group.querySelectorAll('.opt-chip').forEach(el=>el.classList.toggle('sel',el.dataset.value===value));
+  if(id === 'upsellTheme') upsellData.theme = value;
+  if(id === 'upsellPlace') upsellData.place = value;
+}
+
+function setUpsellStoryMode(value){
+  upsellData.storyMode = value;
+  const group = document.getElementById('upsellStoryMode');
+  if(group) group.querySelectorAll('.opt-chip').forEach(el=>el.classList.toggle('sel',el.dataset.value===value));
+  const box = document.getElementById('upsellNewStory');
+  if(box) box.style.display = value === 'nova' ? 'block' : 'none';
+}
+
+function currentUpsellPrice(){
+  return upsellDownsellActive ? PRICES.upsellDownsell : PRICES.upsellFamiliar;
+}
+
+function syncUpsellPriceText(){
+  const price = fmtBRL(currentUpsellPrice());
+  document.querySelectorAll('.upsell-price-dyn').forEach(el=>{ el.textContent = price; });
+}
+
+function acceptUpsellFull(){
+  upsellDownsellActive = false;
+  syncUpsellPriceText();
+  goTo('upsell2');
+}
+
+function renderDownsellTimer(){
+  const el = document.getElementById('downsellTimer');
+  if(!el) return;
+  const minutes = Math.floor(upsellDownsellSeconds / 60);
+  const seconds = upsellDownsellSeconds % 60;
+  el.textContent = `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+}
+
+function showUpsellDownsell(){
+  const modal = document.getElementById('upsellDownsellModal');
+  if(!modal) return;
+  upsellDownsellSeconds = 300;
+  renderDownsellTimer();
+  modal.classList.add('show');
+  clearInterval(upsellDownsellTimer);
+  upsellDownsellTimer = setInterval(()=>{
+    upsellDownsellSeconds = Math.max(0, upsellDownsellSeconds - 1);
+    renderDownsellTimer();
+    if(upsellDownsellSeconds === 0) clearInterval(upsellDownsellTimer);
+  },1000);
+}
+
+function hideUpsellDownsell(){
+  const modal = document.getElementById('upsellDownsellModal');
+  if(modal) modal.classList.remove('show');
+  clearInterval(upsellDownsellTimer);
+}
+
+function acceptUpsellDownsell(){
+  upsellDownsellActive = true;
+  hideUpsellDownsell();
+  syncUpsellPriceText();
+  goTo('upsell2');
+}
+
+function declineUpsellFinal(){
+  hideUpsellDownsell();
+  goTo('aprovado');
+}
+
+function startUpsellCheckout(){
+  syncUpsellSummary();
+  upsellData.detail = getVal('upsellDetail');
+  upsellAdded = true;
+  checkoutMode = 'upsell';
+  obExtras = false;
+  const check = document.getElementById('obCheck');
+  if(check){check.classList.remove('on');check.textContent='';}
+  goTo('checkout');
+}
+
+const upsellNamesField = document.getElementById('upsellNames');
+if(upsellNamesField) upsellNamesField.addEventListener('input', syncUpsellSummary);
+const upsellPhotoField = document.getElementById('upsellPhoto');
+if(upsellPhotoField) upsellPhotoField.addEventListener('change', function(){
+  const file = this.files && this.files[0];
+  if(!file) return;
+  upsellData.photoSelected = true;
+  const preview = document.getElementById('upsellPhotoPreview');
+  const box = document.getElementById('upsellPhotoBox');
+  if(preview) preview.src = URL.createObjectURL(file);
+  if(box) box.classList.add('has-photo');
+});
+
 function calcTotalCheckout(){
+  if(typeof checkoutMode !== 'undefined' && checkoutMode === 'upsell'){
+    let tot = currentUpsellPrice();
+    if(obExtras) tot += OB_PRECO;
+    return parseFloat(tot.toFixed(2));
+  }
   let tot = calcTotal().tot;
   if(obExtras) tot += OB_PRECO;
   return parseFloat(tot.toFixed(2));
 }
 
 function syncCheckoutReceipt(){
+  if(checkoutMode === 'upsell'){
+    let h = `<div class="rr sub"><span class="rl">Adicional: pessoa ou família na história</span><span class="rv">${fmtBRL(currentUpsellPrice())}</span></div>`;
+    if(obExtras) h += `<div class="rr add"><span class="rl">+2 Historinhas Extras</span><span class="rv">+${fmtBRL(OB_PRECO)}</span></div>`;
+    const totalFinal = calcTotalCheckout();
+    h += `<div class="rr tot"><span class="rl">Total a Pagar</span><span class="rv">${fmtBRL(totalFinal)}</span></div>`;
+    const el = document.getElementById('rec-checkout');
+    if(el) el.innerHTML = h;
+    const ctaPix = document.getElementById('ctaPricePix');
+    if(ctaPix) ctaPix.textContent = fmtBRL(totalFinal);
+    const title = document.querySelector('#sc-checkout .kw-prod-title');
+    const sub = document.querySelector('#sc-checkout .kw-prod-sub');
+    if(title) title.textContent = 'Adicional Sua Historinha';
+    if(sub) sub.textContent = 'Coloque uma pessoa querida dentro da história personalizada.';
+    return;
+  }
   const tot = calcTotal();
   let h = `<div class="rr sub"><span class="rl">Livro Ilustrado Personalizado</span><span class="rv">${fmtBRL(tot.sub)}</span></div>`;
   h += `<div class="rr disc"><span class="rl">Desconto Dia das Crianças${hasDiscount?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
@@ -2110,6 +2527,10 @@ function syncCheckoutReceipt(){
   if(el) el.innerHTML = h;
   const ctaPix = document.getElementById('ctaPricePix');
   if(ctaPix) ctaPix.textContent = fmtBRL(totalFinal);
+  const title = document.querySelector('#sc-checkout .kw-prod-title');
+  const sub = document.querySelector('#sc-checkout .kw-prod-sub');
+  if(title) title.textContent = 'Sua Historinha';
+  if(sub) sub.textContent = 'Entrega por e-mail em até 1 hora após a confirmação do pagamento.';
 }
 
 function selMethod(m){
@@ -2154,15 +2575,27 @@ async function pagarPix(){
   const quizData = getQuizData();
   quizData.addon_colorir  = addons.colorir  ? 'Sim' : 'Não';
   quizData.addon_expressa = addons.expressa ? 'Sim' : 'Não';
+  quizData.upsell_familiar = checkoutMode === 'upsell' ? 'Sim' : 'Não';
+  quizData.upsell_downsell = checkoutMode === 'upsell' && upsellDownsellActive ? 'Sim' : 'Não';
+  quizData.upsell_names = checkoutMode === 'upsell' ? upsellData.names : '';
+  quizData.upsell_story_mode = checkoutMode === 'upsell' ? upsellData.storyMode : '';
+  quizData.upsell_theme = checkoutMode === 'upsell' ? upsellData.theme : '';
+  quizData.upsell_place = checkoutMode === 'upsell' ? upsellData.place : '';
+  quizData.upsell_detail = checkoutMode === 'upsell' ? upsellData.detail : '';
 
   let retryAllowed = true;
   try{
     const r = await fetch('/api/criar-pix',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        email, telefone: tel, document: BuyerDocument.normalize(getVal('fDocument')), total, quizData, identifier: SESSION_EID, hasDiscount,
+        email, telefone: tel, document: BuyerDocument.normalize(getVal('fDocument')), total, quizData, identifier: SESSION_EID, hasDiscount, checkoutRecoveryOffer: checkoutMode === 'main' && checkoutRecoveryOffer,
         utms: getUTMsFresh(), eventId: SESSION_EID, fbp: getFbp(), fbc: getFbc(),
-        obExtras, addon_colorir: addons.colorir, addon_expressa: addons.expressa,
+        obExtras,
+        addon_colorir: checkoutMode === 'main' && addons.colorir,
+        addon_expressa: checkoutMode === 'main' && addons.expressa,
+        upsellFamiliar: checkoutMode === 'upsell',
+        upsellDownsell: checkoutMode === 'upsell' && upsellDownsellActive,
+        upsellData,
       }),
     });
     const data = await paymentResponse(r);
@@ -2217,6 +2650,11 @@ async function paymentResponse(response){
   if(!response.ok||data.erro){const e=new Error(data.erro||'Não foi possível processar o pagamento.');e.uncertain=data.uncertain===true;throw e}
   return data;
 }
+function handleApprovedPayment(email){
+  document.getElementById('okEmail').textContent = email || getCheckoutEmail() || getVal('q-email');
+  if(checkoutMode === 'upsell') goTo('aprovado');
+  else goTo('upsell1');
+}
 async function verificarPagamento(){
   if(!pendingPayment)return;
   const output=document.getElementById('paymentStatusMessage');
@@ -2228,7 +2666,7 @@ async function verificarPagamento(){
     const response=await fetch('/api/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({statusToken:pendingPayment.statusToken})});
     const data=await paymentResponse(response);
     if(data.status==='approved'){
-      clearInterval(expInterval);document.getElementById('okEmail').textContent=pendingPayment.email;goTo('aprovado');
+      clearInterval(expInterval);handleApprovedPayment(pendingPayment.email);
     }else if(['failed','refunded','charged_back','expired','canceled','rejected'].includes(data.status)){
       output.textContent='Pagamento não concluído ou encerrado. Confira o aplicativo do banco antes de fazer um novo pedido.';
     }else{output.textContent='O pagamento ainda aguarda confirmação. Após pagar, aguarde um minuto e consulte novamente.'}
@@ -2280,14 +2718,21 @@ async function pagarCartaoAmplo(){
   erro.textContent = '';
   let allowCardRetry=true;
   const quizData = getQuizData();
-  quizData.addon_colorir = addons.colorir ? 'Sim' : 'Não';
-  quizData.addon_expressa = addons.expressa ? 'Sim' : 'Não';
+  quizData.addon_colorir = checkoutMode === 'main' && addons.colorir ? 'Sim' : 'Não';
+  quizData.addon_expressa = checkoutMode === 'main' && addons.expressa ? 'Sim' : 'Não';
+  quizData.upsell_familiar = checkoutMode === 'upsell' ? 'Sim' : 'Não';
+  quizData.upsell_downsell = checkoutMode === 'upsell' && upsellDownsellActive ? 'Sim' : 'Não';
+  quizData.upsell_names = checkoutMode === 'upsell' ? upsellData.names : '';
+  quizData.upsell_story_mode = checkoutMode === 'upsell' ? upsellData.storyMode : '';
+  quizData.upsell_theme = checkoutMode === 'upsell' ? upsellData.theme : '';
+  quizData.upsell_place = checkoutMode === 'upsell' ? upsellData.place : '';
+  quizData.upsell_detail = checkoutMode === 'upsell' ? upsellData.detail : '';
 
   try{
     const r = await fetch('/api/criar-cartao',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        identifier: 'HIST-' + SESSION_EID, hasDiscount,
+        identifier: 'HIST-' + SESSION_EID, hasDiscount, checkoutRecoveryOffer: checkoutMode === 'main' && checkoutRecoveryOffer,
         amount: calcTotalCheckout(),
         email, telefone: tel, total: calcTotalCheckout(), quizData,
         client: {
@@ -2303,20 +2748,26 @@ async function pagarCartaoAmplo(){
           expiresAt, cvv:getVal('cardCvv')
         },
         installments:Number(getVal('cardInstallments')) || 1,
-        products:[{id:'sua-historinha',name:'Sua Historinha',quantity:1,price:calcTotalCheckout()}],
+        products:[checkoutMode === 'upsell'
+          ? {id:upsellDownsellActive?'adicional-pessoa-familia-oferta':'adicional-pessoa-familia',name:'Adicional: pessoa ou família na história',quantity:1,price:calcTotalCheckout()}
+          : {id:'sua-historinha',name:'Sua Historinha',quantity:1,price:calcTotalCheckout()}],
         metadata:{provider:'Amplo Pay',orderId:'HIST-'+SESSION_EID},
-        obExtras, addon_colorir:addons.colorir, addon_expressa:addons.expressa,
+        obExtras,
+        addon_colorir:checkoutMode === 'main' && addons.colorir,
+        addon_expressa:checkoutMode === 'main' && addons.expressa,
+        upsellFamiliar:checkoutMode === 'upsell',
+        upsellDownsell:checkoutMode === 'upsell' && upsellDownsellActive,
+        upsellData,
         utms:getUTMsFresh()
       })
     });
     const d = await paymentResponse(r);
     if(!r.ok || d.erro || ['FAILED','REJECTED','CANCELED'].includes(d.status)) throw new Error(d.erro || d.errorDescription || 'Pagamento recusado.');
     if(d.status === 'approved' || d.transactionStatus === 'COMPLETED'){
-      document.getElementById('okEmail').textContent = email;
       if(typeof window.trackPurchase === 'function') window.trackPurchase({
         eventId:'card_'+(d.id || SESSION_EID), total:d.total || calcTotalCheckout(), paymentMethod:'card', paymentStatus:'approved'
       });
-      goTo('aprovado');
+      handleApprovedPayment(email);
     }else{
       pendingPayment={statusToken:d.statusToken,email};
       document.getElementById('paymentCheck').style.display='block';
@@ -2334,6 +2785,7 @@ async function pagarCartaoAmplo(){
 // ── GOTO — adicionar sc-checkout e sc-aprovado ────────────────────────────────
 // ── TRANSIÇÃO RÁPIDA PRO CHECKOUT ─────────────────────────────────────────────
 function irParaCheckout(){
+  checkoutMode = 'main';
   goTo('redirect');
   const fill = document.getElementById('redirectFill');
   if(fill){
@@ -2352,6 +2804,7 @@ window.goTo = function(s){
   if(siteHeader) siteHeader.style.display = (s === 'checkout' || s === 'aprovado') ? 'none' : 'flex';
 
   if(s === 'checkout'){
+    if(checkoutMode === 'main') armCheckoutBackOffer();
     document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
     document.getElementById('sc-checkout').classList.add('active');
     step = 'checkout';
