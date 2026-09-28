@@ -26,17 +26,6 @@
   <link rel="preload" as="image" href="images/ChatGPT%20Image%2017%20de%20jun.%20de%202026%2C%2014_54_47.png" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:wght@400;500;600&amp;family=Open+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 
-  <!-- VTurb player preloads -->
-  <script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
-  <link rel="preload" href="js/player.js" as="script">
-  <link rel="preload" href="js/smartplayer.js" as="script">
-  <link rel="preload" href="https://cdn.converteai.net/5a997ec4-709f-4ac4-8078-16082f6a9347/6aa857911793a964188aa777/main.m3u8" as="fetch">
-  <link rel="dns-prefetch" href="https://cdn.converteai.net">
-  <link rel="dns-prefetch" href="https://scripts.converteai.net">
-  <link rel="dns-prefetch" href="https://images.converteai.net">
-  <link rel="dns-prefetch" href="https://license.vturb.com">
-
-
   <style>
     .amplo-card-grid{display:grid;gap:12px;margin-bottom:16px}.amplo-card-grid .kiwi-input-field{border:1px solid #d1d5db;border-radius:6px;padding:12px;width:100%}
     :root {
@@ -743,7 +732,7 @@
     .downsell-decline { border: none; background: none; color: var(--ink-soft); font-size: 12.5px; font-weight: 700; padding: 9px 6px; cursor: pointer }
 
   </style>
-<script src="js/player.js" async=""></script></head>
+</head>
 <body>
 
 <div class="overlay" id="overlay">
@@ -1249,8 +1238,9 @@
         <div class="section-sub">Depoimentos reais de famílias que já surpreenderam seus pequenos</div>
 
         <div class="video-review-stack">
-          <vturb-smartplayer id="vid-6aa8579893c6be5534cbd406" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer>
-          <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/5a997ec4-709f-4ac4-8078-16082f6a9347/players/6aa8579893c6be5534cbd406/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
+          <div style="position:relative;padding-top:56.25%;width:100%;max-width:400px;margin:0 auto;border-radius:10px;overflow:hidden;background:#1C1E52;">
+            <iframe src="https://player.mediadelivery.net/embed/764426/cb1d8670-f5bf-461e-83eb-26ad06044819?autoplay=false&amp;loop=false&amp;muted=false&amp;preload=true&amp;responsive=true" loading="lazy" style="border:0;position:absolute;top:0;left:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;" allowfullscreen="true"></iframe>
+          </div>
         </div>
 
         <div class="carousel-wrap">
@@ -1821,22 +1811,6 @@ if(cardZipField){
   });
   cardZipField.addEventListener('blur',lookupCep);
 }
-
-// O player VTurb é externo; desabilita qualquer repetição quando o vídeo termina.
-(function preventVideoLoop(){
-  const stopLoop = () => {
-    const host = document.querySelector('vturb-smartplayer');
-    const video = host?.shadowRoot?.querySelector('video');
-    if(!video || video.dataset.noLoopGuard) return;
-    video.dataset.noLoopGuard = '1';
-    video.loop = false;
-    video.removeAttribute('loop');
-    video.addEventListener('ended', () => { video.loop = false; video.pause(); }, false);
-  };
-  stopLoop();
-  const timer = setInterval(stopLoop, 1000);
-  setTimeout(() => clearInterval(timer), 30000);
-})();
 
 // Checkout agora é embutido — sem links externos
 

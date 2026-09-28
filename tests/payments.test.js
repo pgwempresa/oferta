@@ -21,10 +21,11 @@ test('documento do checkout limita a 14 dígitos e formata CPF/CNPJ',()=>{
  assert.match(html,/id="fDocument"[^>]*maxlength="18"/);
  assert.match(html,/replace\(\/\\D\/g,''\)\.slice\(0,14\)/);
 });
-test('player não deve repetir o vídeo ao terminar',()=>{
+test('player de depoimento usa MediaDelivery sem loop e sem VTurb antigo',()=>{
  const html=fs.readFileSync('index.html','utf8');
- assert.match(html,/video\.loop = false/);
- assert.match(html,/video\.addEventListener\('ended'/);
+ assert.match(html,/https:\/\/player\.mediadelivery\.net\/embed\/764426\/cb1d8670-f5bf-461e-83eb-26ad06044819\?[^"]*loop=false/);
+ assert.doesNotMatch(html,/vturb-smartplayer/);
+ assert.doesNotMatch(html,/scripts\.converteai\.net\/5a997ec4/);
 });
 test('ícones das telas de feedback e popup estão visíveis e usam os arquivos enviados',()=>{
  const html=fs.readFileSync('index.html','utf8');
