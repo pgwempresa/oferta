@@ -241,6 +241,7 @@
     .receipt { background: var(--bg-card); border-radius: var(--radius-md); padding: 16px 18px; margin-top: 16px }
     .rr { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 13px; gap: 8px }
     .rr.sub .rv { text-decoration: line-through; color: var(--muted) }
+    .rr.item .rv { color: var(--ink); font-weight: 600; text-decoration: none }
     .rr.disc .rl { color: var(--coral-d) }
     .rr.disc .rv { color: var(--coral-d); font-weight: 600 }
     .rr.add .rl { color: var(--ink-soft) }
@@ -2351,6 +2352,42 @@ let cardBrickController = null;
 // Preço do order bump — atualizado via /config
 let OB_PRECO = 9.90;
 
+function resetCheckoutPaymentState(){
+  pixId = null;
+  pendingPayment = null;
+  nextStatusCheck = 0;
+  if(expInterval){ clearInterval(expInterval); expInterval = null; }
+  const paymentMethodCard = document.getElementById('paymentMethodCard');
+  const pixDisplay = document.getElementById('pixDisplay');
+  const paymentCheck = document.getElementById('paymentCheck');
+  const statusMessage = document.getElementById('paymentStatusMessage');
+  const pixCode = document.getElementById('pixCode');
+  const qrImg = document.getElementById('qrImg');
+  const pixTotal = document.getElementById('pixTotalDisplay');
+  const expTimer = document.getElementById('expTimer');
+  const btnPix = document.getElementById('btnPix');
+  const checkPayment = document.getElementById('checkPayment');
+  const erroCheckout = document.getElementById('erroCheckout');
+  const erroCartao = document.getElementById('erroCartaoBrick');
+  const cepStatus = document.getElementById('cepStatus');
+  if(paymentMethodCard) paymentMethodCard.style.display = 'block';
+  if(pixDisplay) pixDisplay.style.display = 'none';
+  if(paymentCheck) paymentCheck.style.display = 'none';
+  if(statusMessage) statusMessage.textContent = '';
+  if(pixCode) pixCode.textContent = 'Aguardando...';
+  if(qrImg) qrImg.removeAttribute('src');
+  if(pixTotal) pixTotal.textContent = fmtBRL(calcTotalCheckout());
+  if(expTimer) expTimer.textContent = '30:00';
+  if(btnPix){
+    btnPix.disabled = false;
+    btnPix.innerHTML = `<img src="images/pix.png" alt="" width="20" height="20" style="filter:brightness(0) invert(1)"> Pagar agora <span id="ctaPricePix" style="display:none">${fmtBRL(calcTotalCheckout())}</span>`;
+  }
+  if(checkPayment) checkPayment.disabled = false;
+  if(erroCheckout) erroCheckout.textContent = '';
+  if(erroCartao) erroCartao.textContent = '';
+  if(cepStatus) cepStatus.textContent = '';
+}
+
 // ── MÁSCARA TELEFONE — (DD) 9XXXX-XXXX ────────────────────────────────────────
 (function(){
   const tel = document.getElementById('fTel');
@@ -2499,7 +2536,7 @@ function calcTotalCheckout(){
 
 function syncCheckoutReceipt(){
   if(checkoutMode === 'upsell'){
-    let h = `<div class="rr sub"><span class="rl">Adicional: pessoa ou família na história</span><span class="rv">${fmtBRL(currentUpsellPrice())}</span></div>`;
+    let h = `<div class="rr item"><span class="rl">Adicional: pessoa ou família na história</span><span class="rv">${fmtBRL(currentUpsellPrice())}</span></div>`;
     if(obExtras) h += `<div class="rr add"><span class="rl">+2 Historinhas Extras</span><span class="rv">+${fmtBRL(OB_PRECO)}</span></div>`;
     const totalFinal = calcTotalCheckout();
     h += `<div class="rr tot"><span class="rl">Total a Pagar</span><span class="rv">${fmtBRL(totalFinal)}</span></div>`;
@@ -2815,9 +2852,7 @@ window.goTo = function(s){
     const emailQuiz = getVal('q-email');
     if(emailQuiz){ const fe = document.getElementById('fEmail'); if(fe) fe.value = emailQuiz; }
 
-    document.getElementById('paymentMethodCard').style.display = 'block';
-    document.getElementById('pixDisplay').style.display = 'none';
-
+    resetCheckoutPaymentState();
     syncCheckoutReceipt();
     selMethod('pix');
     if(typeof window.trackInitiateCheckout === 'function') {
