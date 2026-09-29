@@ -1994,6 +1994,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     syncUpsellPriceText();
     setTimeout(()=>goTo('checkout'),80);
   }
+  if(previewParams.get('afterPix') === 'upsell'){
+    setTimeout(()=>goTo('upsell1'),80);
+  }
 
   const customInput=document.getElementById('q-setting-custom');
   if(customInput){
