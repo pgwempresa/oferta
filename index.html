@@ -2667,7 +2667,7 @@ async function pagarPix(){
     pendingPayment = {statusToken:data.statusToken,email};
     document.getElementById('paymentCheck').style.display='block';
     retryAllowed = false;
-    sendRecoveryEvent('pix_pending',{email,payment_method:'pix',payment_id:pixId,status_token:data.statusToken,amount:data.total || data.amount || total});
+    sendRecoveryEvent('pix_pending',{email,payment_method:'pix',payment_id:pixId,status_token:data.statusToken,recovery_token:data.recoveryToken,pix_code:pixCode,pix_image:data.pix?.image || '',pix_expires_at:data.pix?.expiresAt || '',amount:data.total || data.amount || total});
     startExpTimer(data.pix?.expiresAt);
     if(typeof window.trackPurchase === 'function') window.trackPurchase({
       eventId:data.metaEventId, total:data.total, paymentMethod:'pix', paymentStatus:'pending'

@@ -2,7 +2,7 @@ const {test,afterEach}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');const vm=require('node:vm');
 const p=require('../lib/payment');
-const pix=require('../api/criar-pix');const card=require('../api/criar-cartao');const status=require('../api/status');const recovery=require('../api/recovery');const processEmailJobs=require('../api/process-email-jobs');
+const pix=require('../api/criar-pix');const card=require('../api/criar-cartao');const status=require('../api/status');const recovery=require('../api/recovery');const processEmailJobs=require('../api/process-email-jobs');const recuperarPix=require('../api/recuperar-pix');
 const originalFetch=global.fetch;
 test('Pix e cartão aprovados encaminham principal para upsell e upsell para obrigado',()=>{
  const html=fs.readFileSync('index.html','utf8');
@@ -76,6 +76,7 @@ async function callApi(fn,{method='GET',query={},headers={}}={}){
 test('HTML: scripts válidos e todas as rotas de pagamento apontam para APIs existentes',()=>{
  const html=fs.readFileSync('index.html','utf8');for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);
  for(const endpoint of ['criar-pix','criar-cartao','status','config','recovery']){assert.ok(html.includes('/api/'+endpoint));assert.ok(fs.existsSync('api/'+endpoint+'.js'))}
+ assert.ok(fs.existsSync('api/recuperar-pix.js'));assert.ok(fs.existsSync('recuperar-pix.html'));
  assert.ok(!html.includes("await r.json()"));assert.ok(!html.includes('MercadoPago'));assert.ok(!html.includes('posthog'));assert.ok(!html.includes("d.status === 'OK'"));
 });
 test('recuperação de e-mail é fire-and-forget e não bloqueia checkout',async()=>{
@@ -125,7 +126,7 @@ test('processador de email_jobs envia Brevo e marca job como enviado',async()=>{
    calls.push({url,options});
    if(url.includes('/email_jobs?select='))return new Response(JSON.stringify([{
      id:'job-1',kind:'pix_reminder',status:'scheduled',
-     checkout_leads:{child_name:'Miguel',email:'cliente@example.com',amount:14.9}
+     checkout_leads:{child_name:'Miguel',email:'cliente@example.com',amount:14.9,cart_data:{recovery_token:'recover-token'}}
    }]));
    if(url.includes('/rest/v1/email_jobs?id=eq.job-1'))return new Response(JSON.stringify([{id:'job-1'}]));
    if(url==='https://api.brevo.com/v3/smtp/email'){
@@ -135,6 +136,7 @@ test('processador de email_jobs envia Brevo e marca job como enviado',async()=>{
      assert.equal(body.to[0].email,'cliente@example.com');
      assert.match(body.subject,/Miguel/);
      assert.match(body.htmlContent,/Falta só pagar o Pix/);
+     assert.match(body.htmlContent,/recuperar-pix\.html\?token=recover-token/);
      return new Response(JSON.stringify({messageId:'m1'}));
    }
    throw new Error('URL inesperada: '+url);
@@ -173,6 +175,27 @@ test('credenciais ausentes resultam em JSON 503, sem chamada ao gateway',async()
 test('Pix: payload correto, resposta normalizada e sem chave secreta',async()=>{
  setup();global.fetch=async(url,options)=>{assert.equal(url,'https://app.amplopay.com/api/v1/gateway/pix/receive');assert.equal(options.headers['x-secret-key'],'test-secret');const o=JSON.parse(options.body);assert.equal(o.amount,14.9);assert.equal(o.client.name,'Responsável');assert.equal(o.products[0].price,o.amount);return new Response(JSON.stringify({transactionId:'tx1',status:'OK',webhookToken:'private',pix:{code:'000201abc',image:'https://example.com/qr.png'}}))};
  const r=await call(pix,body());assert.equal(r.code,200);assert.equal(r.data.status,'pending');assert.equal(r.data.qr_code,'000201abc');assert.equal(p.verify(r.data.statusToken).id,'tx1');assert.ok(!JSON.stringify(r.data).includes('test-secret'));assert.ok(!JSON.stringify(r.data).includes('private'));
+ assert.equal(p.verifyRecovery(r.data.recoveryToken).id,'tx1');
+});
+test('recuperação real de Pix carrega código e permite consulta com token seguro',async()=>{
+ setup();
+ const token=p.recoveryTicket('tx1',14.9);
+ global.fetch=async(url,options)=>{
+   assert.match(url,/https:\/\/supabase\.test\/rest\/v1\/checkout_leads/);
+   assert.match(url,/gateway_transaction_id=eq\.tx1/);
+   assert.equal(options.headers.Authorization,'Bearer service-secret');
+   return new Response(JSON.stringify([{email:'cliente@example.com',child_name:'Miguel',amount:14.9,status:'pix_generated',cart_data:{pix_code:'000201abc',pix_image:'https://example.com/qr.png',pix_expires_at:'2030-01-01',status_token:p.ticket('tx1',14.9)}}]));
+ };
+ process.env.SUPABASE_URL='https://supabase.test';process.env.SUPABASE_SERVICE_ROLE_KEY='service-secret';
+ const r=await call(recuperarPix,{token});
+ assert.equal(r.code,200);
+ assert.equal(r.data.pixCode,'000201abc');
+ assert.equal(r.data.childName,'Miguel');
+ assert.equal(p.verify(r.data.statusToken).id,'tx1');
+ const html=fs.readFileSync('recuperar-pix.html','utf8');
+ assert.match(html,/\/api\/recuperar-pix/);
+ assert.match(html,/\/api\/status/);
+ assert.match(html,/Copiar código Pix/);
 });
 test('Utmify: script de UTMs fica instalado sem postback duplicado no backend',()=>{
  const html=fs.readFileSync('index.html','utf8');

@@ -1,0 +1,31 @@
+<!doctype html><html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recuperar Pix — Sua Historinha</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#fff;color:#20203d}.wrap{max-width:480px;margin:0 auto;padding:28px 18px}.card{border:1px solid #ececf3;border-radius:18px;padding:22px;box-shadow:0 8px 28px rgba(32,32,61,.08)}h1{font-size:24px;margin:0 0 8px}.muted{color:#666}.qr{width:210px;height:210px;margin:18px auto;border:1px solid #eee;border-radius:14px;padding:10px;object-fit:contain}.code{background:#f6f5fb;border-radius:12px;padding:14px;word-break:break-all;font-size:13px;margin:14px 0}.btn{width:100%;border:0;border-radius:12px;padding:15px;font-weight:800;font-size:16px;margin:8px 0;cursor:pointer}.green{background:#04aa3f;color:#fff}.light{background:#eef5ff;color:#20203d}.msg{margin-top:12px;font-weight:700}.err{color:#b00020}
+</style></head><body><main class="wrap"><section class="card">
+<h1 id="title">Carregando seu Pix...</h1><p id="sub" class="muted">Aguarde um instante.</p>
+<img id="qr" class="qr" alt="QR Code Pix" style="display:none">
+<div id="code" class="code" style="display:none"></div>
+<button id="copy" class="btn green" style="display:none">Copiar código Pix</button>
+<button id="check" class="btn light" style="display:none">Já paguei — verificar confirmação</button>
+<p id="msg" class="msg"></p>
+</section></main><script>
+const qs=new URLSearchParams(location.search),token=qs.get('token');let statusToken='';
+function setMsg(t,err){const el=document.getElementById('msg');el.textContent=t||'';el.className='msg '+(err?'err':'')}
+async function load(){
+ if(!token){document.getElementById('title').textContent='Link inválido';setMsg('Abra o link recebido no e-mail.',true);return}
+ try{
+  const r=await fetch('/api/recuperar-pix',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})});
+  const d=await r.json();if(!r.ok)throw Error(d.erro||'Não foi possível carregar o Pix.');
+  statusToken=d.statusToken;document.getElementById('title').textContent='Seu Pix está aqui';
+  document.getElementById('sub').textContent=`Historinha de ${d.childName||'seu pequeno'} — R$ ${Number(d.amount||0).toFixed(2).replace('.',',')}`;
+  const code=document.getElementById('code');code.textContent=d.pixCode;code.style.display='block';
+  const qr=document.getElementById('qr');qr.src=d.pixImage||`https://api.qrserver.com/v1/create-qr-code/?size=210x210&data=${encodeURIComponent(d.pixCode)}`;qr.style.display='block';
+  document.getElementById('copy').style.display='block';document.getElementById('check').style.display='block';
+ }catch(e){document.getElementById('title').textContent='Não conseguimos abrir este Pix';document.getElementById('sub').textContent='Tente voltar ao site e gerar um novo Pix.';setMsg(e.message,true)}
+}
+document.getElementById('copy').onclick=async()=>{await navigator.clipboard.writeText(document.getElementById('code').textContent);setMsg('Código Pix copiado!')};
+document.getElementById('check').onclick=async()=>{try{setMsg('Verificando...');const r=await fetch('/api/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({statusToken})});const d=await r.json();if(!r.ok)throw Error(d.erro||'Erro ao verificar.');setMsg(d.status==='approved'?'Pagamento confirmado!':'Ainda não encontramos a confirmação do pagamento.')}catch(e){setMsg(e.message,true)}};
+load();
+</script></body></html>
