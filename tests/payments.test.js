@@ -100,12 +100,14 @@ test('recuperação agenda jobs de carrinho e Pix pendente sem expor service rol
    assert.equal(options.headers.Authorization,'Bearer service-secret');
    if(url.includes('/checkout_leads?select='))return new Response('[]');
    if(url.endsWith('/rest/v1/checkout_leads'))return new Response(JSON.stringify([{id:'lead-1'}]));
+   if(url.includes('/rest/v1/email_jobs?lead_id=eq.lead-1&kind=eq.checkout_reminder&status=eq.scheduled'))return new Response(JSON.stringify([{id:'old-job',status:'cancelled'}]));
    if(url.includes('/rest/v1/email_jobs?on_conflict='))return new Response(JSON.stringify([{id:'job-1'}]));
    throw new Error('URL inesperada: '+url);
  };
  const r=await call(recovery,{status:'pix_pending',email:'teste@example.com',quizData:{mom_name:'Maria',child_name:'Miguel'},payment_method:'pix',payment_id:'tx1',status_token:'token',amount:14.9});
  assert.equal(r.code,200);
  assert.equal(r.data.ok,true);
+ assert.ok(calls.some(c=>c.url.includes('kind=eq.checkout_reminder')&&c.options.method==='PATCH'));
  assert.equal(calls.filter(c=>c.url.includes('/rest/v1/email_jobs?on_conflict=')).length,2);
  const firstJob=JSON.parse(calls.find(c=>c.url.includes('/rest/v1/email_jobs?on_conflict=')).options.body);
  assert.equal(firstJob.lead_id,'lead-1');
