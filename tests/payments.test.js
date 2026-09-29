@@ -97,21 +97,19 @@ test('recuperação agenda jobs de carrinho e Pix pendente sem expor service rol
  global.fetch=async(url,options)=>{
    calls.push({url,options});
    assert.equal(options.headers.Authorization,'Bearer service-secret');
-   if(url.includes('/checkout_recovery?select='))return new Response('[]');
-   if(url.endsWith('/rest/v1/checkout_recovery'))return new Response(JSON.stringify([{id:'rec-1'}]));
-   if(url.includes('/email_jobs?select='))return new Response('[]');
-   if(url.endsWith('/rest/v1/email_jobs'))return new Response(JSON.stringify([{id:'job-1'}]));
+   if(url.includes('/checkout_leads?select='))return new Response('[]');
+   if(url.endsWith('/rest/v1/checkout_leads'))return new Response(JSON.stringify([{id:'lead-1'}]));
+   if(url.includes('/rest/v1/email_jobs?on_conflict='))return new Response(JSON.stringify([{id:'job-1'}]));
    throw new Error('URL inesperada: '+url);
  };
  const r=await call(recovery,{status:'pix_pending',email:'teste@example.com',quizData:{mom_name:'Maria',child_name:'Miguel'},payment_method:'pix',payment_id:'tx1',status_token:'token',amount:14.9});
  assert.equal(r.code,200);
  assert.equal(r.data.ok,true);
- assert.equal(calls.filter(c=>c.url.endsWith('/rest/v1/email_jobs')).length,3);
- const firstJob=JSON.parse(calls.find(c=>c.url.endsWith('/rest/v1/email_jobs')).options.body);
- assert.equal(firstJob.recovery_id,'rec-1');
- assert.equal(firstJob.job_type,'pix_pending_10m');
- assert.equal(firstJob.status,'pending');
- assert.equal(firstJob.payload.child_name,'Miguel');
+ assert.equal(calls.filter(c=>c.url.includes('/rest/v1/email_jobs?on_conflict=')).length,2);
+ const firstJob=JSON.parse(calls.find(c=>c.url.includes('/rest/v1/email_jobs?on_conflict=')).options.body);
+ assert.equal(firstJob.lead_id,'lead-1');
+ assert.equal(firstJob.kind,'pix_reminder');
+ assert.equal(firstJob.status,'scheduled');
  assert.ok(!JSON.stringify(r.data).includes('service-secret'));
 });
 test('processador de email_jobs envia Brevo e marca job como enviado',async()=>{
@@ -126,8 +124,8 @@ test('processador de email_jobs envia Brevo e marca job como enviado',async()=>{
  global.fetch=async(url,options)=>{
    calls.push({url,options});
    if(url.includes('/email_jobs?select='))return new Response(JSON.stringify([{
-     id:'job-1',email:'cliente@example.com',job_type:'pix_pending_10m',status:'pending',
-     payload:{child_name:'Miguel',email:'cliente@example.com',amount:14.9}
+     id:'job-1',kind:'pix_reminder',status:'scheduled',
+     checkout_leads:{child_name:'Miguel',email:'cliente@example.com',amount:14.9}
    }]));
    if(url.includes('/rest/v1/email_jobs?id=eq.job-1'))return new Response(JSON.stringify([{id:'job-1'}]));
    if(url==='https://api.brevo.com/v3/smtp/email'){
