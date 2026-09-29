@@ -155,7 +155,7 @@ test('processador de email_jobs exige segredo em produção',async()=>{
 });
 test('Vercel aplica cabeçalhos que protegem checkout e integrações necessárias',()=>{
  const config=JSON.parse(fs.readFileSync('vercel.json','utf8'));
- assert.deepEqual(config.crons,[{path:'/api/process-email-jobs',schedule:'*/5 * * * *'}]);
+ assert.equal(config.crons,undefined);
  const all=config.headers.flatMap(rule=>rule.headers);
  const header=key=>all.find(item=>item.key===key)?.value||'';
  const csp=header('Content-Security-Policy');

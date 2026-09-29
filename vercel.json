@@ -1,8 +1,5 @@
 {
   "functions": {"api/*.js": {"maxDuration": 30}},
-  "crons": [
-    {"path":"/api/process-email-jobs","schedule":"*/5 * * * *"}
-  ],
   "rewrites": [
     {"source":"/criar-pix","destination":"/api/criar-pix"},
     {"source":"/criar-cartao","destination":"/api/criar-cartao"},
