@@ -53,6 +53,7 @@ test('HTML inclui o código base inline detectável pela Meta',()=>{
  const html=fs.readFileSync('index.html','utf8');
  assert.match(html,/connect\.facebook\.net\/en_US\/fbevents\.js/);
  assert.match(html,/fbq\('init','2175744060029065'\)/);
+ assert.match(html,/fbq\('init','1110595511660038'\)/);
  assert.match(html,/fbq\('track','PageView'\)/);
 });
 test('Microsoft Clarity está instalado com o ID correto',()=>{
