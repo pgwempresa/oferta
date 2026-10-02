@@ -1127,14 +1127,14 @@
 
           <div class="addon-card" id="addon-expressa" onclick="togAddon('expressa')">
             <div class="addon-body">
-              <div class="addon-thumb"><img loading="lazy" decoding="async" src="images/entrega-expressa.webp" alt="Entrega expressa"></div>
+              <div class="addon-thumb"><img loading="lazy" decoding="async" src="images/entrega-expressa.webp" alt="Prioridade na criação da historinha"></div>
               <div class="addon-info">
-                <div class="addon-name">Prioridade: Entrega Expressa</div>
+                <div class="addon-name">Prioridade na Criação da Historinha</div>
                 <div class="addon-desc">Seu pedido pula a fila e é finalizado com prioridade máxima.</div>
                 <div class="addon-price-row"><span class="addon-price-old">R$ 9,90</span><span class="addon-price">R$ 3,90</span></div>
               </div>
             </div>
-            <div class="addon-action"><div class="addon-check" id="adcheck-expressa"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"></polyline></svg></div><span class="addon-action-txt">Quero prioridade na entrega também</span></div>
+            <div class="addon-action"><div class="addon-check" id="adcheck-expressa"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"></polyline></svg></div><span class="addon-action-txt">Quero prioridade na criação também</span></div>
           </div>
 
           <div class="receipt" id="rec-11"></div>
@@ -2182,7 +2182,7 @@ function buildReceiptHTML(){
   h+=`<div class="rr disc"><span class="rl">${discountLabel}${discountActive?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
   h+=discountActive?`<span class="rv">-${fmtBRL(c.disc)}</span></div>`:`<span class="rv" style="opacity:.35">-${fmtBRL(PRICES.discount)}</span></div>`;
   if(addons.colorir)h+=`<div class="rr add"><span class="rl">Versão para Colorir</span><span class="rv">+${fmtBRL(PRICES.colorir)}</span></div>`;
-  if(addons.expressa)h+=`<div class="rr add"><span class="rl">Entrega Expressa</span><span class="rv">+${fmtBRL(PRICES.expressa)}</span></div>`;
+  if(addons.expressa)h+=`<div class="rr add"><span class="rl">Prioridade na Criação da Historinha</span><span class="rv">+${fmtBRL(PRICES.expressa)}</span></div>`;
   h+=`<div class="rr tot"><span class="rl">Total a Pagar</span><span class="rv">${fmtBRL(c.tot)}</span></div>`;
   return h;
 }
@@ -2192,7 +2192,7 @@ function updatePriceResultTag(){
   if(!tag)return;
   const extras=[];
   if(addons.colorir)extras.push('Colorir');
-  if(addons.expressa)extras.push('Expressa');
+  if(addons.expressa)extras.push('Prioridade na criação');
   tag.textContent = extras.length
     ? `Inclui ${extras.join(' + ')} · ${checkoutRecoveryOffer ? 'Oferta especial ativa' : 'Desconto de Dia das Crianças ativo'}`
     : (checkoutRecoveryOffer ? 'Oferta especial de R$ 9,90 ativa nesta sessão' : 'Desconto de Dia das Crianças ativo nesta sessão');
@@ -2535,7 +2535,7 @@ function syncCheckoutReceipt(){
   h += `<div class="rr disc"><span class="rl">Desconto Dia das Crianças${hasDiscount?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
   h += hasDiscount ? `<span class="rv">-${fmtBRL(tot.disc)}</span></div>` : `<span class="rv" style="opacity:.35">-${fmtBRL(tot.disc)}</span></div>`;
   if(addons.colorir)  h += `<div class="rr add"><span class="rl">Versão para Colorir</span><span class="rv">+${fmtBRL(PRICES.colorir)}</span></div>`;
-  if(addons.expressa) h += `<div class="rr add"><span class="rl">Entrega Expressa</span><span class="rv">+${fmtBRL(PRICES.expressa)}</span></div>`;
+  if(addons.expressa) h += `<div class="rr add"><span class="rl">Prioridade na Criação da Historinha</span><span class="rv">+${fmtBRL(PRICES.expressa)}</span></div>`;
   if(obExtras)         h += `<div class="rr add"><span class="rl">+2 Historinhas Extras</span><span class="rv">+${fmtBRL(OB_PRECO)}</span></div>`;
   const totalFinal = calcTotalCheckout();
   h += `<div class="rr tot"><span class="rl">Total a Pagar</span><span class="rv">${fmtBRL(totalFinal)}</span></div>`;
