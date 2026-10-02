@@ -171,6 +171,31 @@ test('Vercel aplica cabeçalhos que protegem checkout e integrações necessári
  assert.equal(header('Referrer-Policy'),'strict-origin-when-cross-origin');
 });
 test('preço calculado pelo servidor e total adulterado rejeitado',()=>{setup();assert.equal(p.total(body()),14.9);assert.equal(p.total({...body(),addon_colorir:true,addon_expressa:true,obExtras:true}),36.6);assert.throws(()=>p.buildOrder({...body(),total:0.01},'pix',{}),/preço/)});
+test('UTMs do anúncio entram no metadata enviado para a Amplo',()=>{
+ setup();
+ const order=p.buildOrder({...body(),utms:{
+   utm_source:'facebook',
+   utm_medium:'paid_social',
+   utm_campaign:'campanha-dia-das-criancas',
+   utm_content:'criativo-01',
+   utm_term:'publico-avo',
+   src:'meta',
+   sck:'abc123',
+   fbclid:'fb.abc',
+   gclid:'google.abc',
+   ignored:'nao-enviar'
+ }},'pix',{});
+ assert.equal(order.metadata.utm_source,'facebook');
+ assert.equal(order.metadata.utm_medium,'paid_social');
+ assert.equal(order.metadata.utm_campaign,'campanha-dia-das-criancas');
+ assert.equal(order.metadata.utm_content,'criativo-01');
+ assert.equal(order.metadata.utm_term,'publico-avo');
+ assert.equal(order.metadata.src,'meta');
+ assert.equal(order.metadata.sck,'abc123');
+ assert.equal(order.metadata.fbclid,'fb.abc');
+ assert.equal(order.metadata.gclid,'google.abc');
+ assert.equal(order.metadata.ignored,undefined);
+});
 test('credenciais ausentes resultam em JSON 503, sem chamada ao gateway',async()=>{
  global.fetch=()=>{throw Error('Não deveria chamar')};const r=await call(pix,body());assert.equal(r.code,503);assert.match(r.data.erro,/AMPLO_PUBLIC_KEY/);
 });
