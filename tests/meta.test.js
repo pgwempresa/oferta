@@ -17,7 +17,7 @@ test('CAPI Purchase ao gerar Pix: valor real, sem dados infantis/CPF, e-mail has
  process.env.META_ACCESS_TOKEN='test-only-secret';
  let event;
  global.fetch=async(url,options)=>{
-  assert.equal(url,'https://graph.facebook.com/v23.0/2175744060029065/events');
+  assert.equal(url,'https://graph.facebook.com/v23.0/2190209678598583/events');
   assert.equal(options.headers.Authorization,'Bearer test-only-secret');
   assert.ok(!options.body.includes('test-only-secret'));
   assert.ok(!options.body.includes('Adult@'));
@@ -52,9 +52,9 @@ test('Purchase é configurado tanto para Pix quanto para cartão aprovado',()=>{
 test('HTML inclui o código base inline detectável pela Meta',()=>{
  const html=fs.readFileSync('index.html','utf8');
  assert.match(html,/connect\.facebook\.net\/en_US\/fbevents\.js/);
- assert.match(html,/fbq\('init','2175744060029065'\)/);
- assert.match(html,/fbq\('init','1110595511660038'\)/);
  assert.match(html,/fbq\('init','2190209678598583'\)/);
+ assert.doesNotMatch(html,/fbq\('init','2175744060029065'\)/);
+ assert.doesNotMatch(html,/fbq\('init','1110595511660038'\)/);
  assert.match(html,/fbq\('track','PageView'\)/);
 });
 test('Microsoft Clarity está instalado com o ID correto',()=>{
