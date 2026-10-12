@@ -4,7 +4,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const {pixGenerated}=require('../lib/meta');
 const originalFetch=global.fetch;
-afterEach(()=>{global.fetch=originalFetch;delete process.env.META_ACCESS_TOKEN;});
+afterEach(()=>{global.fetch=originalFetch;delete process.env.META_ACCESS_TOKEN;delete process.env.META_PIXEL_ID;});
 const req={headers:{origin:'https://loja.example','user-agent':'test-agent'}};
 const order={amount:36.6,client:{email:'Adult@example.com',document:'do-not-share'}};
 test('CAPI sem token não bloqueia Pix; ID estável por transação',async()=>{
@@ -54,6 +54,7 @@ test('HTML inclui o código base inline detectável pela Meta',()=>{
  assert.match(html,/connect\.facebook\.net\/en_US\/fbevents\.js/);
  assert.match(html,/fbq\('init','2175744060029065'\)/);
  assert.match(html,/fbq\('init','1110595511660038'\)/);
+ assert.match(html,/fbq\('init','2190209678598583'\)/);
  assert.match(html,/fbq\('track','PageView'\)/);
 });
 test('Microsoft Clarity está instalado com o ID correto',()=>{

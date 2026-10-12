@@ -227,7 +227,7 @@ test('recuperação real de Pix carrega código e permite consulta com token seg
 test('Utmify: script de UTMs fica instalado sem postback duplicado no backend',()=>{
  const html=fs.readFileSync('index.html','utf8');
  assert.match(html,/Utmify UTMs script/);
- assert.match(html,/DFASknEsAKoezPt18Csw5wNAIpA8pI8BgCMovV5PZMQwuY8YmTZrvBJDbYR8vtQG/);
+ assert.match(html,/DN5eFAMNOsr3joxbMqV8YXFhGPDV5vgvQq1kOyxuXqTZ/);
  assert.doesNotMatch(fs.readFileSync('api/criar-pix.js','utf8'),/api\.utmify|utmify/);
  assert.doesNotMatch(fs.readFileSync('api/criar-cartao.js','utf8'),/api\.utmify|utmify/);
  assert.doesNotMatch(fs.readFileSync('api/status.js','utf8'),/api\.utmify|utmify/);
