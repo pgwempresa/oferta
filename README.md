@@ -18,7 +18,7 @@ Ambas são exigidas pela documentação da Amplo Pay. Não usar chaves da XPag. 
 - `POST /api/status`: consulta manual e autenticada por ticket assinado retornado ao criar o pagamento; somente COMPLETED com valor e moeda corretos libera a tela de confirmação.
 - `GET /api/config`: configuração pública sem credenciais.
 
-Os preços ficam em `lib/payment.js` e devem acompanhar os valores exibidos no frontend. A oferta Antecipa Black Friday aplica R$30 de desconto (R$9,90) e a última chance aplica R$35 (R$4,90); adicionais são calculados no servidor. `OK` da criação não equivale a pagamento confirmado. Falha ambígua de rede bloqueia nova tentativa na mesma tela; conferir a operação no painel antes de repetir. Não existe garantia de idempotência documentada neste código; não realizar retries automáticos de cobranças.
+Os preços ficam em `lib/payment.js` e devem acompanhar os valores exibidos no frontend. A oferta Antecipa Black Friday aplica R$30 de desconto (R$9,90) e o back redirect aplica R$32 (R$7,90); adicionais são calculados no servidor. `OK` da criação não equivale a pagamento confirmado. Falha ambígua de rede bloqueia nova tentativa na mesma tela; conferir a operação no painel antes de repetir. Não existe garantia de idempotência documentada neste código; não realizar retries automáticos de cobranças.
 
 ## Limites atuais
 

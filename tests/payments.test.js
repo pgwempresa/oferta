@@ -23,7 +23,7 @@ test('documento do checkout limita a 14 dígitos e formata CPF/CNPJ',()=>{
 });
 test('player de depoimento usa MediaDelivery sem loop e sem VTurb antigo',()=>{
  const html=fs.readFileSync('index.html','utf8');
- assert.match(html,/https:\/\/player\.mediadelivery\.net\/embed\/764426\/cb1d8670-f5bf-461e-83eb-26ad06044819\?[^"]*loop=false/);
+ assert.match(html,/https:\/\/player\.mediadelivery\.net\/embed\/791992\/dd6de2c9-b463-44f4-be52-cb71a1107c6f\?[^"]*loop=false/);
  assert.doesNotMatch(html,/vturb-smartplayer/);
  assert.doesNotMatch(html,/scripts\.converteai\.net\/5a997ec4/);
 });
@@ -170,7 +170,7 @@ test('Vercel aplica cabeçalhos que protegem checkout e integrações necessári
  assert.equal(header('X-Content-Type-Options'),'nosniff');
  assert.equal(header('Referrer-Policy'),'strict-origin-when-cross-origin');
 });
-test('preço calculado pelo servidor e total adulterado rejeitado',()=>{setup();assert.equal(p.total(body()),9.9);assert.equal(p.total({...body(),addon_colorir:true,addon_expressa:true,obExtras:true}),31.6);assert.equal(p.total({...body(),addon_colorir:true,addon_expressa:true,obExtras:true,obCartinha:true,obBau:true}),46.4);assert.equal(p.total({...body(),checkoutRecoveryOffer:true}),4.9);assert.throws(()=>p.buildOrder({...body(),total:0.01},'pix',{}),/preço/)});
+test('preço calculado pelo servidor e total adulterado rejeitado',()=>{setup();assert.equal(p.total(body()),9.9);assert.equal(p.total({...body(),addon_colorir:true,addon_expressa:true,obExtras:true}),31.6);assert.equal(p.total({...body(),addon_colorir:true,addon_expressa:true,obExtras:true,obCartinha:true,obBau:true}),46.4);assert.equal(p.total({...body(),checkoutRecoveryOffer:true}),7.9);assert.throws(()=>p.buildOrder({...body(),total:0.01},'pix',{}),/preço/)});
 test('UTMs do anúncio entram no metadata enviado para a Amplo',()=>{
  setup();
  const order=p.buildOrder({...body(),utms:{
@@ -280,10 +280,10 @@ test('oferta Antecipa Black Friday não mantém campanha antiga e cobra os preç
  assert.doesNotMatch(html,/Dia das Crianças/i);
  assert.match(html,/🎄 Edição Especial de Natal/);
  assert.match(html,/price-result">R\$ 9,90/);
- assert.match(html,/Quero aproveitar por R\$ 4,90/);
+ assert.match(html,/Quero aproveitar por R\$ 7,90/);
  setup();
  assert.equal(p.total(body()),9.9);
- assert.equal(p.total({...body(),checkoutRecoveryOffer:true}),4.9);
+ assert.equal(p.total({...body(),checkoutRecoveryOffer:true}),7.9);
 });
 test('quiz oferece Reino Natalino como primeira aventura',()=>{
  const html=fs.readFileSync('index.html','utf8');

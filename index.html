@@ -1253,7 +1253,7 @@
 
         <div class="video-review-stack">
           <div style="position:relative;padding-top:56.25%;width:100%;max-width:400px;margin:0 auto;border-radius:10px;overflow:hidden;background:#1C1E52;">
-            <iframe src="https://player.mediadelivery.net/embed/764426/cb1d8670-f5bf-461e-83eb-26ad06044819?autoplay=false&amp;loop=false&amp;muted=false&amp;preload=true&amp;responsive=true" loading="lazy" style="border:0;position:absolute;top:0;left:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;" allowfullscreen="true"></iframe>
+            <iframe src="https://player.mediadelivery.net/embed/791992/dd6de2c9-b463-44f4-be52-cb71a1107c6f?autoplay=false&amp;loop=false&amp;muted=false&amp;preload=true&amp;responsive=true" loading="lazy" style="border:0;position:absolute;top:0;left:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;" allowfullscreen="true"></iframe>
           </div>
         </div>
 
@@ -1764,10 +1764,10 @@
 <div class="popup-overlay" id="checkoutRecoveryPopup">
   <div class="popup-card">
     <div class="popup-icon"><img src="images/icone-presente.webp" alt="Oferta especial" style="width: 76px; height: 76px; object-fit: contain;" onerror="this.style.display='none'"></div>
-    <div class="popup-title">Espere! Leve o livro de <em><span class="child-name-dyn"></span> por apenas R$ 4,90</em></div>
+    <div class="popup-title">Espere! Leve o livro de <em><span class="child-name-dyn"></span> por apenas R$ 7,90</em></div>
     <div class="popup-sub">Última condição da Antecipa Black Friday para você não deixar esse presente para depois. Disponível somente nesta tela.</div>
     <div class="downsell-timer" style="margin:0 auto 14px">Termina em <strong id="checkoutRecoveryTimer">05:00</strong></div>
-    <button class="popup-btn" onclick="applyCheckoutRecoveryOffer()">Quero aproveitar por R$ 4,90</button>
+    <button class="popup-btn" onclick="applyCheckoutRecoveryOffer()">Quero aproveitar por R$ 7,90</button>
     <button class="btn-mini-back" onclick="closeCheckoutRecoveryPopup()" style="display:block;margin:10px auto 0">Continuar sem desconto extra</button>
   </div>
 </div>
@@ -1783,7 +1783,7 @@
 
 <script src="js/document.js"></script>
 <script>
-const PRICES = { base: 39.90, discount: 30.00, checkoutRecoveryDiscount: 35.00, colorir: 7.90, expressa: 3.90, upsellFamiliar: 29.90, upsellDownsell: 14.90 };
+const PRICES = { base: 39.90, discount: 30.00, checkoutRecoveryDiscount: 32.00, colorir: 7.90, expressa: 3.90, upsellFamiliar: 29.90, upsellDownsell: 14.90 };
 let step = 'intro', addons = { colorir: false, expressa: false }, hasDiscount = false;
 let checkoutMode = 'main';
 let checkoutRecoveryOffer = false;
@@ -2246,7 +2246,7 @@ function updatePriceResultTag(){
   if(addons.expressa)extras.push('Prioridade na criação');
   tag.textContent = extras.length
     ? `Inclui ${extras.join(' + ')} · ${checkoutRecoveryOffer ? 'Última chance ativa' : 'Desconto Antecipa Black Friday ativo'}`
-    : (checkoutRecoveryOffer ? 'Última chance de R$ 4,90 ativa nesta sessão' : 'Desconto Antecipa Black Friday ativo nesta sessão');
+    : (checkoutRecoveryOffer ? 'Última chance de R$ 7,90 ativa nesta sessão' : 'Desconto Antecipa Black Friday ativo nesta sessão');
 }
 function updateReceipts(){
   syncReceipt('rec-11');
