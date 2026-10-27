@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="pt-BR"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sua Historinha — Livro Personalizado para Crianças</title>
+  <title>Sua Historinha — Presente Personalizado para Crianças</title>
   <!-- Meta Pixel base code: kept inline so Meta Pixel Helper can detect it. -->
   <script>
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -31,21 +31,21 @@
   <style>
     .amplo-card-grid{display:grid;gap:12px;margin-bottom:16px}.amplo-card-grid .kiwi-input-field{border:1px solid #d1d5db;border-radius:6px;padding:12px;width:100%}
     :root {
-      --bg:        #FFFFFF;
-      --bg-soft:   #FAFAFC;
-      --bg-card:   #F6F5FB;
-      --ink:       #20203D;
-      --ink-soft:  #5C5C7A;
-      --muted:     #8C8CA8;
-      --border:    #ECECF3;
+      --bg:        #FFF9ED;
+      --bg-soft:   #FFF4DF;
+      --bg-card:   #FFF1D6;
+      --ink:       #173D2B;
+      --ink-soft:  #536A5C;
+      --muted:     #829086;
+      --border:    #EBDDBF;
 
-      --navy:      #1C1E52;
-      --gold:      #FFC845;
-      --gold-d:    #E6B030;
-      --coral:     #FF6F91;
-      --coral-d:   #E85878;
-      --green:     #009F33;
-      --green-bg:  #E4F7EA;
+      --navy:      #0D5233;
+      --gold:      #F4C542;
+      --gold-d:    #C99718;
+      --coral:     #C4162A;
+      --coral-d:   #9F1020;
+      --green:     #167A3E;
+      --green-bg:  #E5F4E9;
       --blue:      #4A90E2;
 
       --display: 'Reddit Sans', sans-serif;
@@ -67,9 +67,9 @@
     button { font-weight: 600; font-family: var(--body) }
 
     /* ── LAYOUT ── */
-    .overlay { position: fixed; inset: 0; z-index: 9999; background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch }
+    .overlay { position: fixed; inset: 0; z-index: 9999; background: linear-gradient(145deg,#8F0F1A 0%,#C4162A 52%,#0D5233 100%); overflow-y: auto; -webkit-overflow-scrolling: touch }
     .inner { display: flex; flex-direction: column; align-items: center; padding: 16px 16px 40px }
-    .card-wrap { width: 100%; max-width: 480px }
+    .card-wrap { width: 100%; max-width: 480px; background: var(--bg); border: 2px solid rgba(244,197,66,.82); border-radius: 18px; padding: 12px 14px 26px; box-shadow: 0 18px 50px rgba(63,4,12,.28) }
 
     /* ── HEADER (logo fixo em toda tela) ── */
     .site-header { display: flex; justify-content: center; padding: 2px 0 16px }
@@ -267,6 +267,12 @@
     .promo-bar { background: var(--coral); color: #fff; text-align: center; font-size: 12px; font-weight: 600; padding: 9px 14px; letter-spacing: .8px; text-transform: uppercase; border-radius: var(--radius-sm); margin-bottom: 18px }
 
     /* ── INTRO ── */
+    #sc-intro { position: relative; isolation: isolate }
+    #sc-intro > :not(.intro-snow) { position: relative; z-index: 1 }
+    .intro-snow { position: absolute; inset: -16px -12px 0; z-index: 0; overflow: hidden; pointer-events: none; border-radius: var(--radius-md) }
+    .snowflake { position: absolute; top: -22px; left: var(--snow-left); width: var(--snow-size); height: var(--snow-size); border-radius: 50%; background: rgba(255,255,255,.92); box-shadow: 0 0 5px rgba(255,255,255,.7); opacity: var(--snow-opacity); animation: snowFall var(--snow-duration) linear var(--snow-delay) infinite }
+    @keyframes snowFall { to { transform: translate3d(var(--snow-drift), 780px, 0) rotate(180deg) } }
+    @media (prefers-reduced-motion: reduce) { .intro-snow { display: none } }
     .intro-hero-banner { width: 80%; margin: 0 auto 22px }
     .intro-hero-banner img { width: 100%; height: auto; display: block; object-fit: contain }
 
@@ -754,15 +760,16 @@
            INTRO
       ══════════════════════════════════ -->
       <div class="screen active" id="sc-intro">
-        <div class="promo-bar">🎁 Edição Especial — Dia das Crianças</div>
+        <div class="intro-snow" id="introSnow" aria-hidden="true"></div>
+        <div class="promo-bar">🎄 Edição Especial de Natal</div>
 
-        <h1 class="intro-headline">O presente que vira <em>a história favorita</em> de uma criança</h1>
+        <h1 class="intro-headline">Um presente único para <em>aniversários, Natal e momentos especiais</em></h1>
 
         <div class="intro-hero-banner">
-          <img loading="eager" decoding="async" fetchpriority="high" src="images/ChatGPT%20Image%204%20de%20set.%20de%202026%2C%2014_43_48%20%281%29_11zon%20%281%29.webp" alt="Criança com seu livro personalizado">
+          <img loading="eager" decoding="async" fetchpriority="high" src="images/natal-hero-transparente.png" alt="Livro de Natal personalizado com a criança como personagem">
         </div>
 
-        <p class="intro-sub">Crie um livro ilustrado personalizado com o nome, o jeitinho e a aparência de quem você ama — <strong>filho(a), neto(a), sobrinho(a) ou afilhado(a).</strong></p>
+        <p class="intro-sub">Transforme quem você ama no personagem principal de uma aventura feita especialmente para ela — <strong>um presente emocionante para filhos, netos, sobrinhos e afilhados.</strong></p>
 
         <button class="btn-cta btn-pulse" onclick="goTo('social')">Quero Criar o Livro Agora</button>
 
@@ -994,6 +1001,11 @@
           <div class="step-title">Onde vai acontecer a <em>aventura <span class="child-name-dyn"></span>?</em></div>
           <div class="step-sub">Escolha o cenário onde <span class="child-name-solo"></span> vai viver a história.</div>
           <div class="tile-list" id="setting-grid">
+            <div class="tile-card" onclick="selTileCard(this,'setting-grid','q-setting','reino natalino','fb-aventura'); closeCustomScenario()">
+              <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/reino-natalino.png" alt="Reino Natalino" onload="this.previousElementSibling.style.display='none'"></div>
+              <div class="tile-card-scrim"></div>
+              <div class="tile-card-label">Reino Natalino</div>
+            </div>
             <div class="tile-card" onclick="selTileCard(this,'setting-grid','q-setting','floresta encantada','fb-aventura'); closeCustomScenario()">
               <div class="tile-card-pic"><div class="ph-skeleton"></div><img loading="lazy" decoding="async" src="images/floresta.webp" alt="Floresta Encantada" onload="this.previousElementSibling.style.display='none'"></div>
               <div class="tile-card-scrim"></div>
@@ -1103,7 +1115,7 @@
       <div class="screen" id="sc-11">
         <div class="quiz-card">
           <div class="step-title">Deixe o presente <em class="child-name-dyn"></em> ainda mais completo</div>
-          <div class="step-sub">Aproveite o desconto de Dia das Crianças, adicione também os presentes abaixo:</div>
+          <div class="step-sub">Aproveite a condição da Antecipa Black Friday e deixe o presente ainda mais completo:</div>
 
           <div class="included-tag">✓ Já incluso: 1 Livro Personalizado de 20 Páginas Ilustrado · PDF para ler e imprimir</div>
 
@@ -1178,7 +1190,7 @@
       <div class="screen" id="sc-result">
         <div style="text-align:center;margin-bottom:16px">
           <div class="result-headline">O livro <span class="child-name-dyn"></span> está quase pronto</div>
-          <div class="result-sub">Uma aventura com <span class="child-name-solo"></span> como protagonista. Após a confirmação do pagamento, seu pedido entra na fila de geração, com entrega por e-mail em até 1 hora.</div>
+          <div class="result-sub">Um presente personalizado para aniversário, Natal ou qualquer momento especial, com <span class="child-name-solo"></span> como protagonista. Após a confirmação do pagamento, seu pedido entra na fila de criação, com entrega por e-mail em até 1 hora.</div>
         </div>
 
         <div class="social-proof-row">
@@ -1207,8 +1219,8 @@
 
         <div class="price-anchor-card">
           <div class="price-anchor-old">De R$ 39,90 por apenas</div>
-          <div class="price-anchor-new" id="price-result">R$ 14,90</div>
-          <div class="price-anchor-tag" id="price-result-tag">Desconto de Dia das Crianças ativo nesta sessão</div>
+          <div class="price-anchor-new" id="price-result">R$ 9,90</div>
+          <div class="price-anchor-tag" id="price-result-tag">Desconto Antecipa Black Friday ativo nesta sessão</div>
         </div>
 
         <div class="bonus-stack">
@@ -1302,7 +1314,7 @@
         <div class="kw-content">
           <div class="kw-col-main">
 
-            <img class="kw-banner-img" src="images/ChatGPT%20Image%208%20de%20set.%20de%202026%2C%2001_43_47%20%281%29%20%281%29%20%281%29.webp" alt="Sua Historinha" fetchpriority="high">
+            <img class="kw-banner-img" src="images/natal-checkout.webp" alt="Sua história personalizada está a um passo de se tornar realidade" fetchpriority="high">
 
             <div class="kw-checkoutblock">
 
@@ -1342,7 +1354,7 @@
               <div id="rec-checkout" style="margin-top:4px"></div>
 
               <!-- Order Bump — layout idêntico ao print enviado -->
-              <div class="kw-ob" id="obWrap" onclick="toggleOb()">
+              <div class="kw-ob" id="obWrap" onclick="toggleOb('extras','obCheck')">
                 <div class="kw-ob-title">SIM, EU ACEITO ESSA OFERTA ESPECIAL!</div>
                 <div class="kw-ob-row">
                   <svg class="kw-ob-arrow" viewBox="0 0 512 512" width="22" height="22" fill="#dc2626"><path fill="currentColor" d="M481,256L263.3,38.3v130.6H31v174.2h232.3v130.6L481,256z"></path></svg>
@@ -1350,6 +1362,30 @@
                   <img class="kw-ob-img" src="images/ChatGPT%20Image%208%20de%20set.%20de%202026%2C%2001_33_44%20%281%29%20%281%29.webp" alt="Historinhas extras" width="56" height="56" loading="lazy">
                   <div class="kw-ob-desc">
                     <span class="kw-ob-headline">APENAS HOJE:</span> LEVE + 2 HISTÓRIAS EXTRAS 100% PERSONALIZADAS - <span id="obPreco">R$ 9,90</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="kw-ob" id="obCartinhaWrap" onclick="toggleOb('cartinha','obCartinhaCheck')">
+                <div class="kw-ob-title">SIM, QUERO A CARTINHA DO PAPAI NOEL!</div>
+                <div class="kw-ob-row">
+                  <svg class="kw-ob-arrow" viewBox="0 0 512 512" width="22" height="22" fill="#dc2626"><path fill="currentColor" d="M481,256L263.3,38.3v130.6H31v174.2h232.3v130.6L481,256z"></path></svg>
+                  <div class="kw-ob-check" id="obCartinhaCheck"></div>
+                  <img class="kw-ob-img" src="images/cartinha-papai-noel.png" alt="Cartinha do Papai Noel" width="56" height="56" loading="lazy">
+                  <div class="kw-ob-desc">
+                    <span class="kw-ob-headline">CARTINHA DO PAPAI NOEL:</span> uma carta do Papai Noel escrita para a criança. É só imprimir e entregar junto com o presente — <span id="obCartinhaPreco">R$ 6,90</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="kw-ob" id="obBauWrap" onclick="toggleOb('bau','obBauCheck')">
+                <div class="kw-ob-title">SIM, QUERO O BAÚ DE NATAL!</div>
+                <div class="kw-ob-row">
+                  <svg class="kw-ob-arrow" viewBox="0 0 512 512" width="22" height="22" fill="#dc2626"><path fill="currentColor" d="M481,256L263.3,38.3v130.6H31v174.2h232.3v130.6L481,256z"></path></svg>
+                  <div class="kw-ob-check" id="obBauCheck"></div>
+                  <img class="kw-ob-img" src="images/bau-de-natal.png" alt="Baú de Natal" width="56" height="56" loading="lazy">
+                  <div class="kw-ob-desc">
+                    <span class="kw-ob-headline">BAÚ DE NATAL:</span> 24 atividades natalinas para fazer com o netinho: receitas, brincadeiras e jogos para imprimir — <span id="obBauPreco">R$ 7,90</span>
                   </div>
                 </div>
               </div>
@@ -1717,9 +1753,9 @@
 <!-- POPUP CUPOM -->
 <div class="popup-overlay" id="couponPopup">
   <div class="popup-card">
-    <div class="popup-icon"><img src="images/icone-presente.webp" alt="Presente de Dia das Crianças" style="width: 76px; height: 76px; object-fit: contain;" onerror="this.style.display='none'"></div>
-    <div class="popup-title">Você ganhou um <em>desconto de Dia das Crianças!</em></div>
-    <div class="popup-sub">Para comemorar o Dia das Crianças, liberamos <strong>R$ 25,00</strong> de desconto no livro <span class="child-name-dyn"></span> — mas ele <strong>expira ao sair desta tela.</strong></div>
+    <div class="popup-icon"><img src="images/icone-presente.webp" alt="Presente especial" style="width: 76px; height: 76px; object-fit: contain;" onerror="this.style.display='none'"></div>
+    <div class="popup-title">Você ganhou o desconto da <em>Antecipa Black Friday!</em></div>
+    <div class="popup-sub">Liberamos <strong>R$ 30,00 de desconto</strong> no livro de <span class="child-name-dyn"></span>. Garanta agora este presente personalizado por apenas <strong>R$ 9,90</strong> — a condição <strong>expira ao sair desta tela.</strong></div>
     <button class="popup-btn" onclick="applyDiscount()">Ativar Meu Desconto</button>
   </div>
 </div>
@@ -1728,10 +1764,10 @@
 <div class="popup-overlay" id="checkoutRecoveryPopup">
   <div class="popup-card">
     <div class="popup-icon"><img src="images/icone-presente.webp" alt="Oferta especial" style="width: 76px; height: 76px; object-fit: contain;" onerror="this.style.display='none'"></div>
-    <div class="popup-title">Espera! Leve o livro de <em><span class="child-name-dyn"></span> por R$ 9,90</em></div>
-    <div class="popup-sub">Essa é uma oferta especial para finalizar agora. O desconto fica disponível só nesta tela.</div>
+    <div class="popup-title">Espere! Leve o livro de <em><span class="child-name-dyn"></span> por apenas R$ 4,90</em></div>
+    <div class="popup-sub">Última condição da Antecipa Black Friday para você não deixar esse presente para depois. Disponível somente nesta tela.</div>
     <div class="downsell-timer" style="margin:0 auto 14px">Termina em <strong id="checkoutRecoveryTimer">05:00</strong></div>
-    <button class="popup-btn" onclick="applyCheckoutRecoveryOffer()">Ativar oferta de R$ 9,90</button>
+    <button class="popup-btn" onclick="applyCheckoutRecoveryOffer()">Quero aproveitar por R$ 4,90</button>
     <button class="btn-mini-back" onclick="closeCheckoutRecoveryPopup()" style="display:block;margin:10px auto 0">Continuar sem desconto extra</button>
   </div>
 </div>
@@ -1747,7 +1783,7 @@
 
 <script src="js/document.js"></script>
 <script>
-const PRICES = { base: 39.90, discount: 25.00, checkoutRecoveryDiscount: 30.00, colorir: 7.90, expressa: 3.90, upsellFamiliar: 29.90, upsellDownsell: 14.90 };
+const PRICES = { base: 39.90, discount: 30.00, checkoutRecoveryDiscount: 35.00, colorir: 7.90, expressa: 3.90, upsellFamiliar: 29.90, upsellDownsell: 14.90 };
 let step = 'intro', addons = { colorir: false, expressa: false }, hasDiscount = false;
 let checkoutMode = 'main';
 let checkoutRecoveryOffer = false;
@@ -1763,6 +1799,22 @@ let upsellData = { names: '', photoSelected: false, storyMode: 'original', theme
 const SESSION_EID = 'ev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
 const TOTAL_STEPS = 11;
 const IMG_BASE = 'images/';
+
+// Neve decorativa leve, limitada à primeira tela.
+const introSnow=document.getElementById('introSnow');
+if(introSnow&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  for(let i=0;i<24;i++){
+    const flake=document.createElement('span');
+    flake.className='snowflake';
+    flake.style.setProperty('--snow-left',`${(i*37)%101}%`);
+    flake.style.setProperty('--snow-size',`${4+(i%4)*2}px`);
+    flake.style.setProperty('--snow-opacity',`${.25+(i%5)*.08}`);
+    flake.style.setProperty('--snow-duration',`${6+(i%6)}s`);
+    flake.style.setProperty('--snow-delay',`${-(i%9)}s`);
+    flake.style.setProperty('--snow-drift',`${-24+(i%7)*8}px`);
+    introSnow.appendChild(flake);
+  }
+}
 
 // Limita e formata o documento do responsável: CPF (11) ou CNPJ (14) dígitos.
 const documentField = document.getElementById('fDocument');
@@ -2176,7 +2228,7 @@ function calcTotal(){
 function buildReceiptHTML(){
   const c=calcTotal();
   let h=`<div class="rr sub"><span class="rl">Livro Ilustrado Personalizado</span><span class="rv">${fmtBRL(c.sub)}</span></div>`;
-  const discountLabel = checkoutRecoveryOffer ? 'Oferta especial para finalizar agora' : 'Desconto Dia das Crianças';
+  const discountLabel = checkoutRecoveryOffer ? 'Última chance Antecipa Black Friday' : 'Desconto Antecipa Black Friday';
   const discountActive = c.disc > 0;
   h+=`<div class="rr disc"><span class="rl">${discountLabel}${discountActive?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
   h+=discountActive?`<span class="rv">-${fmtBRL(c.disc)}</span></div>`:`<span class="rv" style="opacity:.35">-${fmtBRL(PRICES.discount)}</span></div>`;
@@ -2193,8 +2245,8 @@ function updatePriceResultTag(){
   if(addons.colorir)extras.push('Colorir');
   if(addons.expressa)extras.push('Prioridade na criação');
   tag.textContent = extras.length
-    ? `Inclui ${extras.join(' + ')} · ${checkoutRecoveryOffer ? 'Oferta especial ativa' : 'Desconto de Dia das Crianças ativo'}`
-    : (checkoutRecoveryOffer ? 'Oferta especial de R$ 9,90 ativa nesta sessão' : 'Desconto de Dia das Crianças ativo nesta sessão');
+    ? `Inclui ${extras.join(' + ')} · ${checkoutRecoveryOffer ? 'Última chance ativa' : 'Desconto Antecipa Black Friday ativo'}`
+    : (checkoutRecoveryOffer ? 'Última chance de R$ 4,90 ativa nesta sessão' : 'Desconto Antecipa Black Friday ativo nesta sessão');
 }
 function updateReceipts(){
   syncReceipt('rec-11');
@@ -2319,6 +2371,8 @@ function togFaq(el){el.parentElement.classList.toggle('open')}
 //  CHECKOUT EMBUTIDO
 // ════════════════════════════════════════════
 let obExtras   = false;
+let obCartinha = false;
+let obBau      = false;
 let metodoPag  = 'pix';
 let pixId      = null;
 let pollingInt = null;
@@ -2330,6 +2384,8 @@ let cardBrickController = null;
 
 // Preço do order bump — atualizado via /config
 let OB_PRECO = 9.90;
+let OB_CARTINHA_PRECO = 6.90;
+let OB_BAU_PRECO = 7.90;
 
 function resetCheckoutPaymentState(){
   pixId = null;
@@ -2387,11 +2443,14 @@ function resetCheckoutPaymentState(){
   });
 })();
 
-function toggleOb(){
-  obExtras = !obExtras;
-  const check = document.getElementById('obCheck');
-  check.classList.toggle('on', obExtras);
-  check.textContent = obExtras ? '✓' : '';
+function toggleOb(kind,checkId){
+  if(kind==='extras')obExtras=!obExtras;
+  if(kind==='cartinha')obCartinha=!obCartinha;
+  if(kind==='bau')obBau=!obBau;
+  const active=kind==='extras'?obExtras:(kind==='cartinha'?obCartinha:obBau);
+  const check = document.getElementById(checkId);
+  check.classList.toggle('on', active);
+  check.textContent = active ? '✓' : '';
   syncCheckoutReceipt();
   refreshCardBrickIfNeeded();
 }
@@ -2484,8 +2543,12 @@ function startUpsellCheckout(){
   upsellAdded = true;
   checkoutMode = 'upsell';
   obExtras = false;
-  const check = document.getElementById('obCheck');
-  if(check){check.classList.remove('on');check.textContent='';}
+  obCartinha = false;
+  obBau = false;
+  ['obCheck','obCartinhaCheck','obBauCheck'].forEach(id=>{
+    const check=document.getElementById(id);
+    if(check){check.classList.remove('on');check.textContent='';}
+  });
   goTo('checkout');
 }
 
@@ -2506,10 +2569,14 @@ function calcTotalCheckout(){
   if(typeof checkoutMode !== 'undefined' && checkoutMode === 'upsell'){
     let tot = currentUpsellPrice();
     if(obExtras) tot += OB_PRECO;
+    if(obCartinha) tot += OB_CARTINHA_PRECO;
+    if(obBau) tot += OB_BAU_PRECO;
     return parseFloat(tot.toFixed(2));
   }
   let tot = calcTotal().tot;
   if(obExtras) tot += OB_PRECO;
+  if(obCartinha) tot += OB_CARTINHA_PRECO;
+  if(obBau) tot += OB_BAU_PRECO;
   return parseFloat(tot.toFixed(2));
 }
 
@@ -2517,6 +2584,8 @@ function syncCheckoutReceipt(){
   if(checkoutMode === 'upsell'){
     let h = `<div class="rr item"><span class="rl">Adicional: pessoa ou família na história</span><span class="rv">${fmtBRL(currentUpsellPrice())}</span></div>`;
     if(obExtras) h += `<div class="rr add"><span class="rl">+2 Historinhas Extras</span><span class="rv">+${fmtBRL(OB_PRECO)}</span></div>`;
+    if(obCartinha) h += `<div class="rr add"><span class="rl">Cartinha do Papai Noel</span><span class="rv">+${fmtBRL(OB_CARTINHA_PRECO)}</span></div>`;
+    if(obBau) h += `<div class="rr add"><span class="rl">Baú de Natal</span><span class="rv">+${fmtBRL(OB_BAU_PRECO)}</span></div>`;
     const totalFinal = calcTotalCheckout();
     h += `<div class="rr tot"><span class="rl">Total a Pagar</span><span class="rv">${fmtBRL(totalFinal)}</span></div>`;
     const el = document.getElementById('rec-checkout');
@@ -2531,11 +2600,13 @@ function syncCheckoutReceipt(){
   }
   const tot = calcTotal();
   let h = `<div class="rr sub"><span class="rl">Livro Ilustrado Personalizado</span><span class="rv">${fmtBRL(tot.sub)}</span></div>`;
-  h += `<div class="rr disc"><span class="rl">Desconto Dia das Crianças${hasDiscount?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
+  h += `<div class="rr disc"><span class="rl">${checkoutRecoveryOffer ? 'Última chance Antecipa Black Friday' : 'Desconto Antecipa Black Friday'}${hasDiscount?'':' <span style="font-size:10px;opacity:.5">(disponível)</span>'}</span>`;
   h += hasDiscount ? `<span class="rv">-${fmtBRL(tot.disc)}</span></div>` : `<span class="rv" style="opacity:.35">-${fmtBRL(tot.disc)}</span></div>`;
   if(addons.colorir)  h += `<div class="rr add"><span class="rl">Versão para Colorir</span><span class="rv">+${fmtBRL(PRICES.colorir)}</span></div>`;
   if(addons.expressa) h += `<div class="rr add"><span class="rl">Prioridade na Criação da Historinha</span><span class="rv">+${fmtBRL(PRICES.expressa)}</span></div>`;
   if(obExtras)         h += `<div class="rr add"><span class="rl">+2 Historinhas Extras</span><span class="rv">+${fmtBRL(OB_PRECO)}</span></div>`;
+  if(obCartinha)       h += `<div class="rr add"><span class="rl">Cartinha do Papai Noel</span><span class="rv">+${fmtBRL(OB_CARTINHA_PRECO)}</span></div>`;
+  if(obBau)            h += `<div class="rr add"><span class="rl">Baú de Natal</span><span class="rv">+${fmtBRL(OB_BAU_PRECO)}</span></div>`;
   const totalFinal = calcTotalCheckout();
   h += `<div class="rr tot"><span class="rl">Total a Pagar</span><span class="rv">${fmtBRL(totalFinal)}</span></div>`;
 
@@ -2645,6 +2716,8 @@ async function pagarPix(){
         email, telefone: tel, document: BuyerDocument.normalize(getVal('fDocument')), total, quizData, identifier: SESSION_EID, hasDiscount, checkoutRecoveryOffer: checkoutMode === 'main' && checkoutRecoveryOffer,
         utms: getUTMsFresh(), eventId: SESSION_EID, fbp: getFbp(), fbc: getFbc(),
         obExtras,
+        obCartinha,
+        obBau,
         addon_colorir: checkoutMode === 'main' && addons.colorir,
         addon_expressa: checkoutMode === 'main' && addons.expressa,
         upsellFamiliar: checkoutMode === 'upsell',
@@ -2809,6 +2882,8 @@ async function pagarCartaoAmplo(){
           : {id:'sua-historinha',name:'Sua Historinha',quantity:1,price:calcTotalCheckout()}],
         metadata:{provider:'Amplo Pay',orderId:'HIST-'+SESSION_EID},
         obExtras,
+        obCartinha,
+        obBau,
         addon_colorir:checkoutMode === 'main' && addons.colorir,
         addon_expressa:checkoutMode === 'main' && addons.expressa,
         upsellFamiliar:checkoutMode === 'upsell',
@@ -2900,8 +2975,14 @@ window.goTo = function(s){
     const r = await fetch('/api/config');
     srvCfg = await paymentResponse(r);
     if(srvCfg.orderBump?.preco) OB_PRECO = srvCfg.orderBump.preco;
+    if(srvCfg.orderBumps?.cartinha) OB_CARTINHA_PRECO = srvCfg.orderBumps.cartinha;
+    if(srvCfg.orderBumps?.bau) OB_BAU_PRECO = srvCfg.orderBumps.bau;
     const obPrecoEl = document.getElementById('obPreco');
     if(obPrecoEl && srvCfg.orderBump) obPrecoEl.textContent = fmtBRL(srvCfg.orderBump.preco||9.90);
+    const obCartinhaPrecoEl = document.getElementById('obCartinhaPreco');
+    if(obCartinhaPrecoEl) obCartinhaPrecoEl.textContent = fmtBRL(OB_CARTINHA_PRECO);
+    const obBauPrecoEl = document.getElementById('obBauPreco');
+    if(obBauPrecoEl) obBauPrecoEl.textContent = fmtBRL(OB_BAU_PRECO);
   }catch(_){}
 })();
 </script>

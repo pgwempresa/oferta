@@ -62,7 +62,7 @@ test('cartão mantém campos da cobrança e hierarquia visual do checkout',()=>{
 });
 afterEach(()=>{global.fetch=originalFetch;delete process.env.AMPLO_PUBLIC_KEY;delete process.env.AMPLO_SECRET_KEY;delete process.env.SUPABASE_URL;delete process.env.SUPABASE_SERVICE_ROLE_KEY;delete process.env.BREVO_API_KEY;delete process.env.BREVO_FROM_EMAIL;delete process.env.BREVO_FROM_NAME;delete process.env.EMAIL_JOBS_SECRET;delete process.env.CRON_SECRET;delete process.env.VERCEL;delete process.env.VERCEL_ENV;delete process.env.PUBLIC_SITE_URL});
 function setup(){process.env.AMPLO_PUBLIC_KEY='test-public';process.env.AMPLO_SECRET_KEY='test-secret';}
-function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',document:'529.982.247-25',quizData:{mom_name:'Responsável'},total:14.9,hasDiscount:true};}
+function body(){return {identifier:'test-order-123',email:'teste@example.com',telefone:'5511999999999',document:'529.982.247-25',quizData:{mom_name:'Responsável'},total:9.9,hasDiscount:true};}
 async function call(fn,b,method='POST'){
   let code,data;const headers={};
   await fn({method,body:b,headers:{host:'loja.example',origin:'https://loja.example'},socket:{remoteAddress:'127.0.0.1'}},{setHeader(k,v){headers[k]=v},status(v){code=v;return this},json(v){data=v}});
@@ -170,7 +170,7 @@ test('Vercel aplica cabeçalhos que protegem checkout e integrações necessári
  assert.equal(header('X-Content-Type-Options'),'nosniff');
  assert.equal(header('Referrer-Policy'),'strict-origin-when-cross-origin');
 });
-test('preço calculado pelo servidor e total adulterado rejeitado',()=>{setup();assert.equal(p.total(body()),14.9);assert.equal(p.total({...body(),addon_colorir:true,addon_expressa:true,obExtras:true}),36.6);assert.throws(()=>p.buildOrder({...body(),total:0.01},'pix',{}),/preço/)});
+test('preço calculado pelo servidor e total adulterado rejeitado',()=>{setup();assert.equal(p.total(body()),9.9);assert.equal(p.total({...body(),addon_colorir:true,addon_expressa:true,obExtras:true}),31.6);assert.equal(p.total({...body(),addon_colorir:true,addon_expressa:true,obExtras:true,obCartinha:true,obBau:true}),46.4);assert.equal(p.total({...body(),checkoutRecoveryOffer:true}),4.9);assert.throws(()=>p.buildOrder({...body(),total:0.01},'pix',{}),/preço/)});
 test('UTMs do anúncio entram no metadata enviado para a Amplo',()=>{
  setup();
  const order=p.buildOrder({...body(),utms:{
@@ -200,7 +200,7 @@ test('credenciais ausentes resultam em JSON 503, sem chamada ao gateway',async()
  global.fetch=()=>{throw Error('Não deveria chamar')};const r=await call(pix,body());assert.equal(r.code,503);assert.match(r.data.erro,/AMPLO_PUBLIC_KEY/);
 });
 test('Pix: payload correto, resposta normalizada e sem chave secreta',async()=>{
- setup();global.fetch=async(url,options)=>{assert.equal(url,'https://app.amplopay.com/api/v1/gateway/pix/receive');assert.equal(options.headers['x-secret-key'],'test-secret');const o=JSON.parse(options.body);assert.equal(o.amount,14.9);assert.equal(o.client.name,'Responsável');assert.equal(o.products[0].price,o.amount);return new Response(JSON.stringify({transactionId:'tx1',status:'OK',webhookToken:'private',pix:{code:'000201abc',image:'https://example.com/qr.png'}}))};
+ setup();global.fetch=async(url,options)=>{assert.equal(url,'https://app.amplopay.com/api/v1/gateway/pix/receive');assert.equal(options.headers['x-secret-key'],'test-secret');const o=JSON.parse(options.body);assert.equal(o.amount,9.9);assert.equal(o.client.name,'Responsável');assert.equal(o.products[0].price,o.amount);return new Response(JSON.stringify({transactionId:'tx1',status:'OK',webhookToken:'private',pix:{code:'000201abc',image:'https://example.com/qr.png'}}))};
  const r=await call(pix,body());assert.equal(r.code,200);assert.equal(r.data.status,'pending');assert.equal(r.data.qr_code,'000201abc');assert.equal(p.verify(r.data.statusToken).id,'tx1');assert.ok(!JSON.stringify(r.data).includes('test-secret'));assert.ok(!JSON.stringify(r.data).includes('private'));
  assert.equal(p.verifyRecovery(r.data.recoveryToken).id,'tx1');
 });
@@ -253,16 +253,70 @@ test('cobranças não são bloqueadas por limite local de tentativas',async()=>{
 test('ícone Pix referenciado usa extensão correspondente ao PNG',()=>{
  const html=fs.readFileSync('index.html','utf8');assert.ok(!html.includes('images/pix.svg'));assert.ok((html.match(/images\/pix.png/g)||[]).length>=3);assert.equal(fs.readFileSync('images/pix.png').subarray(0,8).toString('hex'),'89504e470d0a1a0a');
 });
-test('16 combinações de desconto e adicionais: UI, total e itens da operadora coincidem',()=>{
+test('64 combinações de desconto, adicionais e order bumps: UI e operadora coincidem',()=>{
  setup();const html=fs.readFileSync('index.html','utf8');
  const source=html.match(/const PRICES = .*?;/)[0]+'\n'+html.match(/function calcTotal\(\)\{[\s\S]*?\n\}/)[0]+'\n'+html.match(/function calcTotalCheckout\(\)\{[\s\S]*?\n\}/)[0];
- for(let mask=0;mask<16;mask++){
-   const b={...body(),hasDiscount:!!(mask&1),addon_colorir:!!(mask&2),addon_expressa:!!(mask&4),obExtras:!!(mask&8)};
-   const ctx={hasDiscount:b.hasDiscount,checkoutRecoveryOffer:false,checkoutMode:'main',upsellDownsellActive:false,addons:{colorir:b.addon_colorir,expressa:b.addon_expressa},obExtras:b.obExtras,OB_PRECO:9.9};vm.createContext(ctx);vm.runInContext(source,ctx);
+ for(let mask=0;mask<64;mask++){
+   const b={...body(),hasDiscount:!!(mask&1),addon_colorir:!!(mask&2),addon_expressa:!!(mask&4),obExtras:!!(mask&8),obCartinha:!!(mask&16),obBau:!!(mask&32)};
+   const ctx={hasDiscount:b.hasDiscount,checkoutRecoveryOffer:false,checkoutMode:'main',upsellDownsellActive:false,addons:{colorir:b.addon_colorir,expressa:b.addon_expressa},obExtras:b.obExtras,obCartinha:b.obCartinha,obBau:b.obBau,OB_PRECO:9.9,OB_CARTINHA_PRECO:6.9,OB_BAU_PRECO:7.9};vm.createContext(ctx);vm.runInContext(source,ctx);
    b.total=vm.runInContext('calcTotalCheckout()',ctx);const order=p.buildOrder(b,'pix',{});
    assert.equal(order.amount,b.total);assert.equal(order.products.reduce((sum,item)=>sum+Math.round(item.price*100)*item.quantity,0),Math.round(b.total*100));
-   assert.equal(order.products.length,1+Number(b.addon_colorir)+Number(b.addon_expressa)+Number(b.obExtras));assert.equal(order.metadata.obExtras,b.obExtras);
+   assert.equal(order.products.length,1+Number(b.addon_colorir)+Number(b.addon_expressa)+Number(b.obExtras)+Number(b.obCartinha)+Number(b.obBau));assert.equal(order.metadata.obExtras,b.obExtras);assert.equal(order.metadata.obCartinha,b.obCartinha);assert.equal(order.metadata.obBau,b.obBau);
  }
+});
+test('checkout mostra e envia os dois order bumps natalinos',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/Cartinha do Papai Noel[\s\S]*?R\$ 6,90/);
+ assert.match(html,/Baú de Natal[\s\S]*?R\$ 7,90/);
+ assert.match(html,/images\/cartinha-papai-noel\.png/);
+ assert.match(html,/images\/bau-de-natal\.png/);
+ assert.ok(fs.existsSync('images/cartinha-papai-noel.png'));
+ assert.ok(fs.existsSync('images/bau-de-natal.png'));
+ setup();const order=p.buildOrder({...body(),obCartinha:true,obBau:true,total:24.7},'pix',{});
+ assert.deepEqual(order.products.map(item=>item.id),['sua-historinha','cartinha-papai-noel','bau-de-natal']);
+});
+test('oferta Antecipa Black Friday não mantém campanha antiga e cobra os preços anunciados',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.doesNotMatch(html,/Dia das Crianças/i);
+ assert.match(html,/🎄 Edição Especial de Natal/);
+ assert.match(html,/price-result">R\$ 9,90/);
+ assert.match(html,/Quero aproveitar por R\$ 4,90/);
+ setup();
+ assert.equal(p.total(body()),9.9);
+ assert.equal(p.total({...body(),checkoutRecoveryOffer:true}),4.9);
+});
+test('quiz oferece Reino Natalino como primeira aventura',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ const floresta=html.indexOf("'floresta encantada','fb-aventura'");
+ const fundoMar=html.indexOf("'fundo do mar','fb-aventura'");
+ const natal=html.indexOf("'reino natalino','fb-aventura'");
+ assert.ok(natal>=0&&floresta>natal&&fundoMar>floresta);
+ assert.match(html,/src="images\/reino-natalino\.png" alt="Reino Natalino"/);
+ assert.ok(fs.existsSync('images/reino-natalino.png'));
+});
+test('primeira tela tem neve leve e respeita redução de movimento',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/id="sc-intro"[\s\S]*?id="introSnow"/);
+ assert.match(html,/@keyframes snowFall/);
+ assert.match(html,/prefers-reduced-motion: reduce/);
+ assert.match(html,/for\(let i=0;i<24;i\+\+\)/);
+ assert.match(html,/\.intro-snow \{[^}]*z-index: 0/);
+ assert.match(html,/#sc-intro \{ position: relative; isolation: isolate \}/);
+ assert.doesNotMatch(html,/#sc-intro \{[^}]*background:/);
+});
+test('primeira tela e checkout usam os novos criativos de Natal',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/class="intro-hero-banner">[\s\S]*?src="images\/natal-hero-transparente\.png"/);
+ assert.match(html,/class="kw-banner-img" src="images\/natal-checkout\.webp"/);
+ assert.ok(fs.existsSync('images/natal-hero-transparente.png'));
+ assert.ok(fs.existsSync('images/natal-checkout.webp'));
+});
+test('funil usa paleta natalina com vermelho, verde e dourado',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ assert.match(html,/--navy:\s+#0D5233/);
+ assert.match(html,/--gold:\s+#F4C542/);
+ assert.match(html,/--coral:\s+#C4162A/);
+ assert.match(html,/background: linear-gradient\(145deg,#8F0F1A 0%,#C4162A 52%,#0D5233 100%\)/);
 });
 test('CPF/CNPJ validado, formatado e enviado para ambos os métodos',()=>{
  setup();const v=require('../js/document');assert.ok(v.valid('529.982.247-25'));assert.ok(v.valid('11.222.333/0001-81'));
