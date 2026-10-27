@@ -270,7 +270,7 @@
     #sc-intro { position: relative; isolation: isolate }
     #sc-intro > :not(.intro-snow) { position: relative; z-index: 1 }
     .intro-snow { position: absolute; inset: -16px -12px 0; z-index: 0; overflow: hidden; pointer-events: none; border-radius: var(--radius-md) }
-    .snowflake { position: absolute; top: -22px; left: var(--snow-left); width: var(--snow-size); height: var(--snow-size); border-radius: 50%; background: rgba(255,255,255,.92); box-shadow: 0 0 5px rgba(255,255,255,.7); opacity: var(--snow-opacity); animation: snowFall var(--snow-duration) linear var(--snow-delay) infinite }
+    .snowflake { position: absolute; top: -28px; left: var(--snow-left); width: var(--snow-size); height: var(--snow-size); color: #8FC7D8; font-size: var(--snow-size); line-height: 1; text-shadow: 0 1px 2px rgba(13,82,51,.2),0 0 5px rgba(255,255,255,.9); opacity: var(--snow-opacity); animation: snowFall var(--snow-duration) linear var(--snow-delay) infinite }
     @keyframes snowFall { to { transform: translate3d(var(--snow-drift), 780px, 0) rotate(180deg) } }
     @media (prefers-reduced-motion: reduce) { .intro-snow { display: none } }
     .intro-hero-banner { width: 80%; margin: 0 auto 22px }
@@ -1252,7 +1252,7 @@
         <div class="section-sub">Depoimentos reais de famílias que já surpreenderam seus pequenos</div>
 
         <div class="video-review-stack">
-          <div style="position:relative;padding-top:56.25%;width:100%;max-width:400px;margin:0 auto;border-radius:10px;overflow:hidden;background:#1C1E52;">
+          <div style="position:relative;padding-top:177.78%;width:100%;max-width:320px;margin:0 auto;border-radius:10px;overflow:hidden;background:#1C1E52;">
             <iframe src="https://player.mediadelivery.net/embed/791992/dd6de2c9-b463-44f4-be52-cb71a1107c6f?autoplay=false&amp;loop=false&amp;muted=false&amp;preload=true&amp;responsive=true" loading="lazy" style="border:0;position:absolute;top:0;left:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;" allowfullscreen="true"></iframe>
           </div>
         </div>
@@ -1806,9 +1806,10 @@ if(introSnow&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
   for(let i=0;i<24;i++){
     const flake=document.createElement('span');
     flake.className='snowflake';
+    flake.textContent='❄';
     flake.style.setProperty('--snow-left',`${(i*37)%101}%`);
-    flake.style.setProperty('--snow-size',`${4+(i%4)*2}px`);
-    flake.style.setProperty('--snow-opacity',`${.25+(i%5)*.08}`);
+    flake.style.setProperty('--snow-size',`${10+(i%4)*3}px`);
+    flake.style.setProperty('--snow-opacity',`${.42+(i%5)*.09}`);
     flake.style.setProperty('--snow-duration',`${6+(i%6)}s`);
     flake.style.setProperty('--snow-delay',`${-(i%9)}s`);
     flake.style.setProperty('--snow-drift',`${-24+(i%7)*8}px`);

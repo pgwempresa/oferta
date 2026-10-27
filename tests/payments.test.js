@@ -24,6 +24,7 @@ test('documento do checkout limita a 14 dígitos e formata CPF/CNPJ',()=>{
 test('player de depoimento usa MediaDelivery sem loop e sem VTurb antigo',()=>{
  const html=fs.readFileSync('index.html','utf8');
  assert.match(html,/https:\/\/player\.mediadelivery\.net\/embed\/791992\/dd6de2c9-b463-44f4-be52-cb71a1107c6f\?[^"]*loop=false/);
+ assert.match(html,/padding-top:177\.78%;width:100%;max-width:320px/);
  assert.doesNotMatch(html,/vturb-smartplayer/);
  assert.doesNotMatch(html,/scripts\.converteai\.net\/5a997ec4/);
 });
@@ -300,6 +301,8 @@ test('primeira tela tem neve leve e respeita redução de movimento',()=>{
  assert.match(html,/@keyframes snowFall/);
  assert.match(html,/prefers-reduced-motion: reduce/);
  assert.match(html,/for\(let i=0;i<24;i\+\+\)/);
+ assert.match(html,/flake\.textContent='❄'/);
+ assert.match(html,/color: #8FC7D8/);
  assert.match(html,/\.intro-snow \{[^}]*z-index: 0/);
  assert.match(html,/#sc-intro \{ position: relative; isolation: isolate \}/);
  assert.doesNotMatch(html,/#sc-intro \{[^}]*background:/);
